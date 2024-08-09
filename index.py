@@ -17,7 +17,7 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
                 Title("OpenSAT"),
                 Style(open("css/index.css").read()))
 
-section_input = 'math'
+section_input = 'english'
 
 def hide_switch(input):
    return not input
@@ -150,7 +150,7 @@ def get(section:str,num:int,answer:bool):
                          hidden=bool(answer)
                         )
 
-                        ,Class="container"
+                        ,Class="container",style="max-width:80vh;"
                    )
                    ,Style="display:flex;"
                 )
