@@ -17,10 +17,12 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
                 Title("OpenSAT"),
                 Style(open("css/index.css").read()))
 
-section_input = 'english'
+
 
 def hide_switch(input):
    return not input
+
+
 
 
 @rt("/")
@@ -54,7 +56,7 @@ def get():
                           "constantly growing thanks to a dedicated community of contributors.",
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
                         Div(
-                            A("Explore", href="/explore", Class="btn btn-primary"),
+                            A("Explore", href="/explore/english", Class="btn btn-primary"),
                             A("Contribute", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
                             A("JSON Database", href="https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5", 
                           Class="btn btn-secondary"),
@@ -69,8 +71,8 @@ def get():
     )
 
 
-@rt("/explore")
-def get():
+@rt("/explore/{section}")
+def get(section:str):
  return (
     
        Html(
@@ -92,10 +94,11 @@ def get():
                     Class="header"
                 ),
                 Main(
-
                     Div(
-                         
-                        *[A(Div("📚",Class="icon"),Div(f'Question #{i}',Class="question-number"),Div(x['domain'], Class="category"),Class="card",href=f"/questions/{section_input}/{i}/True") for i, x in enumerate(question_objects(section_input))]
+                       
+                         A("English", href=f'/explore/english',Class="btn btn-secondary card", style="background-color: #fc9d9a; font-size:0.9em;"),
+                         A("Math", href=f'/explore/math',Class="btn btn-secondary card", style="background-color: #fc9d9a; font-size:0.9em;"),
+                        *[A(Div("📚",Class="icon"),Div(f'Question #{i}',Class="question-number"),Div(x['domain'], Class="category"),Class="card",href=f"/questions/{section}/{i}/True") for i, x in enumerate(question_objects(section))]
 
                         ,Class="list-content"
                    )
