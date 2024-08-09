@@ -5,10 +5,19 @@ from pages.explore import question_objects
 app,rt = fast_app()
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
+            Script('''MathJax = {
+  tex: {
+    inlineMath: [['$', '$'], ['\\(', '\\)']]
+  },
+  svg: {
+    fontCache: 'global'
+  }
+};'''),
+            Script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"),
                 Title("OpenSAT"),
                 Style(open("css/index.css").read()))
 
-section_input = 'english'
+section_input = 'math'
 
 def hide_switch(input):
    return not input
@@ -37,7 +46,7 @@ def get():
                 ),
                 Main(
                     Div(
-                        Span("🎓", style=" display: flex; font-size: 5rem; margin-bottom: 20px; justify-content: center;"),
+                        Span("🎓", style="display: flex; font-size: 5rem; margin-bottom: 20px; justify-content: center;"),
                         H2("Question Bank with ", Span("Endless", Class="text-primary-500 decoration-wavy"), " Possibilities",
                            style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
                         P("OpenSAT, a free and open-source SAT question bank. "
@@ -126,7 +135,7 @@ def get(section:str,num:int,answer:bool):
                          
                         H2(f"Question #{question_obj['id']}"),
                         P(question_obj['question'].get('paragraph', "")),
-                        B(question_obj['question']['question']),
+                        B(question_obj['question']['question'].replace('$','$')),
                         
                         Div(f"A. {question_obj['question']['choices']['A']}"),
                         Div(f"B. {question_obj['question']['choices']['B']}"),
