@@ -18,10 +18,10 @@ def home():
             ),
             Body(
                 Header(
-                    Div(
+                    A(
                         Span("🎓", style="font-size:1.8rem;"),
                         H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        Class="logo"
+                        Class="logo", href="/",style="text-decoration: none"
                     ),
                     Nav(
                         A("Tutors", href="/tutors", Class="btn btn-primary"),
@@ -65,10 +65,10 @@ def explore():
             ),
             Body(
                 Header(
-                    Div(
+                    A(
                         Span("🎓", style="font-size:1.8rem;"),
                         H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        Class="logo"
+                        Class="logo",href='/',style="text-decoration: none"
                     ),
                     Nav(
                         A("Tutors", href="/tutors", Class="btn btn-primary"),
