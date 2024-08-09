@@ -11,7 +11,8 @@ response = requests.get('https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2
 data = response.json()
 
 # Access the 'math' array
-math_objects = data.get('math', [])
+def question_objects(section):
+ return data.get(section, [])
 
 
 

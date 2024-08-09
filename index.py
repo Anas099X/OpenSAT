@@ -1,16 +1,21 @@
 from fasthtml import FastHTML
 from fasthtml.common import *
-from pages.explore import math_objects
+from pages.explore import question_objects
 
-app = FastHTMLWithLiveReload()
+app,rt = fast_app()
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
                 Title("OpenSAT"),
                 Style(open("css/index.css").read()))
 
+section_input = 'english'
 
-@app.get("/")
-def home():
+def hide_switch(input):
+   return not input
+
+
+@rt("/")
+def get():
     return (
         Html(
             Head(
@@ -55,8 +60,8 @@ def home():
     )
 
 
-@app.get("/explore")
-def explore():
+@rt("/explore")
+def get():
  return (
     
        Html(
@@ -81,7 +86,7 @@ def explore():
 
                     Div(
                          
-                        *[A(Div("📚",Class="icon"),Div(x['id'],Class="question-number"),Div(x['domain'], Class="category"),Class="card") for x in math_objects]
+                        *[A(Div("📚",Class="icon"),Div(f'Question #{i}',Class="question-number"),Div(x['domain'], Class="category"),Class="card",href=f"/questions/{section_input}/{i}/True") for i, x in enumerate(question_objects(section_input))]
 
                         ,Class="list-content"
                    )
@@ -90,7 +95,58 @@ def explore():
         )
 ) 
 
+)
 
- )
+
+
+@rt('/questions/{section}/{num}/{answer}')
+def get(section:str,num:int,answer:bool):
+   question_obj = question_objects(section)[num]
+   return ( Html(
+            Head(
+                Defaults
+            ),
+            Body(
+                Header(
+                    A(
+                        Span("🎓", style="font-size:1.8rem;"),
+                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
+                        Class="logo",href='/',style="text-decoration: none"
+                    ),
+                    Nav(
+                        A("Tutors", href="/tutors", Class="btn btn-primary"),
+                        A("Github", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
+                        Class="nav"
+                    ),
+                    Class="header"
+                ),
+                Main(
+
+                    Div(
+                         
+                        H2(f"Question #{question_obj['id']}"),
+                        P(question_obj['question'].get('paragraph', "")),
+                        B(question_obj['question']['question']),
+                        
+                        Div(f"A. {question_obj['question']['choices']['A']}"),
+                        Div(f"B. {question_obj['question']['choices']['B']}"),
+                        Div(f"C. {question_obj['question']['choices']['C']}"),
+                        Div(f"D. {question_obj['question']['choices']['D']}"),
+                        Br(),
+                        A("Reveal Answers", href=f'/questions/{section}/{num}/{hide_switch(answer)}',Class="btn btn-secondary", style="font-size:0.9em;"),
+                        Div(
+                        Br(),
+                        B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
+                        P(question_obj['question']['explanation']), 
+                         hidden=bool(answer)
+                        )
+
+                        ,Class="container"
+                   )
+                   ,Style="display:flex;"
+                )
+        )
+) 
+)
 
 serve()
