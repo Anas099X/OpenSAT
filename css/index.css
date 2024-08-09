@@ -65,6 +65,7 @@ body::before {
     justify-content: center;
     flex-wrap: wrap;
     align-content: center;
+    text-decoration: none;
     width:200vh;
     gap: 0.6em;
 }
@@ -141,7 +142,8 @@ body {
     grid-template-columns: auto 1fr;
     grid-template-rows: auto auto;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    text-decoration: none;
     gap: 10px;
     padding: 20px;
     background-color: #f1edd0;
@@ -151,19 +153,26 @@ body {
     align-items: center;
 }
 
+.card:hover {
+    background-color: rgba(241, 237, 208, 0.5);
+    
+    
+}
+
 .icon {
     grid-row: span 2;
     font-size: 24px;
-    color: #ff6b6b;
+    color: #fc9d9a;
 }
 
 .question-number {
     font-size: 18px;
+    color: #000;
     font-weight: bold;
 }
 
 .category {
-    color: #ff6b6b;
+    color: #fc9d9a;
     font-size: 14px;
     padding: 0px 5px;
     border-radius: 5px;

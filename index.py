@@ -81,7 +81,7 @@ def explore():
 
                     Div(
                          
-                        *[Div(Div("📚",Class="icon"),Div(x['id'],Class="question-number"),Div(x['domain'], Class="category"),Class="card") for x in math_objects]
+                        *[A(Div("📚",Class="icon"),Div(x['id'],Class="question-number"),Div(x['domain'], Class="category"),Class="card") for x in math_objects]
 
                         ,Class="list-content"
                    )
