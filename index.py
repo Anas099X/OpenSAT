@@ -2,11 +2,11 @@ from fasthtml import FastHTML
 from fasthtml.common import *
 from pages.explore import math_objects
 
-app = FastHTML()
+app = FastHTMLWithLiveReload()
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
                 Title("OpenSAT"),
-                Style(open("fasthtml/css/index.css").read()))
+                Style(open("css/index.css").read()))
 
 
 @app.get("/")
@@ -81,10 +81,11 @@ def explore():
 
                     Div(
                          
-                        *[Div(x['id'],Class="container") for x in math_objects]
+                        *[Div(Div("📚",Class="icon"),Div(x['id'],Class="question-number"),Div(x['domain'], Class="category"),Class="card") for x in math_objects]
+
                         ,Class="list-content"
-                    )
-                     
+                   )
+                   ,Style="display:flex;"
                 )
         )
 ) 

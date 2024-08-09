@@ -52,19 +52,25 @@ body::before {
 
 /* Layout Components */
 .container {
+    display: flex;
     background-color: #f1edd0;
     border-radius: 20px;
     padding: 40px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
     margin: 20px auto;
+    height:10vh;
+    min-width:35vh;
+   
 }
 
 .list-content {
     display: flex;
     flex-direction: row;
+    justify-content: center;
     flex-wrap: wrap;
-    align-content: flex-start;
-    gap: 1em;
+    align-content: center;
+    width:200vh;
+    gap: 0.6em;
 }
 
 .header {
@@ -132,4 +138,40 @@ main {
 /* For Internet Explorer and Edge */
 body {
     -ms-overflow-style: none;
+}
+
+.card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    gap: 10px;
+    padding: 20px;
+    background-color: #f1edd0;
+    border-radius: 20px;
+    height:13vh;
+    width:45vh;
+    align-items: center;
+}
+
+.icon {
+    grid-row: span 2;
+    font-size: 24px;
+    color: #ff6b6b;
+}
+
+.question-number {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.category {
+    color: #ff6b6b;
+    font-size: 14px;
+    padding: 10px 5px;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: right;
+    font-size: 1em;
+    font-weight: bold;
 }
