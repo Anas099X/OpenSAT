@@ -2,7 +2,7 @@ from fasthtml import FastHTML
 from fasthtml.common import *
 from pages.explore import question_objects
 
-app,rt = fast_app()
+app,rt = fast_app(debug=True)
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
             Script('''MathJax = {
@@ -71,8 +71,12 @@ def get():
     )
 
 
-@rt("/explore/{section}")
-def get(section:str):
+@rt("/explore/{section}/{domain}")
+def get(section:str,domain:str):
+ 
+ def test(input):
+  return str(input).lower()
+ 
  return (
     
        Html(
@@ -95,10 +99,16 @@ def get(section:str):
                 ),
                 Main(
                     Div(
-                       
-                         A("English", href=f'/explore/english',Class="btn btn-secondary card", style="background-color: #fc9d9a; font-size:0.9em;"),
-                         A("Math", href=f'/explore/math',Class="btn btn-secondary card", style="background-color: #fc9d9a; font-size:0.9em;"),
-                        *[A(Div("📚",Class="icon"),Div(f'Question #{i}',Class="question-number"),Div(x['domain'], Class="category"),Class="card",href=f"/questions/{section}/{i}/True") for i, x in enumerate(question_objects(section))]
+                       Div(
+                         A("English", href=f'/explore/english/any',Class="btn btn-secondary", style="background-color: #fc9d9a; font-size:0.9em;"),
+                         A("Math", href=f'/explore/math/any',Class="btn btn-secondary", style="background-color: #fc9d9a; font-size:0.9em;"),
+                         Br(),
+                         Br(),
+
+                         A("Algebra", href=f'/explore/{section}/algebra',Class="btn btn-secondary", style="background-color: #fc9d9a; font-size:0.9em;"),
+                        Class="filter_container"),
+                        *[ A(Div("📚", Class="icon"), Div(f'Question #{i}', Class="question-number"), Div(x['domain'], Class="category"), Class="card", href=f"/questions/{section}/{i}/True" ) if domain.lower() == 'any' or test(x['domain']) == domain.lower() else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]
+                        
 
                         ,Class="list-content"
                    )
@@ -140,12 +150,13 @@ def get(section:str,num:int,answer:bool):
                         P(question_obj['question'].get('paragraph', "")),
                         B(question_obj['question']['question'].replace('$','$')),
                         
-                        Div(f"A. {question_obj['question']['choices']['A']}"),
-                        Div(f"B. {question_obj['question']['choices']['B']}"),
-                        Div(f"C. {question_obj['question']['choices']['C']}"),
-                        Div(f"D. {question_obj['question']['choices']['D']}"),
+                        Div(B("A."), question_obj['question']['choices']['A']),
+                        Div(B("B."), question_obj['question']['choices']['B']),
+                        Div(B("C."), question_obj['question']['choices']['C']),
+                        Div(B("D."), question_obj['question']['choices']['D']),
                         Br(),
-                        A("Reveal Answers", href=f'/questions/{section}/{num}/{hide_switch(answer)}',Class="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Reveal Answers", href=f'/questions/{section}/{num}/{hide_switch(answer)}',Class="btn btn-primary", style="font-size:0.9em;"),
+                        A("Go Back", href=f'/explore/{section}',Class="btn btn-secondary", style="font-size:0.9em;"),
                         Div(
                         Br(),
                         B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
