@@ -56,7 +56,7 @@ def get():
                           "constantly growing thanks to a dedicated community of contributors.",
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
                         Div(
-                            A("Explore", href="/explore/english", Class="btn btn-primary"),
+                            A("Explore", href="/explore/english/any", Class="btn btn-primary"),
                             A("Contribute", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
                             A("JSON Database", href="https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5", 
                           Class="btn btn-secondary"),
@@ -74,9 +74,25 @@ def get():
 @rt("/explore/{section}/{domain}")
 def get(section:str,domain:str):
  
- def test(input):
+ def domain_lower(input):
   return str(input).lower()
  
+ def filter_switch():
+   if section == 'english':
+     return (
+     A("Information and Ideas", href=f'/explore/{section}/information and ideas',Class="btn btn-filter"),
+     A("Craft and Structure", href=f'/explore/{section}/craft and structure',Class="btn btn-filter"),
+     A("Expression of Ideas", href=f'/explore/{section}/expression of ideas',Class="btn btn-filter"),
+     A("Standard English Conventions", href=f'/explore/{section}/standard english conventions',Class="btn btn-filter")
+    )
+   else:
+     return (
+     A("Algebra", href=f'/explore/{section}/algebra',Class="btn btn-filter"),
+     A("Advanced Math", href=f'/explore/{section}/advanced math',Class="btn btn-filter"),
+     A("Problem-Solving and Data Analysis", href=f'/explore/{section}/problem solving and data analysis',Class="btn btn-filter"),
+     A("Geometry and Trigonometry", href=f'/explore/{section}/geometry and trigonometry',Class="btn btn-filter")
+    )
+   
  return (
     
        Html(
@@ -100,14 +116,14 @@ def get(section:str,domain:str):
                 Main(
                     Div(
                        Div(
-                         A("English", href=f'/explore/english/any',Class="btn btn-secondary", style="background-color: #fc9d9a; font-size:0.9em;"),
-                         A("Math", href=f'/explore/math/any',Class="btn btn-secondary", style="background-color: #fc9d9a; font-size:0.9em;"),
+                         A("English", href=f'/explore/english/any',Class="btn btn-primary"),
+                         A("Math", href=f'/explore/math/any',Class="btn btn-primary"),
                          Br(),
                          Br(),
 
-                         A("Algebra", href=f'/explore/{section}/algebra',Class="btn btn-secondary", style="background-color: #fc9d9a; font-size:0.9em;"),
-                        Class="filter_container"),
-                        *[ A(Div("📚", Class="icon"), Div(f'Question #{i}', Class="question-number"), Div(x['domain'], Class="category"), Class="card", href=f"/questions/{section}/{i}/True" ) if domain.lower() == 'any' or test(x['domain']) == domain.lower() else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]
+                         Div(filter_switch()),
+                        Class="filter-container"),
+                        *[ A(Div("📚", Class="icon"), Div(f'Question #{i}', Class="question-number"), Div(x['domain'], Class="category"), Class="card", href=f"/questions/{section}/{i}/True" ) if domain.lower() == 'any' or domain_lower(x['domain']) == domain.lower() else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]
                         
 
                         ,Class="list-content"
