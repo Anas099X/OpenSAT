@@ -172,7 +172,7 @@ def get(section:str,num:int,answer:bool):
                         Div(B("D."), question_obj['question']['choices']['D']),
                         Br(),
                         A("Reveal Answers", href=f'/questions/{section}/{num}/{hide_switch(answer)}',Class="btn btn-primary", style="font-size:0.9em;"),
-                        A("Go Back", href=f'/explore/{section}',Class="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Go Back", href=f'/explore/{section}/{question_obj["domain"]}',Class="btn btn-secondary", style="font-size:0.9em;"),
                         Div(
                         Br(),
                         B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
