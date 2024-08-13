@@ -1,6 +1,6 @@
 from fasthtml import FastHTML
 from fasthtml.common import *
-from pages.explore import question_objects
+from pages.settings import question_objects, firestore_docs
 
 app,rt = fast_app(debug=True)
 
@@ -187,5 +187,49 @@ def get(section:str,num:int,answer:bool):
         )
 ) 
 )
+
+
+@rt("/tutors")
+def get():
+ 
+   
+ return (
+    
+       Html(
+            Head(
+                Defaults
+            ),
+            Body(
+                Header(
+                    A(
+                        Span("🎓", style="font-size:1.8rem;"),
+                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
+                        Class="logo",href='/',style="text-decoration: none"
+                    ),
+                    Nav(
+                        A("Tutors", href="/tutors", Class="btn btn-primary"),
+                        A("Github", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
+                        Class="nav"
+                    ),
+                    Class="header"
+                ),
+                Main(
+                    Div(
+                        *[Div(doc.to_dict()['age'],Class="card") for doc in firestore_docs],
+
+                        Div(
+                         Div(Span(""),Class="avatar")
+                        ,Class="profile-card")
+                        
+
+                        ,Class="list-content"
+                   )
+                   ,Style="display:flex;"
+                )
+        )
+) 
+
+)
+
 
 serve()

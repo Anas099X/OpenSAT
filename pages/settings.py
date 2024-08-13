@@ -1,6 +1,22 @@
+import requests
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+
+
+
+#>> json database
+  
+response = requests.get('https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5')
+# Parse the JSON response
+data = response.json()
+
+# Access the question array
+def question_objects(section):
+ return data.get(section, [])
+
+
+#>> firebase
 
 # Firebase configuration
 firebase_config = {
@@ -23,18 +39,13 @@ firebase_admin.initialize_app(cred, {
 db = firestore.client()
 
 # Example: Add a document to a collection
-def add_document(collection_name, document_data):
-    doc_ref = db.collection(collection_name).add(document_data)
-    print(f"Document added with ID: {doc_ref[1].id}")
-
-# Example: Read a document from a collection
-def read_document(collection_name, document_id):
-    doc_ref = db.collection(collection_name).stream()
-    docs = doc_ref
-
-    [print(f"{doc.to_dict()['age']}") for doc in docs]    
+# def add_document(collection_name, document_data):
+   # doc_ref = db.collection(collection_name).add(document_data)
+   # print(f"Document added with ID: {doc_ref[1].id}")
 
 
+doc_ref = db.collection('users').stream()
+firestore_docs = doc_ref
 
-# Read a document (replace 'document_id' with an actual document ID)
-read_document("users", "document_id")
+       
+

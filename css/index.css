@@ -58,7 +58,7 @@ body::before {
 .btn-filter {
     background-color: #f1edd0;
     margin-bottom: 10px;
-    font-size:0.9em;
+    font-size:1em;
     color: #000;
     box-shadow: 0 3px 3px rgba(0, 0, 0, 0.35);
   
