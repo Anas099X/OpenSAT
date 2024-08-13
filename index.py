@@ -1,6 +1,6 @@
 from fasthtml import FastHTML
 from fasthtml.common import *
-from pages.settings import question_objects, firestore_docs
+from pages.settings import *
 
 app,rt = fast_app(debug=True)
 
@@ -191,7 +191,8 @@ def get(section:str,num:int,answer:bool):
 
 @rt("/tutors")
 def get():
- 
+ firestore_docs = db.collection('users').stream()
+
    
  return (
     
@@ -217,17 +218,7 @@ def get():
                     Div(
                         #*[Div(doc.to_dict()['age'],Class="card") for doc in firestore_docs],
 
-                        Div(
-                         Div(Span("AB"),Class="avatar"),
-                         Div(
-                           H3('Anas099'),
-                           P('online',Class="status"),
-                           P('desc',Class="description"),
-                           P('MAIL',Class="email"),
-                           Div('Flag',Class="location"),Class="info"),
-                           Button('contact',Class="contact-btn")
-
-                        ,Class="profile-card")
+                       *[Div(Img(src=doc.to_dict()['banner'],Class="avatar"),Div(H3(doc.to_dict()['username']),P(doc.to_dict()['description'],Class="description"),P(doc.to_dict()['availability'],Class="status"),P(doc.to_dict()['email'],Class="email"),Div(doc.to_dict()['country'],Class="location"),Class="info"),Button(f"Contact: {doc.to_dict()['contact']}",Class="contact-btn"),Class="profile-card") for doc in firestore_docs]
                         
 
                         ,Class="list-content"

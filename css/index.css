@@ -171,8 +171,8 @@ body {
 .profile-card {
     display: flex;
     flex-direction: column;
-    background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
-    padding: 20px;
+    background: #f1edd0;
+    padding: 15px;
     border-radius: 15px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     width: 300px;
@@ -205,13 +205,13 @@ body {
 }
 
 .status {
-    font-size: 0.9rem;
+    font-size: 0.75rem;
     color: #4caf50;
-    margin-bottom: 10px;
+    gap-top:-10px;
 }
 
 .description {
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     color: #333;
     font-weight: bold;
     margin-bottom: 10px;
@@ -243,7 +243,7 @@ body {
 
 /* Contact Button */
 .contact-btn {
-    background-color: #ffcc00;
+    background-color: #fc9d9a;
     color: #333;
     font-weight: bold;
     border-radius: 10px;
@@ -257,9 +257,60 @@ body {
 }
 
 .contact-btn:hover {
-    background-color: #ffb300;
+
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    
 }
 
 .contact-btn i {
     margin-right: 5px;
+}
+
+
+
+/* explore cards */
+.card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    text-decoration: none;
+    gap: 10px;
+    padding: 20px;
+    background-color: #f1edd0;
+    border-radius: 20px;
+    height:13vh;
+    width:42vh;
+    align-items: center;
+}
+
+.card:hover {
+    background-color: rgba(241, 237, 208, 0.5);
+    
+    
+}
+
+.icon {
+    grid-row: span 2;
+    font-size: 24px;
+    color: #fc9d9a;
+}
+
+.question-number {
+    font-size: 18px;
+    color: #000;
+    font-weight: bold;
+}
+
+.category {
+    color: #fc9d9a;
+    font-size: 14px;
+    padding: 0px 5px;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: right;
+    font-size: 1em;
+    font-weight: bold;
 }

@@ -43,9 +43,5 @@ db = firestore.client()
    # doc_ref = db.collection(collection_name).add(document_data)
    # print(f"Document added with ID: {doc_ref[1].id}")
 
-
-doc_ref = db.collection('users').stream()
-firestore_docs = doc_ref
-
        
 
