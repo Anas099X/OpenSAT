@@ -78,7 +78,6 @@ body::before {
 }
 
 .filter-container {
-
     transition: all 0.3s ease;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     text-decoration: none;
@@ -86,12 +85,11 @@ body::before {
     padding: 20px;
     background-color: #f1edd0;
     border-radius: 20px;
-    maxheight:43vh;
+    max-height:43vh;
     max-width:92vh;
     align-items: center;
     font-size:12px;
 }
-
 
 .list-content {
     display: flex;
@@ -145,7 +143,6 @@ main {
 }
 
 /* Scrollbar Styles */
-/* Webkit browsers (Chrome, Safari, newer versions of Edge) */
 ::-webkit-scrollbar {
     width: 20px;
 }
@@ -160,7 +157,6 @@ main {
     border: 12px solid #f1edd0;
 }
 
-/* Firefox */
 * {
     scrollbar-width: thin;
     scrollbar-color: #fc9d9a #f1edd0;
@@ -171,107 +167,99 @@ body {
     -ms-overflow-style: none;
 }
 
-.card {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    grid-template-rows: auto auto;
-    transition: all 0.3s ease;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-    text-decoration: none;
-    gap: 10px;
-    padding: 20px;
-    background-color: #f1edd0;
-    border-radius: 20px;
-    height:13vh;
-    width:42vh;
-    align-items: center;
-}
-
-.card:hover {
-    background-color: rgba(241, 237, 208, 0.5);
-    
-    
-}
-
-.icon {
-    grid-row: span 2;
-    font-size: 24px;
-    color: #fc9d9a;
-}
-
-.question-number {
-    font-size: 18px;
-    color: #000;
-    font-weight: bold;
-}
-
-.category {
-    color: #fc9d9a;
-    font-size: 14px;
-    padding: 0px 5px;
-    border-radius: 5px;
-    display: inline-block;
-    text-align: right;
-    font-size: 1em;
-    font-weight: bold;
-}
-
-
-
-    max-width: 600px;
-    margin: auto;
-    position: relative;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .slides {
+/* Profile Card Container */
+.profile-card {
     display: flex;
-    transition: transform 0.5s ease-in-out;
-    width: 300%;
-  }
-  
-  .slider-item {
-    width: 100%;
+    flex-direction: column;
+    background: linear-gradient(135deg, #fbc2eb, #a6c1ee);
     padding: 20px;
-    background: #f2f2f2;
-  }
-  
-  input[name="slider"] {
-    display: none;
-  }
-  
-  #slide1:checked ~ .slides {
-    transform: translateX(0);
-  }
-  
-  #slide2:checked ~ .slides {
-    transform: translateX(-100%);
-  }
-  
-  #slide3:checked ~ .slides {
-    transform: translateX(-200%);
-  }
-  
-  .navigation {
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    width: 300px;
+    max-width: 100%;
+    position: relative;
+    color: #333;
+}
+
+/* Avatar Section */
+.avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #ff8a80;
     display: flex;
     justify-content: center;
-    margin-top: 10px;
-  }
-  
-  .nav-btn {
-    width: 12px;
-    height: 12px;
-    margin: 0 5px;
-    background: #bbb;
-    border-radius: 50%;
+    align-items: center;
+    font-size: 20px;
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Info Section */
+.info {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #ff6f61;
+    margin-bottom: 5px;
+}
+
+.status {
+    font-size: 0.9rem;
+    color: #4caf50;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 0.9rem;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.email {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.email i {
+    margin-right: 8px;
+}
+
+.location {
+    display: flex;
+    align-items: center;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 10px;
+}
+
+.location img {
+    margin-right: 8px;
+}
+
+/* Contact Button */
+.contact-btn {
+    background-color: #ffcc00;
+    color: #333;
+    font-weight: bold;
+    border-radius: 10px;
+    text-align: center;
+    padding: 10px;
     cursor: pointer;
-  }
-  
-  #slide1:checked ~ .navigation label[for="slide1"],
-  #slide2:checked ~ .navigation label[for="slide2"],
-  #slide3:checked ~ .navigation label[for="slide3"] {
-    background: #444;
-  }
-  
+    transition: background-color 0.3s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.contact-btn:hover {
+    background-color: #ffb300;
+}
+
+.contact-btn i {
+    margin-right: 5px;
+}

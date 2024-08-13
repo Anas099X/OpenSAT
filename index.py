@@ -215,10 +215,18 @@ def get():
                 ),
                 Main(
                     Div(
-                        *[Div(doc.to_dict()['age'],Class="card") for doc in firestore_docs],
+                        #*[Div(doc.to_dict()['age'],Class="card") for doc in firestore_docs],
 
                         Div(
-                         Div(Span(""),Class="avatar")
+                         Div(Span("AB"),Class="avatar"),
+                         Div(
+                           H3('Anas099'),
+                           P('online',Class="status"),
+                           P('desc',Class="description"),
+                           P('MAIL',Class="email"),
+                           Div('Flag',Class="location"),Class="info"),
+                           Button('contact',Class="contact-btn")
+
                         ,Class="profile-card")
                         
 
