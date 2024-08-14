@@ -59,8 +59,6 @@ def get():
                         Div(
                             A("Explore", href="/explore/english/any", cls="btn btn-primary"),
                             A("Contribute", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
-                            A("JSON Database", href="https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5", 
-                          cls="btn btn-secondary"),
                             style="display: flex; justify-content: center; gap: 15px;"
                             
                         ),
