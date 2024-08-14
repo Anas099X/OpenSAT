@@ -129,7 +129,7 @@ def get(section:str,domain:str):
 
                          Div(filter_switch()),
                         cls="filter-container"),
-                        *[ A(Div("📚", cls="icon"), Div(f'Question #{i}', cls="question-number"), Div(x['domain'], cls="category"), cls="card", href=f"/questions/{section}/{i}/True" ) if domain.lower() == 'any' or domain_lower(x['domain']) == domain.lower() else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]
+                        *[ A(Div("📚", cls="icon"), Div(f'Question #{i}', cls="question-number"), Div(x['domain'], cls="category"), cls="card", href=f"/questions/{section}/{i}/True" ) if domain.lower().replace('%20',' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20',' ') else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]
                         
 
                         ,cls="list-content"
