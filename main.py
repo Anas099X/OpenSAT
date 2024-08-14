@@ -38,33 +38,33 @@ def get():
                     A(
                         Span("🎓", style="font-size:1.8rem;"),
                         H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        Class="logo", href="/",style="text-decoration: none"
+                        cls="logo", href="/",style="text-decoration: none"
                     ),
                     Nav(
-                        A("Tutors", href="/tutors", Class="btn btn-primary"),
-                        A("Github", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
-                        Class="nav"
+                        A("Tutors", href="/tutors", cls="btn btn-primary"),
+                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
+                        cls="nav"
                     ),
-                    Class="header"
+                    cls="header"
                 ),
                 Main(
                     Div(
                         Span("🎓", style="display: flex; font-size: 5rem; margin-bottom: 20px; justify-content: center;"),
-                        H2("Question Bank with ", Span("Endless", Class="text-primary-500 decoration-wavy"), " Possibilities",
+                        H2("Question Bank with ", Span("Endless", cls="text-primary-500 decoration-wavy"), " Possibilities",
                            style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
                         P("OpenSAT, a free and open-source SAT question bank. "
                           "Dive into a massive pool of SAT practice problems, "
                           "constantly growing thanks to a dedicated community of contributors.",
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
                         Div(
-                            A("Explore", href="/explore/english/any", Class="btn btn-primary"),
-                            A("Contribute", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
+                            A("Explore", href="/explore/english/any", cls="btn btn-primary"),
+                            A("Contribute", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
                             A("JSON Database", href="https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5", 
-                          Class="btn btn-secondary"),
+                          cls="btn btn-secondary"),
                             style="display: flex; justify-content: center; gap: 15px;"
                             
                         ),
-                        Class="container"
+                        cls="container"
                     )
                 )
             )
@@ -81,17 +81,17 @@ def get(section:str,domain:str):
  def filter_switch():
    if section == 'english':
      return (  
-     A("Information and Ideas", href=f'/explore/{section}/information and ideas',Class="btn btn-filter"),
-     A("Craft and Structure", href=f'/explore/{section}/craft and structure',Class="btn btn-filter"),
-     A("Expression of Ideas", href=f'/explore/{section}/expression of ideas',Class="btn btn-filter"),
-     A("Standard English Conventions", href=f'/explore/{section}/standard english conventions',Class="btn btn-filter")
+     A("Information and Ideas", href=f'/explore/{section}/information and ideas',cls="btn btn-filter"),
+     A("Craft and Structure", href=f'/explore/{section}/craft and structure',cls="btn btn-filter"),
+     A("Expression of Ideas", href=f'/explore/{section}/expression of ideas',cls="btn btn-filter"),
+     A("Standard English Conventions", href=f'/explore/{section}/standard english conventions',cls="btn btn-filter")
     )
    else:
      return (
-     A("Algebra", href=f'/explore/{section}/algebra',Class="btn btn-filter"),
-     A("Advanced Math", href=f'/explore/{section}/advanced math',Class="btn btn-filter"),
-     A("Problem-Solving and Data Analysis", href=f'/explore/{section}/problem solving and data analysis',Class="btn btn-filter"),
-     A("Geometry and Trigonometry", href=f'/explore/{section}/geometry and trigonometry',Class="btn btn-filter")
+     A("Algebra", href=f'/explore/{section}/algebra',cls="btn btn-filter"),
+     A("Advanced Math", href=f'/explore/{section}/advanced math',cls="btn btn-filter"),
+     A("Problem-Solving and Data Analysis", href=f'/explore/{section}/problem solving and data analysis',cls="btn btn-filter"),
+     A("Geometry and Trigonometry", href=f'/explore/{section}/geometry and trigonometry',cls="btn btn-filter")
     )
    
  return (
@@ -105,29 +105,29 @@ def get(section:str,domain:str):
                     A(
                         Span("🎓", style="font-size:1.8rem;"),
                         H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        Class="logo",href='/',style="text-decoration: none"
+                        cls="logo",href='/',style="text-decoration: none"
                     ),
                     Nav(
-                        A("Tutors", href="/tutors", Class="btn btn-primary"),
-                        A("Github", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
-                        Class="nav"
+                        A("Tutors", href="/tutors", cls="btn btn-primary"),
+                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
+                        cls="nav"
                     ),
-                    Class="header"
+                    cls="header"
                 ),
                 Main(
                     Div(
                        Div(
-                         A("English", href=f'/explore/english/any',Class="btn btn-primary"),
-                         A("Math", href=f'/explore/math/any',Class="btn btn-primary"),
+                         A("English", href=f'/explore/english/any',cls="btn btn-primary"),
+                         A("Math", href=f'/explore/math/any',cls="btn btn-primary"),
                          Br(),
                          Br(),
 
                          Div(filter_switch()),
-                        Class="filter-container"),
-                        *[ A(Div("📚", Class="icon"), Div(f'Question #{i}', Class="question-number"), Div(x['domain'], Class="category"), Class="card", href=f"/questions/{section}/{i}/True" ) if domain.lower() == 'any' or domain_lower(x['domain']) == domain.lower() else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]
+                        cls="filter-container"),
+                        *[ A(Div("📚", cls="icon"), Div(f'Question #{i}', cls="question-number"), Div(x['domain'], cls="category"), cls="card", href=f"/questions/{section}/{i}/True" ) if domain.lower() == 'any' or domain_lower(x['domain']) == domain.lower() else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]
                         
 
-                        ,Class="list-content"
+                        ,cls="list-content"
                    )
                    ,Style="display:flex;"
                 )
@@ -151,14 +151,14 @@ def get(section:str,num:int,answer:bool):
                     A(
                         Span("🎓", style="font-size:1.8rem;"),
                         H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        Class="logo",href='/',style="text-decoration: none"
+                        cls="logo",href='/',style="text-decoration: none"
                     ),
                     Nav(
-                        A("Tutors", href="/tutors", Class="btn btn-primary"),
-                        A("Github", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
-                        Class="nav"
+                        A("Tutors", href="/tutors", cls="btn btn-primary"),
+                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
+                        cls="nav"
                     ),
-                    Class="header"
+                    cls="header"
                 ),
                 Main(
 
@@ -173,8 +173,8 @@ def get(section:str,num:int,answer:bool):
                         Div(B("C."), question_obj['question']['choices']['C']),
                         Div(B("D."), question_obj['question']['choices']['D']),
                         Br(),
-                        A("Reveal Answers", href=f'/questions/{section}/{num}/{hide_switch(answer)}',Class="btn btn-primary", style="font-size:0.9em;"),
-                        A("Go Back", href=f'/explore/{section}/any',Class="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Reveal Answers", href=f'/questions/{section}/{num}/{hide_switch(answer)}',cls="btn btn-primary", style="font-size:0.9em;"),
+                        A("Go Back", href=f'/explore/{section}/any',cls="btn btn-secondary", style="font-size:0.9em;"),
                         Div(
                         Br(),
                         B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
@@ -182,7 +182,7 @@ def get(section:str,num:int,answer:bool):
                          hidden=bool(answer)
                         )
 
-                        ,Class="container",style="max-width:80vh;"
+                        ,cls="container",style="max-width:80vh;"
                    )
                    ,Style="display:flex;"
                 )
@@ -207,23 +207,23 @@ def get():
                     A(
                         Span("🎓", style="font-size:1.8rem;"),
                         H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        Class="logo",href='/',style="text-decoration: none"
+                        cls="logo",href='/',style="text-decoration: none"
                     ),
                     Nav(
-                        A("Tutors", href="/tutors", Class="btn btn-primary"),
-                        A("Github", href="https://github.com/Anas099X/OpenSAT", Class="btn btn-secondary"),
-                        Class="nav"
+                        A("Tutors", href="/tutors", cls="btn btn-primary"),
+                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
+                        cls="nav"
                     ),
-                    Class="header"
+                    cls="header"
                 ),
                 Main(
                     Div(
-                        #*[Div(doc.to_dict()['age'],Class="card") for doc in firestore_docs],
+                        #*[Div(doc.to_dict()['age'],cls="card") for doc in firestore_docs],
 
-                       *[Div(Img(src=doc.to_dict()['banner'],Class="avatar"),Div(H3(doc.to_dict()['username']),P(doc.to_dict()['description'],Class="description"),P(doc.to_dict()['availability'],Class="status"),P(doc.to_dict()['email'],Class="email"),Div(doc.to_dict()['country'],Class="location"),Class="info"),Button(f"Contact: {doc.to_dict()['contact']}",Class="contact-btn"),Class="profile-card") for doc in firestore_docs]
+                       *[Div(Img(src=doc.to_dict()['banner'],cls="avatar"),Div(H3(doc.to_dict()['username']),P(doc.to_dict()['description'],cls="description"),P(doc.to_dict()['availability'],cls="status"),P(doc.to_dict()['email'],cls="email"),Div(doc.to_dict()['country'],cls="location"),cls="info"),Button(f"Contact: {doc.to_dict()['contact']}",cls="contact-btn"),cls="profile-card") for doc in firestore_docs]
                         
 
-                        ,Class="list-content"
+                        ,cls="list-content"
                    )
                    ,Style="display:flex;"
                 )
