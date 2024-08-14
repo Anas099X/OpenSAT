@@ -4,6 +4,11 @@ from settings import *
 app,rt = fast_app(debug=True)
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
+            Meta(property="og:title" ,content="OpenSAT: Question Bank with Endless Possibilities"),
+            Meta(property="og:description" ,content="OpenSAT, a free and open-source SAT question bank. Dive into a massive pool of SAT practice problems, constantly growing thanks to a dedicated community of contributors."),
+            Meta(property="og:image" ,content="public/graduation-cap-solid.svg"),
+            Meta(property="og:url" ,content="https://opensat.fun/"),
+            Meta(property="og:type" ,content="website"),
             Title("OpenSAT"),
             Link(rel="icon",href="public/graduation-cap-solid.svg", sizes="any", type="image/svg+xml"),
             Script('''MathJax = {
@@ -16,7 +21,9 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
 };'''),
             Script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"),
                 Title("OpenSAT"),
-                Style(open("./main.css").read()))
+                Style(open("main.css").read())
+                
+)
 
 
 
