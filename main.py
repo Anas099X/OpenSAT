@@ -6,7 +6,7 @@ app,rt = fast_app(debug=True)
 Defaults = (Meta(name="viewport", content="width=device-width"),
             Meta(property="og:title" ,content="OpenSAT: Question Bank with Endless Possibilities"),
             Meta(property="og:description" ,content="OpenSAT, a free and open-source SAT question bank. Dive into a massive pool of SAT practice problems, constantly growing thanks to a dedicated community of contributors."),
-            Meta(property="og:image" ,content="public/graduation-cap-solid.svg"),
+            Meta(property="og:image" ,content="public/banner.png"),
             Meta(property="og:url" ,content="https://opensat.fun/"),
             Meta(property="og:type" ,content="website"),
             Title("OpenSAT"),
