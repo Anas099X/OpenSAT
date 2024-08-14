@@ -1,0 +1,5 @@
+python-fasthtml
+os
+requests
+firebase-admin
+python-dotenv
