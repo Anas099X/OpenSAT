@@ -1,4 +1,3 @@
-from fasthtml import FastHTML
 from fasthtml.common import *
 from settings import *
 
@@ -17,7 +16,8 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
 };'''),
             Script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"),
                 Title("OpenSAT"),
-                Style(open("./main.css").read()))
+                main_style
+)
 
 
 
