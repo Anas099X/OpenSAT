@@ -123,11 +123,11 @@ def get(section:str,domain:str):
                 Main(
                     Div(
                        Div(
-                         A("English", href=f'/explore/english/any',cls="btn btn-primary"),
-                         A("Math", href=f'/explore/math/any',cls="btn btn-primary"),
+                         H1("🔎 Filters", style=""),
+                         A("English", href=f'/explore/english/any',cls=["btn btn-primary" if section == 'english' else "btn btn-secondary"]),
+                         A("Math", href=f'/explore/math/any',cls=["btn btn-primary" if section == 'math' else "btn btn-secondary"]),
                          Br(),
                          Br(),
-
                          Div(filter_switch()),
                         cls="filter-container"),
                         *[ A(Div("📚", cls="icon"), Div(f'Question #{i}', cls="question-number"), Div(x['domain'], cls="category"), cls="card", href=f"/questions/{section}/{i}/True" ) if domain.lower().replace('%20',' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20',' ') else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]

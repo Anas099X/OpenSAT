@@ -85,10 +85,17 @@ body::before {
     padding: 20px;
     background-color: #f1edd0;
     border-radius: 20px;
-    max-height:43vh;
-    max-width:92vh;
-    align-items: center;
-    font-size:12px;
+    max-height: 43vh;
+    max-width: 92vh;
+    align-items: flex-end;
+    font-size: 12px;
+}
+
+/* Apply margin for screens larger than typical phone screens */
+@media screen and (min-width: 769px) {
+    .filter-container {
+        margin-left: 2vh;
+    }
 }
 
 .list-content {
