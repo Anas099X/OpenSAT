@@ -3,3 +3,5 @@ settings
 .env
 \.sesskey
 \test.py
+\question_generator.py
+\test.json

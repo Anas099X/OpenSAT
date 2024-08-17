@@ -1,7 +1,7 @@
 from fasthtml.common import *
 from settings import *
 
-app,rt = fast_app(debug=True)
+app,rt = fast_app(debug=True,live=True)
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
             Meta(property="og:title" ,content="OpenSAT: Question Bank with Endless Possibilities"),
@@ -96,7 +96,7 @@ def get(section:str,domain:str):
      return (
      A("Algebra", href=f'/explore/{section}/algebra',cls="btn btn-filter"),
      A("Advanced Math", href=f'/explore/{section}/advanced math',cls="btn btn-filter"),
-     A("Problem-Solving and Data Analysis", href=f'/explore/{section}/problem solving and data analysis',cls="btn btn-filter"),
+     A("Problem-Solving and Data Analysis", href=f'/explore/{section}/problem-solving and data analysis',cls="btn btn-filter"),
      A("Geometry and Trigonometry", href=f'/explore/{section}/geometry and trigonometry',cls="btn btn-filter")
     )
    
@@ -172,7 +172,7 @@ def get(section:str,num:int,answer:bool):
                          
                         H2(f"Question #{question_obj['id']}"),
                         P(question_obj['question'].get('paragraph', "")),
-                        B(question_obj['question']['question'].replace('$','$')),
+                        B(question_obj['question']['question']),
                         
                         Div(B("A."), question_obj['question']['choices']['A']),
                         Div(B("B."), question_obj['question']['choices']['B']),
@@ -237,6 +237,50 @@ def get():
 ) 
 
 )
+
+
+
+@rt("/practice")
+def get():
+
+
+   
+ return (
+    
+       Html(
+            Head(
+                Defaults
+            ),
+            Body(
+                Header(
+                    A(
+                        Span("🎓", style="font-size:1.8rem;"),
+                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
+                        cls="logo",href='/',style="text-decoration: none"
+                    ),
+                    Nav(
+                        A("Tutors", href="/tutors", cls="btn btn-primary"),
+                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
+                        cls="nav"
+                    ),
+                    cls="header"
+                ),
+                Main(
+                    Div(
+                        #*[Div(doc.to_dict()['age'],cls="card") for doc in firestore_docs],
+
+                       *[Div(Img(src=doc.to_dict()['banner'],cls="avatar"),Div(H3(doc.to_dict()['username']),P(doc.to_dict()['description'],cls="description"),P(doc.to_dict()['availability'],cls="status"),P(doc.to_dict()['email'],cls="email"),Div(doc.to_dict()['country'],cls="location"),cls="info"),Button(f"Contact: {doc.to_dict()['contact']}",cls="contact-btn"),cls="profile-card") for doc in firestore_docs]
+                        
+
+                        ,cls="list-content"
+                   )
+                   ,Style="display:flex;"
+                )
+        )
+) 
+
+)
+
 
 
 serve()
