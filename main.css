@@ -321,3 +321,101 @@ body {
     font-size: 1em;
     font-weight: bold;
 }
+
+
+/* Question Text Container */
+.question-container {
+    display: flex;
+    flex: 2;
+    padding-right: 20px;
+    border-right: 2px solid #f1edd0;
+    width:30vh;
+}
+
+.question-text {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+}
+ 
+/* Options Container */
+.options-container {
+    flex: 1;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.option {
+    font-size: 1rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    padding: 5px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.option input[type="radio"] {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #fc9d9a;
+    border-radius: 50%;
+    margin-right: 12px;
+    display: grid;
+    place-content: center;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.option input[type="radio"]::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    transform: scale(0);
+    transition: 120ms transform ease-in-out;
+    box-shadow: inset 1em 1em #fc9d9a;
+}
+
+.option input[type="radio"]:checked::before {
+    transform: scale(1);
+}
+
+.option label {
+    cursor: pointer;
+    font-weight: 500;
+}
+
+/* Question Text Container */
+.practice-container {
+    max-width:80vh;
+    background-color: #f1edd0;
+    border-radius: 20px;
+    padding: 40px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+}
+
+.practice-text {
+    font-size: 1rem;
+    color: #333;
+    line-height: 1.5;
+}
+
+/* Timer */
+.timer {
+    font-size: 1.4rem;
+    font-weight: bold;
+    color: #000;
+}

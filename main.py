@@ -20,16 +20,12 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
   }
 };'''),
             Script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"),
+            Script(src="https://unpkg.com/htmx.org@2.0.2"),
             Script(src="/_vercel/insights/script.js"),
                 Title("OpenSAT"),
                 Style(open("main.css").read())
                 
 )
-
-
-
-def hide_switch(input):
-   return not input
 
 
 
@@ -147,6 +143,11 @@ def get(section:str,domain:str):
 @rt('/questions/{section}/{num}/{answer}')
 def get(section:str,num:int,answer:bool):
    question_obj = question_objects(section)[num]
+
+   def hide_switch(input):
+    return not input
+
+
    return (
      Html(
             Head(
@@ -247,40 +248,62 @@ def get():
    
  return (
     
-       Html(
-            Head(
-                Defaults
-            ),
-            Body(
-                Header(
-                    A(
-                        Span("🎓", style="font-size:1.8rem;"),
-                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        cls="logo",href='/',style="text-decoration: none"
-                    ),
-                    Nav(
-                        A("Tutors", href="/tutors", cls="btn btn-primary"),
-                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
-                        cls="nav"
-                    ),
-                    cls="header"
-                ),
-                Main(
-                    Div(
-                        #*[Div(doc.to_dict()['age'],cls="card") for doc in firestore_docs],
-
-                       *[Div(Img(src=doc.to_dict()['banner'],cls="avatar"),Div(H3(doc.to_dict()['username']),P(doc.to_dict()['description'],cls="description"),P(doc.to_dict()['availability'],cls="status"),P(doc.to_dict()['email'],cls="email"),Div(doc.to_dict()['country'],cls="location"),cls="info"),Button(f"Contact: {doc.to_dict()['contact']}",cls="contact-btn"),cls="profile-card") for doc in firestore_docs]
+   Html(
+    Head(
+        Defaults  # This would include meta tags, CSS links, etc.
+    ),
+    Body(
+        Header(
+            
+                H3("Section 1, Module 1: Reading and Writing"),
+                Div(  
+                A(Span("31:19",cls="timer"), cls="btn btn-secondary")
+                )        
+            ,
+            cls="header",style="flex-direction: row; height:12vh;"
+        ),
+        Main(
+             Div(
+                         
+                        H2(f"Question #11111"),
+                        P("Researchers and conservationists stress that biodiversity loss due to invasive species is ______. "
+                        "For example, people can take simple steps such as washing their footwear after travel to avoid "
+                        "introducing potentially invasive organisms into new environments."),
+                        B("GGG"),
                         
+                        Div( Label(
+                            Input(type="radio", name="answer", value="A"),
+                            Span("preventable"),
+                            cls="option"
+                        ),
+                        Label(
+                            Input(type="radio", name="answer", value="B"),
+                            Span("undeniable"),
+                            cls="option"
+                        ),
+                        Label(
+                            Input(type="radio", name="answer", value="C"),
+                            Span("common"),
+                            cls="option"
+                        ),
+                        Label(
+                            Input(type="radio", name="answer", value="D"),
+                            Span("concerning"),
+                            cls="option"
+                        ),
+                        cls="options"),
 
-                        ,cls="list-content"
+                        Br(),
+                        A("<<--", href=f'/explore/any',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("-->>", href=f'/explore/any',cls="btn btn-secondary", style="font-size:0.9em;"),
+
+                        cls="practice-container"
                    )
-                   ,Style="display:flex;"
-                )
-        )
-) 
-
+                   ,Style="display:flex; margin-top:10vh;"
+    )
 )
-
+ )
+ )
 
 
 serve()
