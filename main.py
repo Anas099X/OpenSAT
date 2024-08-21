@@ -1,5 +1,6 @@
 from fasthtml.common import *
 from settings import *
+import random
 
 app,rt = fast_app(debug=True,live=True)
 
@@ -244,7 +245,11 @@ def get():
 @rt("/practice")
 def get():
 
+ practice_en_questions = []
+ 
+ [practice_en_questions.insert(random.randrange(0, len(practice_en_questions) + 1), random.randint(0, 1000)) for x in range(54)]
 
+ question_obj = question_objects('english')[practice_en_questions[1]] 
    
  return (
     
@@ -257,7 +262,7 @@ def get():
             
                 H3("Section 1, Module 1: Reading and Writing"),
                 Div(  
-                A(Span("31:19",cls="timer"), cls="btn btn-secondary")
+                A(Span("31:19"), cls="timer btn btn-secondary")
                 )        
             ,
             cls="header",style="flex-direction: row; height:12vh;"
@@ -265,38 +270,38 @@ def get():
         Main(
              Div(
                          
-                        H2(f"Question #11111"),
-                        P("Researchers and conservationists stress that biodiversity loss due to invasive species is ______. "
-                        "For example, people can take simple steps such as washing their footwear after travel to avoid "
-                        "introducing potentially invasive organisms into new environments."),
-                        B("GGG"),
+                        
+                        P(question_obj['question'].get('paragraph', "")),
+                        B(question_obj['question']['question']),
                         
                         Div( Label(
                             Input(type="radio", name="answer", value="A"),
-                            Span("preventable"),
+                            Span(question_obj['question']['choices']['A']),
                             cls="option"
                         ),
                         Label(
                             Input(type="radio", name="answer", value="B"),
-                            Span("undeniable"),
+                            Span(question_obj['question']['choices']['B']),
                             cls="option"
                         ),
                         Label(
                             Input(type="radio", name="answer", value="C"),
-                            Span("common"),
+                            Span(question_obj['question']['choices']['C']),
                             cls="option"
                         ),
                         Label(
                             Input(type="radio", name="answer", value="D"),
-                            Span("concerning"),
+                            Span(question_obj['question']['choices']['D']),
                             cls="option"
                         ),
                         cls="options"),
 
                         Br(),
-                        A("<<--", href=f'/explore/any',cls="btn btn-secondary", style="font-size:0.9em;"),
-                        A("-->>", href=f'/explore/any',cls="btn btn-secondary", style="font-size:0.9em;"),
-
+                        Div(
+                        A("Back", href=f'/explore/any',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Next", href=f'/explore/any',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        style="display:flex; justify-content:space-between;"
+                        ),
                         cls="practice-container"
                    )
                    ,Style="display:flex; margin-top:10vh;"
