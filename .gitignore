@@ -6,3 +6,5 @@ settings
 \question_generator.py
 \test.json
 \test.db
+\practicetest_generator.py
+\data.json

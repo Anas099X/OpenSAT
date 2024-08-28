@@ -1,6 +1,6 @@
 from fasthtml.common import *
 from settings import *
-import random
+import random, json
 
 app,rt = fast_app(debug=True,live=True)
 
@@ -242,14 +242,14 @@ def get():
 
 
 
-@rt("/practice")
-def get():
+@rt("/practice/page/{count}")
+def get(count:int):
 
- practice_en_questions = []
+ practice_en_questions = json.load(open('data.json'))
  
- [practice_en_questions.insert(random.randrange(0, len(practice_en_questions) + 1), random.randint(0, 1000)) for x in range(54)]
+ 
 
- question_obj = question_objects('english')[practice_en_questions[1]] 
+ question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][count]] 
    
  return (
     
@@ -298,8 +298,8 @@ def get():
 
                         Br(),
                         Div(
-                        A("Back", href=f'/explore/any',cls="btn btn-secondary", style="font-size:0.9em;"),
-                        A("Next", href=f'/explore/any',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Back", href=f'{count - 1 if count > 0 else count}',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Next", href=f'{count + 1 if count < 54 else count}',cls="btn btn-secondary", style="font-size:0.9em;"),
                         style="display:flex; justify-content:space-between;"
                         ),
                         cls="practice-container"
@@ -307,8 +307,5 @@ def get():
                    ,Style="display:flex; margin-top:10vh;"
     )
 )
- )
- )
-
-
-serve()
+)
+)
