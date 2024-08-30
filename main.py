@@ -243,11 +243,11 @@ def get():
 
 
 @rt("/practice/page/{count}")
-def get(count:int):
+def get(session,count:int):
 
  practice_en_questions = json.load(open('data.json'))
  
- 
+ session['en1'] = session.get('en1')
 
  question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][count]] 
    
@@ -260,7 +260,7 @@ def get(count:int):
     Body(
         Header(
             
-                H3("Section 1, Module 1: Reading and Writing"),
+                H3(session['en1']),
                 Div(  
                 A(Span("31:19"), cls="timer btn btn-secondary")
                 )        
@@ -274,7 +274,7 @@ def get(count:int):
                         P(question_obj['question'].get('paragraph', "")),
                         B(question_obj['question']['question']),
                         
-                        Div( Label(
+                        Form( Label(
                             Input(type="radio", name="answer", value="A"),
                             Span(question_obj['question']['choices']['A']),
                             cls="option"
@@ -294,7 +294,7 @@ def get(count:int):
                             Span(question_obj['question']['choices']['D']),
                             cls="option"
                         ),
-                        cls="options"),
+                        cls="options", hx_post="/page", hx_trigger="change", hx_swap="none"),
 
                         Br(),
                         Div(
@@ -309,3 +309,11 @@ def get(count:int):
 )
 )
 )
+
+@rt('/page')
+def post(session,answer:str):
+ session.clear()
+ session.setdefault('en1', answer)
+
+
+serve()
