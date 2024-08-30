@@ -249,7 +249,13 @@ def get(session,count:int):
  
  session['en1'] = session.get('en1')
 
- question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][count]] 
+ question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][count]]
+
+ def practice_options(value:str):
+    if session['en1'][count][str(count)] == value:
+     return Input(type="radio", name="answer", value=value, checked=True)
+    else:
+     return Input(type="radio", name="answer", value=value) 
    
  return (
     
@@ -260,7 +266,7 @@ def get(session,count:int):
     Body(
         Header(
             
-                H3(session['en1']),
+                H3(session['en1'][count][str(count)]),
                 Div(  
                 A(Span("31:19"), cls="timer btn btn-secondary")
                 )        
@@ -275,30 +281,30 @@ def get(session,count:int):
                         B(question_obj['question']['question']),
                         
                         Form( Label(
-                            Input(type="radio", name="answer", value="A"),
+                            practice_options('A'),
                             Span(question_obj['question']['choices']['A']),
                             cls="option"
                         ),
                         Label(
-                            Input(type="radio", name="answer", value="B"),
+                            practice_options('B'),
                             Span(question_obj['question']['choices']['B']),
                             cls="option"
                         ),
                         Label(
-                            Input(type="radio", name="answer", value="C"),
+                            practice_options('C'),
                             Span(question_obj['question']['choices']['C']),
                             cls="option"
                         ),
                         Label(
-                            Input(type="radio", name="answer", value="D"),
+                            practice_options('D'),
                             Span(question_obj['question']['choices']['D']),
                             cls="option"
                         ),
-                        cls="options", hx_post="/page", hx_trigger="change", hx_swap="none"),
+                        cls="options", hx_post=f"/page/{count}", hx_trigger="change", hx_swap="none"),
 
                         Br(),
                         Div(
-                        A("Back", href=f'{count - 1 if count > 0 else count}',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Back", href=f'{count - 1 if count > 1 else count}',cls="btn btn-secondary", style="font-size:0.9em;"),
                         A("Next", href=f'{count + 1 if count < 54 else count}',cls="btn btn-secondary", style="font-size:0.9em;"),
                         style="display:flex; justify-content:space-between;"
                         ),
@@ -310,10 +316,28 @@ def get(session,count:int):
 )
 )
 
-@rt('/page')
-def post(session,answer:str):
- session.clear()
- session.setdefault('en1', answer)
+@rt('/page/{count}')
+def post(session,count:int,answer:str):
+ session.setdefault('en1', [])
+ practice_answers = session['en1']
+
+ # Ensure count is an integer
+ count = int(count)
+
+ # Update or append the new item
+ new_item = {count: answer}
+ if count < len(practice_answers):
+        practice_answers[count] = new_item
+ else:
+        practice_answers.append(new_item)
+
+ # Sort the list based on the count (key of the dictionary)
+ practice_answers.sort(key=lambda x: int(list(x.keys())[0]))
+
+ # Update the session
+ session['en1'] = practice_answers
+
+ 
 
 
 serve()
