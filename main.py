@@ -1,6 +1,9 @@
 from fasthtml.common import *
 from settings import *
-import random, json
+from datetime import *
+import asyncio
+import random, json, time
+from starlette.responses import StreamingResponse
 
 app,rt = fast_app(debug=True,live=True)
 
@@ -23,6 +26,7 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
             Script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"),
             Script(src="https://unpkg.com/htmx.org@2.0.2"),
             Script(src="/_vercel/insights/script.js"),
+            Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
                 Title("OpenSAT"),
                 Style(open("main.css").read())
                 
@@ -242,17 +246,23 @@ def get():
 
 
 
-@rt("/practice/page/{count}")
-def get(session,count:int):
+@rt("/{practice}/{module}/page/{num}")
+def get(session,practice:str,module:str,num:int):
 
  practice_en_questions = json.load(open('data.json'))
  
- session['en1'] = session.get('en1')
+ question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][num]]
+ def answers_session(count):
+    session['en1'] = session.get('en1')
+    try:
+     return session['en1'][count][str(count)]
+    except:
+      return None
+    
 
- question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][count]]
-
+   
  def practice_options(value:str):
-    if session['en1'][count][str(count)] == value:
+    if answers_session(num) == value:
      return Input(type="radio", name="answer", value=value, checked=True)
     else:
      return Input(type="radio", name="answer", value=value) 
@@ -266,9 +276,9 @@ def get(session,count:int):
     Body(
         Header(
             
-                H3(session['en1'][count][str(count)]),
+                H3(answers_session(num)),
                 Div(  
-                A(Span("31:19"), cls="timer btn btn-secondary")
+                A('', sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect="/time-sender",cls="timer btn btn-secondary")
                 )        
             ,
             cls="header",style="flex-direction: row; height:12vh;"
@@ -300,12 +310,12 @@ def get(session,count:int):
                             Span(question_obj['question']['choices']['D']),
                             cls="option"
                         ),
-                        cls="options", hx_post=f"/page/{count}", hx_trigger="change", hx_swap="none"),
+                        cls="options", hx_post=f"/page/{num}", hx_trigger="change", hx_swap="none"),
 
                         Br(),
                         Div(
-                        A("Back", href=f'{count - 1 if count > 1 else count}',cls="btn btn-secondary", style="font-size:0.9em;"),
-                        A("Next", href=f'{count + 1 if count < 54 else count}',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Back", href=f'{num - 1 if num > 1 else num}',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Next", href=f'{num + 1 if num < 54 else num}',cls="btn btn-secondary", style="font-size:0.9em;"),
                         style="display:flex; justify-content:space-between;"
                         ),
                         cls="practice-container"
@@ -337,7 +347,43 @@ def post(session,count:int,answer:str):
  # Update the session
  session['en1'] = practice_answers
 
- 
 
+@rt("/time-sender")
+async def get(session):
+    # Total duration of the countdown (54 minutes)
+    total_duration = timedelta(minutes=54)
+
+    # Check if the start time is already in the session
+    if 'start_time' not in session:
+        # Store the current time as the start time
+        session['start_time'] = datetime.now().isoformat()
+
+    # Retrieve the start time from the session
+    start_time = datetime.fromisoformat(session['start_time'])
+
+    def time_generator():
+        while True:
+            # Calculate the elapsed time
+            elapsed_time = datetime.now() - start_time
+            
+            # Calculate the remaining time
+            remaining_time = total_duration - elapsed_time
+            
+            if remaining_time.total_seconds() > 0:
+                # Calculate minutes and seconds left
+                minutes, seconds = divmod(remaining_time.total_seconds(), 60)
+                time_str = f"{int(minutes):02d}:{int(seconds):02d}"
+            else:
+                # If time is up, show 00:00
+                time_str = "00:00"
+
+            # Send the remaining time to all connected clients
+            yield f"""event: TimeUpdateEvent\ndata: {to_xml(P(time_str, sse_swap="TimeUpdateEvent"))}\n\n"""
+
+            # Sleep for a second before the next update
+            time.sleep(1)
+    
+    # Start streaming the countdown timer
+    return StreamingResponse(time_generator(), media_type="text/event-stream")
 
 serve()
