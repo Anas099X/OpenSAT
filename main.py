@@ -276,9 +276,9 @@ def get(session,practice:str,module:str,num:int):
     Body(
         Header(
             
-                H3(answers_session(num)),
+                H3(datetime.fromisoformat(session['start_time'])),
                 Div(  
-                A('', sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect="/time-sender",cls="timer btn btn-secondary")
+                A('', sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect="/time-sender/False",cls="timer btn btn-secondary")
                 )        
             ,
             cls="header",style="flex-direction: row; height:12vh;"
@@ -290,7 +290,7 @@ def get(session,practice:str,module:str,num:int):
                         P(question_obj['question'].get('paragraph', "")),
                         B(question_obj['question']['question']),
                         
-                        Form( Label(
+                        Form(Label(
                             practice_options('A'),
                             Span(question_obj['question']['choices']['A']),
                             cls="option"
@@ -348,8 +348,10 @@ def post(session,count:int,answer:str):
  session['en1'] = practice_answers
 
 
-@rt("/time-sender")
-async def get(session):
+@rt("/time-sender/{reset}")
+async def get(session,reset:bool):
+    if reset == True:
+     session.clear()
     # Total duration of the countdown (54 minutes)
     total_duration = timedelta(minutes=54)
 
@@ -360,6 +362,7 @@ async def get(session):
 
     # Retrieve the start time from the session
     start_time = datetime.fromisoformat(session['start_time'])
+
 
     def time_generator():
         while True:
@@ -376,6 +379,7 @@ async def get(session):
             else:
                 # If time is up, show 00:00
                 time_str = "00:00"
+
 
             # Send the remaining time to all connected clients
             yield f"""event: TimeUpdateEvent\ndata: {to_xml(P(time_str, sse_swap="TimeUpdateEvent"))}\n\n"""
