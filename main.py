@@ -246,23 +246,28 @@ def get():
 
 
 
-@rt("/{practice}/{module}/page/{num}")
-def get(session,practice:str,module:str,num:int):
+@rt("/{practice}/{module}")
+def get(session,practice:str,module:str):
+
+ if 'page' not in session or session['page'] is None:
+        session['page'] = 1  
+ if 'en1' not in session or session['en1'] is None:
+        session['en1'] = []
 
  practice_en_questions = json.load(open('data.json'))
  
- question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][num]]
+ question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][session['page']]]
  def answers_session(count):
     session['en1'] = session.get('en1')
     try:
      return session['en1'][count][str(count)]
     except:
       return None
-    
-
+     
+ reset_timer = True
    
  def practice_options(value:str):
-    if answers_session(num) == value:
+    if answers_session(session['page']) == value:
      return Input(type="radio", name="answer", value=value, checked=True)
     else:
      return Input(type="radio", name="answer", value=value) 
@@ -276,9 +281,9 @@ def get(session,practice:str,module:str,num:int):
     Body(
         Header(
             
-                H3(datetime.fromisoformat(session['start_time'])),
+                H3(session['en1']),
                 Div(  
-                A('', sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect="/time-sender/False",cls="timer btn btn-secondary")
+                A('',sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect=f"/time-sender",cls="timer btn btn-secondary")
                 )        
             ,
             cls="header",style="flex-direction: row; height:12vh;"
@@ -310,48 +315,65 @@ def get(session,practice:str,module:str,num:int):
                             Span(question_obj['question']['choices']['D']),
                             cls="option"
                         ),
-                        cls="options", hx_post=f"/page/{num}", hx_trigger="change", hx_swap="none"),
+                        cls="options", hx_post=f"/page/{session['page']}", hx_trigger="change", hx_swap="none"),
 
                         Br(),
                         Div(
-                        A("Back", href=f'{num - 1 if num > 1 else num}',cls="btn btn-secondary", style="font-size:0.9em;"),
-                        A("Next", href=f'{num + 1 if num < 54 else num}',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Back", hx_post=f'/previous_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Next", hx_post=f'/next_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
                         style="display:flex; justify-content:space-between;"
                         ),
                         cls="practice-container"
                    )
                    ,Style="display:flex; margin-top:10vh;"
     )
+,id="practice_html")
 )
 )
-)
+
+
+@rt('/next_page/{practice}/{module}')
+def post(session,practice:str,module:str):
+ # Initialize 'en1' in the session if it doesn't exist or if it's None
+    session.setdefault('page', 1)
+    session['page'] = session.get('page') + 1
+    return RedirectResponse(f'/{practice}/{module}', status_code=303)
+
+@rt('/previous_page/{practice}/{module}')
+def post(session,practice:str,module:str):
+ # Initialize 'en1' in the session if it doesn't exist or if it's None
+    session.setdefault('page', 1)
+    session['page'] = session.get('page') - 1
+    return RedirectResponse(f'/{practice}/{module}', status_code=303)
 
 @rt('/page/{count}')
-def post(session,count:int,answer:str):
- session.setdefault('en1', [])
- practice_answers = session['en1']
+def post(session, count: int, answer: str):
+    # Initialize 'en1' in the session if it doesn't exist or if it's None
+    if 'en1' not in session or session['en1'] is None:
+        session['en1'] = []
+    practice_answers = session['en1']
 
- # Ensure count is an integer
- count = int(count)
+    # Ensure count is an integer
+    count = int(count)
 
- # Update or append the new item
- new_item = {count: answer}
- if count < len(practice_answers):
+    # Update or append the new item
+    new_item = {count: answer}
+    if count < len(practice_answers):
         practice_answers[count] = new_item
- else:
+    else:
         practice_answers.append(new_item)
 
- # Sort the list based on the count (key of the dictionary)
- practice_answers.sort(key=lambda x: int(list(x.keys())[0]))
+    # Sort the list based on the count (key of the dictionary)
+    practice_answers.sort(key=lambda x: int(list(x.keys())[0]))
 
- # Update the session
- session['en1'] = practice_answers
+    # Update the session
+    session['en1'] = practice_answers
 
 
-@rt("/time-sender/{reset}")
-async def get(session,reset:bool):
-    if reset == True:
-     session.clear()
+
+@rt("/time-sender")
+async def get(session):
+    #session.clear()
     # Total duration of the countdown (54 minutes)
     total_duration = timedelta(minutes=54)
 
