@@ -248,21 +248,20 @@ def get():
 
 @rt("/{practice}/{module}")
 def get(session,practice:str,module:str):
-
+ #del session[module]
  if 'page' not in session or session['page'] is None:
-        session['page'] = 1  
- if 'en1' not in session or session['en1'] is None:
-        session['en1'] = []
+        session['page'] = 1
+ if module not in session or session[module] is None:
+        session[module] = []
 
  practice_en_questions = json.load(open('data.json'))
  
- question_obj = question_objects('english')[practice_en_questions['practice1']['en1'][session['page']]]
+ question_obj = question_objects('english')[practice_en_questions['practice1'][module][session['page']]]
  def answers_session(count):
-    session['en1'] = session.get('en1')
-    try:
-     return session['en1'][count][str(count)]
-    except:
-      return None
+  for answer in session[module]:
+     if str(count) in answer:
+      return answer[str(count)]
+     
      
  reset_timer = True
    
@@ -281,9 +280,9 @@ def get(session,practice:str,module:str):
     Body(
         Header(
             
-                H3(session['en1']),
+                H3(session[module]),
                 Div(  
-                A('',sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect=f"/time-sender",cls="timer btn btn-secondary")
+                #A('',sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect=f"/time-sender",cls="timer btn btn-secondary")
                 )        
             ,
             cls="header",style="flex-direction: row; height:12vh;"
@@ -315,11 +314,12 @@ def get(session,practice:str,module:str):
                             Span(question_obj['question']['choices']['D']),
                             cls="option"
                         ),
-                        cls="options", hx_post=f"/page/{session['page']}", hx_trigger="change", hx_swap="none"),
+                        cls="options", hx_post=f"/page/{module}/{session['page']}", hx_trigger="change", hx_swap="none"),
 
                         Br(),
                         Div(
                         A("Back", hx_post=f'/previous_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        H4(session['page']),
                         A("Next", hx_post=f'/next_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
                         style="display:flex; justify-content:space-between;"
                         ),
@@ -334,46 +334,50 @@ def get(session,practice:str,module:str):
 
 @rt('/next_page/{practice}/{module}')
 def post(session,practice:str,module:str):
- # Initialize 'en1' in the session if it doesn't exist or if it's None
-    session.setdefault('page', 1)
+ # Initialize module in the session if it doesn't exist or if it's None
+    session.setdefault('page', 0)
     session['page'] = session.get('page') + 1
     return RedirectResponse(f'/{practice}/{module}', status_code=303)
 
 @rt('/previous_page/{practice}/{module}')
 def post(session,practice:str,module:str):
- # Initialize 'en1' in the session if it doesn't exist or if it's None
+ # Initialize module in the session if it doesn't exist or if it's None
     session.setdefault('page', 1)
     session['page'] = session.get('page') - 1
     return RedirectResponse(f'/{practice}/{module}', status_code=303)
 
-@rt('/page/{count}')
-def post(session, count: int, answer: str):
-    # Initialize 'en1' in the session if it doesn't exist or if it's None
-    if 'en1' not in session or session['en1'] is None:
-        session['en1'] = []
-    practice_answers = session['en1']
+@rt('/page/{module}/{count}')
+def post(session, count: int, module: str, answer: str):
+    # Initialize module in the session if it doesn't exist or if it's None
+    if module not in session or session[module] is None:
+        session[module] = []
+    practice_answers = session[module]
 
     # Ensure count is an integer
-    count = int(count)
+    count = str(count)
 
     # Update or append the new item
-    new_item = {count: answer}
-    if count < len(practice_answers):
-        practice_answers[count] = new_item
+    for item in practice_answers:
+        if count in item:
+            # If the count already exists, update the answer
+            item[count] = answer
+            break
     else:
-        practice_answers.append(new_item)
+        # If the count doesn't exist, append a new item
+        practice_answers.append({count: answer})
 
-    # Sort the list based on the count (key of the dictionary)
-    practice_answers.sort(key=lambda x: int(list(x.keys())[0]))
+    # Update the session with the modified practice_answers
+    session[module] = practice_answers
+
 
     # Update the session
-    session['en1'] = practice_answers
+    session[module] = practice_answers
 
 
 
 @rt("/time-sender")
 async def get(session):
-    #session.clear()
+    #del session['start_time']
     # Total duration of the countdown (54 minutes)
     total_duration = timedelta(minutes=54)
 
@@ -410,6 +414,6 @@ async def get(session):
             time.sleep(1)
     
     # Start streaming the countdown timer
-    return StreamingResponse(time_generator(), media_type="text/event-stream")
+    return StreamingResponse(time_generator())
 
 serve()
