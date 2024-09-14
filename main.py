@@ -256,14 +256,14 @@ def get(session,practice:str,module:str):
 
  practice_en_questions = json.load(open('data.json'))
  
- question_obj = question_objects('english')[practice_en_questions['practice1'][module][session['page']]]
+ question_obj = question_objects('english')[practice_en_questions[practice][module][session['page']]]
  def answers_session(count):
   for answer in session[module]:
      if str(count) in answer:
       return answer[str(count)]
      
      
- reset_timer = True
+ timer_time = 10
    
  def practice_options(value:str):
     if answers_session(session['page']) == value:
@@ -282,7 +282,7 @@ def get(session,practice:str,module:str):
             
                 H3(session[module]),
                 Div(  
-                #A('',sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect=f"/time-sender",cls="timer btn btn-secondary")
+                #A('',sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect=f"/time-sender/{timer_time}",cls="timer btn btn-secondary")
                 )        
             ,
             cls="header",style="flex-direction: row; height:12vh;"
@@ -375,23 +375,20 @@ def post(session, count: int, module: str, answer: str):
 
 
 
-@rt("/time-sender")
-async def get(session):
-    #del session['start_time']
+@rt("/time-sender/{time}")
+async def get(session,time:int):
     # Total duration of the countdown (54 minutes)
-    total_duration = timedelta(minutes=54)
+    total_duration = timedelta(minutes=int(time))
 
-    # Check if the start time is already in the session
+    # Ensure the start time is in the session
     if 'start_time' not in session:
-        # Store the current time as the start time
         session['start_time'] = datetime.now().isoformat()
 
-    # Retrieve the start time from the session
-    start_time = datetime.fromisoformat(session['start_time'])
-
-
-    def time_generator():
+    async def time_generator():
         while True:
+            # Retrieve the start time from the session at the start of each iteration
+            start_time = datetime.fromisoformat(session['start_time'])
+
             # Calculate the elapsed time
             elapsed_time = datetime.now() - start_time
             
@@ -403,17 +400,22 @@ async def get(session):
                 minutes, seconds = divmod(remaining_time.total_seconds(), 60)
                 time_str = f"{int(minutes):02d}:{int(seconds):02d}"
             else:
-                # If time is up, show 00:00
+                # If time is up, reset the timer
+                session['start_time'] = datetime.now().isoformat()
+                start_time = datetime.fromisoformat(session['start_time'])
                 time_str = "00:00"
-
 
             # Send the remaining time to all connected clients
             yield f"""event: TimeUpdateEvent\ndata: {to_xml(P(time_str, sse_swap="TimeUpdateEvent"))}\n\n"""
 
-            # Sleep for a second before the next update
-            time.sleep(1)
-    
-    # Start streaming the countdown timer
-    return StreamingResponse(time_generator())
+            # Use asyncio.sleep to keep the loop non-blocking
+            await asyncio.sleep(1)
+
+    try:
+        # Start streaming the countdown timer
+        return StreamingResponse(time_generator(), media_type="text/event-stream")
+    except asyncio.CancelledError:
+        # This block will be executed when the server is shutting down
+        print("Timer stream was cancelled")
 
 serve()
