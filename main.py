@@ -280,7 +280,7 @@ def get(session,practice:str,module:str):
     Body(
         Header(
             
-                H3(session[module]),
+                H3(session['page'] + 1),
                 Div(  
                 #A('',sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect=f"/time-sender/{timer_time}",cls="timer btn btn-secondary")
                 )        
@@ -318,9 +318,9 @@ def get(session,practice:str,module:str):
 
                         Br(),
                         Div(
-                        A("Back", hx_post=f'/previous_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
-                        H4(session['page']),
-                        A("Next", hx_post=f'/next_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Back", hx_post=[f'/previous_page/{practice}/{module}' if session['page'] > 0 else None],hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        H4(session['page'] + 1),
+                        [A("Next", hx_post=[f'/next_page/{practice}/{module}' if session['page'] < 54 else None],hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;")],
                         style="display:flex; justify-content:space-between;"
                         ),
                         cls="practice-container"
@@ -330,6 +330,7 @@ def get(session,practice:str,module:str):
 ,id="practice_html")
 )
 )
+
 
 
 @rt('/next_page/{practice}/{module}')
@@ -342,7 +343,7 @@ def post(session,practice:str,module:str):
 @rt('/previous_page/{practice}/{module}')
 def post(session,practice:str,module:str):
  # Initialize module in the session if it doesn't exist or if it's None
-    session.setdefault('page', 1)
+    session.setdefault('page', 0)
     session['page'] = session.get('page') - 1
     return RedirectResponse(f'/{practice}/{module}', status_code=303)
 
