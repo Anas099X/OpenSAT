@@ -124,7 +124,7 @@ def get(section:str,domain:str):
                 Main(
                     Div(
                        Div(
-                         H1("🔎 Filters", style=""),
+                         H1("🔎 Filters"),
                          A("English", href=f'/explore/english/any',cls=["btn btn-primary" if section == 'english' else "btn btn-secondary"]),
                          A("Math", href=f'/explore/math/any',cls=["btn btn-primary" if section == 'math' else "btn btn-secondary"]),
                          Br(),
