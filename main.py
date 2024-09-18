@@ -263,7 +263,9 @@ def get(session,practice:str,module:str):
      if str(count) in answer:
       return answer[str(count)]
      
-     
+ def switch_module():
+     session['page'] = 0
+     return f'/{practice}/module_2'
  timer_time = 10
    
  def practice_options(value:str):
@@ -321,7 +323,7 @@ def get(session,practice:str,module:str):
                         Div(
                         A("Back", hx_post=[f'/previous_page/{practice}/{module}' if session['page'] > 0 else None],hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
                         H4(session['page'] + 1),
-                        A("Next", hx_post=f'/next_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;") if session['page'] < 53 else A("Finish", hx_post=f'/next_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Next", hx_post=f'/next_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;") if session['page'] < 53 else A("Finish", href=switch_module(),hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
                         style="display:flex; justify-content:space-between;"
                         ),
                         cls="practice-container"
