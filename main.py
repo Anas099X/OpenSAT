@@ -246,10 +246,11 @@ def get():
 
 
 
-@rt("/{practice}/{module}")
-def get(session,practice:str,module:str):
+@rt("/{practice}/module/{module_number}")
+def get(session,practice:str,module_number:int):
  #del session[module]
  # session['page'] = 50
+ module = f'module_{module_number}'
  if 'page' not in session or session['page'] is None:
         session['page'] = 1
  if module not in session or session[module] is None:
@@ -263,9 +264,6 @@ def get(session,practice:str,module:str):
      if str(count) in answer:
       return answer[str(count)]
      
- def switch_module():
-     session['page'] = 0
-     return f'/{practice}/module_2'
  timer_time = 10
    
  def practice_options(value:str):
@@ -321,9 +319,9 @@ def get(session,practice:str,module:str):
 
                         Br(),
                         Div(
-                        A("Back", hx_post=[f'/previous_page/{practice}/{module}' if session['page'] > 0 else None],hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Back", hx_post=[f'/previous_page/{practice}/{module_number}' if session['page'] > 0 else None],hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
                         H4(session['page'] + 1),
-                        A("Next", hx_post=f'/next_page/{practice}/{module}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;") if session['page'] < 53 else A("Finish", href=switch_module(),hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Next", hx_post=f'/next_page/{practice}/{module_number}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;") if session['page'] < 53 else A("Finish", href=f'/{practice}/module/{module_number + 1}',cls="btn btn-secondary", style="font-size:0.9em;"),
                         style="display:flex; justify-content:space-between;"
                         ),
                         cls="practice-container"
@@ -336,19 +334,19 @@ def get(session,practice:str,module:str):
 
 
 
-@rt('/next_page/{practice}/{module}')
-def post(session,practice:str,module:str):
+@rt('/next_page/{practice}/{module_number}')
+def post(session,practice:str,module_number:str):
  # Initialize module in the session if it doesn't exist or if it's None
     session.setdefault('page', 0)
     session['page'] = session.get('page') + 1
-    return RedirectResponse(f'/{practice}/{module}', status_code=303)
+    return RedirectResponse(f'/{practice}/module/{module_number}', status_code=303)
 
-@rt('/previous_page/{practice}/{module}')
-def post(session,practice:str,module:str):
+@rt('/previous_page/{practice}/{module_number}')
+def post(session,practice:str,module_number:str):
  # Initialize module in the session if it doesn't exist or if it's None
     session.setdefault('page', 0)
     session['page'] = session.get('page') - 1
-    return RedirectResponse(f'/{practice}/{module}', status_code=303)
+    return RedirectResponse(f'/{practice}/module/{module_number}', status_code=303)
 
 @rt('/page/{module}/{count}')
 def post(session, count: int, module: str, answer: str):
