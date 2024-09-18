@@ -9,3 +9,4 @@ settings
 \practicetest_generator.py
 \data.json
 \.venv
+\local_storage.json
