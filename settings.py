@@ -1,5 +1,5 @@
 import os
-import requests
+import requests, json
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
@@ -11,6 +11,7 @@ load_dotenv()
 # JSON database part remains unchanged
 response = requests.get('https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5')
 data = response.json()
+#data = json.load(open('local_storage.json'))
 
 def question_objects(section):
     return data.get(section, [])

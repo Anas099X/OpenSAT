@@ -244,7 +244,46 @@ def get():
 
 )
 
+@rt("/explore/practice")
+def get():
+ 
+ practice_questions = json.load(open('data.json'))
+ 
 
+ return (
+    
+       Html(
+            Head(
+                Defaults
+            ),
+            Body(
+                Header(
+                    A(
+                        Span("🎓", style="font-size:1.8rem;"),
+                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
+                        cls="logo",href='/',style="text-decoration: none"
+                    ),
+                    Nav(
+                        A("Tutors", href="/tutors", cls="btn btn-primary"),
+                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
+                        cls="nav"
+                    ),
+                    cls="header"
+                ),
+                Main(
+                    Div(
+
+                        *[ A(Div("📚", cls="icon"), Div(practice_questions['practice1']['name'], cls="question-number"), Div("Practice Test", cls="category"), cls="card", href=f"/practice1/module/1")]
+                        
+
+                        ,cls="list-content"
+                   )
+                   ,Style="display:flex;"
+                )
+        )
+) 
+
+)
 
 @rt("/{practice}/module/{module_number}")
 def get(session,practice:str,module_number:int):
