@@ -247,7 +247,7 @@ def get():
 @rt("/explore/practice")
 def get():
  
- practice_questions = json.load(open('data.json'))
+ modules = json.load(open('data.json'))['practice_test']
  
 
  return (
@@ -273,7 +273,7 @@ def get():
                 Main(
                     Div(
 
-                        *[ A(Div("📚", cls="icon"), Div(practice_questions['practice1']['name'], cls="question-number"), Div("Practice Test", cls="category"), cls="card", href=f"/practice1/module/1")]
+                        *[ A(Div("📚", cls="icon"), Div(module['name'], cls="question-number"), Div("Practice Test", cls="category"), cls="card", href=f"/{i}/module/1") for i, module in enumerate(modules)]
                         
 
                         ,cls="list-content"
@@ -286,16 +286,16 @@ def get():
 )
 
 @rt("/{practice}/module/{module_number}")
-def get(session,practice:str,module_number:int):
+def get(session,practice:int,module_number:int):
  #del session[module]
  # session['page'] = 50
  module = f'module_{module_number}'
  if 'page' not in session or session['page'] is None:
-        session['page'] = 1
+        session['page'] = 0
  if module not in session or session[module] is None:
         session[module] = []
 
- practice_en_questions = json.load(open('data.json'))
+ practice_en_questions = json.load(open('data.json'))['practice_test']
  
  question_obj = question_objects('english')[practice_en_questions[practice][module][session['page']]]
  def answers_session(count):

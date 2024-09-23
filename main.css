@@ -43,30 +43,60 @@ body::before {
 
 /* Buttons */
 .btn {
-    padding: 6px 12px;
+    padding: 8px 16px; /* Consistent padding */
     border-radius: 15px;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     font-weight: 600;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
+    border: none; /* Remove default border */
+    margin: 2px; /* Removed margin to eliminate spacing between buttons */
 }
-.btn-primary { background-color: #fc9d9a; color: white; }
-.btn-secondary { background-color: #f1edd0; color: black; }
+
+.btn-primary {
+    background: linear-gradient(145deg, #fc9d9a, #f96c6a); /* Gradient for primary button */
+    color: white;
+    box-shadow: 0 4px 8px rgba(255, 158, 158, 0.6); /* Colored shadow for primary button */
+}
+
+.btn-red {
+    background: linear-gradient(145deg, #ff4d4d, #ff1a1a); /* Vibrant red gradient */
+    color: white;
+    box-shadow: 0 4px 8px rgba(255, 77, 77, 0.6); /* Red-colored shadow */
+    border: none; /* No border for a cleaner look */
+    transition: all 0.3s ease;
+}
+
+.btn-secondary {
+    background: linear-gradient(145deg, #f1edd0, #e4e0b7); /* Gradient for secondary button */
+    color: #333; /* Darker text for more contrast */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Darker shadow to stand out more */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border for extra distinction */
+}
+
 .btn-filter {
-    background-color: #f1edd0;
+    background: linear-gradient(145deg, #f1edd0, #e4e0b7); /* Matching gradient with secondary */
     margin-bottom: 10px;
-    font-size:1em;
-    color: #000;
-    box-shadow: 0 3px 3px rgba(0, 0, 0, 0.35);
-  
+    font-size: 1em;
+    color: #333; /* Darker color for text */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25); /* Darker shadow for contrast */
+    border: 1px solid rgba(0, 0, 0, 0.05); /* Subtle border */
 }
+
+/* Hover and Active states */
 .btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+    transform: translateY(-4px); /* More pronounced hover effect */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25); /* Increased shadow on hover */
 }
+
+.btn:active {
+    transform: translateY(0); /* Remove elevation when pressed */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Reduced shadow for active state */
+}
+
 
 /* Layout Components */
 .container {
