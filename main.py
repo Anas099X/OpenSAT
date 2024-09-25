@@ -244,7 +244,7 @@ def get():
 
 )
 
-@rt("/explore/practice")
+@rt("/practice/explore")
 def get():
  
  modules = json.load(open('data.json'))['practice_test']
@@ -273,7 +273,7 @@ def get():
                 Main(
                     Div(
 
-                        *[ A(Div("📚", cls="icon"), Div(module['name'], cls="question-number"), Div("Practice Test", cls="category"), cls="card", href=f"/{i}/module/1") for i, module in enumerate(modules)]
+                        *[ A(Div("📚", cls="icon"), Div(module['name'], cls="question-number"), Div("Practice Test", cls="category"), cls="card", href=f"/practice/{i}/module/1") for i, module in enumerate(modules)]
                         
 
                         ,cls="list-content"
@@ -285,8 +285,8 @@ def get():
 
 )
 
-@rt("/{practice}/module/{module_number}")
-def get(session,practice:int,module_number:int):
+@rt("/practice/{practice_num}/module/{module_number}")
+def get(session,practice_num:int,module_number:int):
  #del session[module]
  # session['page'] = 50
  module = f'module_{module_number}'
@@ -297,15 +297,24 @@ def get(session,practice:int,module_number:int):
 
  practice_en_questions = json.load(open('data.json'))['practice_test']
  
- question_obj = question_objects('english')[practice_en_questions[practice][module][session['page']]]
+ question_obj = question_objects('english')[practice_en_questions[practice_num][module][session['page']]]
  def answers_session(count):
   for answer in session[module]:
      if str(count) in answer:
       return answer[str(count)]
      
- def module_switch():
-    session['page'] = 0
-    return f'/{practice}/module/{module_number + 1}'   
+ def module_switcher():
+  if session['page'] < 53:
+     return A("Next", hx_post=f'/next_page/{practice_num}/{module_number}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;")
+  elif module == "module_2":
+     session['page'] = 0
+     return A("Finish", href=f'/practice/{practice_num}/break',cls="btn btn-secondary", style="font-size:0.9em;") 
+  else:
+     session['page'] = 0
+     return A("Finish", href=f'/{practice_num}/module/{module_number + 1}',cls="btn btn-secondary", style="font-size:0.9em;")
+     
+ 
+   
  timer_time = 10
    
  def practice_options(value:str):
@@ -323,7 +332,7 @@ def get(session,practice:int,module_number:int):
     Body(
         Header(
             
-                H3(session['page'] + 1),
+                H3(session[module]),
                 Div(  
                 #A('',sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect=f"/time-sender/{timer_time}",cls="timer btn btn-secondary")
                 )        
@@ -361,9 +370,9 @@ def get(session,practice:int,module_number:int):
 
                         Br(),
                         Div(
-                        A("Back", hx_post=[f'/previous_page/{practice}/{module_number}' if session['page'] > 0 else None],hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        A("Back", hx_post=[f'/previous_page/{practice_num}/{module_number}' if session['page'] > 0 else None],hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
                         H4(session['page'] + 1),
-                        A("Next", hx_post=f'/next_page/{practice}/{module_number}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;") if session['page'] < 53 else A("Finish", href=module_switch(),cls="btn btn-secondary", style="font-size:0.9em;"),
+                        module_switcher(),
                         style="display:flex; justify-content:space-between;"
                         ),
                         cls="practice-container"
@@ -381,36 +390,68 @@ def post(session,practice:str,module_number:str):
  # Initialize module in the session if it doesn't exist or if it's None
     session.setdefault('page', 0)
     session['page'] = session.get('page') + 1
-    return RedirectResponse(f'/{practice}/module/{module_number}', status_code=303)
+    return RedirectResponse(f'/practice/{practice}/module/{module_number}', status_code=303)
 
 @rt('/previous_page/{practice}/{module_number}')
 def post(session,practice:str,module_number:str):
  # Initialize module in the session if it doesn't exist or if it's None
     session.setdefault('page', 0)
     session['page'] = session.get('page') - 1
-    return RedirectResponse(f'/{practice}/module/{module_number}', status_code=303)
+    return RedirectResponse(f'/practice/{practice}/module/{module_number}', status_code=303)
+
+
+@rt("/practice/{practice_num}/break")
+def get(practice_num:int):
+    return (
+        Html(
+            Head(
+                Defaults
+            ),
+            Body(
+                Main(
+                    Div(
+                       
+                        H2("Break Time!",
+                           style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
+                        P("click continue to start the next module",
+                          style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
+                        Div(
+                            A("Continue", href=f"/{practice_num}/module/3", cls="btn btn-primary"),
+                            style="display:flex; justify-content:center;"
+                            
+                        ),
+                        cls="container"
+                    )
+                )
+            )
+        )
+    )
+
 
 @rt('/page/{module}/{count}')
 def post(session, count: int, module: str, answer: str):
-    # Initialize module in the session if it doesn't exist or if it's None
+ # Initialize module in the session if it doesn't exist or if it's None
     if module not in session or session[module] is None:
         session[module] = []
     practice_answers = session[module]
 
-    # Ensure count is an integer
-    count = str(count)
+    # Ensure count is an integer, but we need it as a string to use as a key in the dictionary
+    count_str = str(count)
 
     # Update or append the new item
     for item in practice_answers:
-        if count in item:
+        if count_str in item:
             # If the count already exists, update the answer
-            item[count] = answer
+            item[count_str] = answer
             break
     else:
         # If the count doesn't exist, append a new item
-        practice_answers.append({count: answer})
+        practice_answers.append({count_str: answer})
 
-    # Update the session with the modified practice_answers
+    # Sort the practice_answers list by the integer value of the 'count' key in each dictionary
+    practice_answers.sort(key=lambda item: int(list(item.keys())[0]))
+
+    # Update the session with the modified and sorted practice_answers
     session[module] = practice_answers
 
 
