@@ -3,6 +3,7 @@ from settings import *
 from datetime import *
 import asyncio
 import random, json, time
+from deepdiff import DeepDiff
 from starlette.responses import StreamingResponse
 
 app,rt = fast_app(debug=True,live=True)
@@ -311,7 +312,7 @@ def get(session,practice_num:int,module_number:int):
      return A("Finish", href=f'/practice/{practice_num}/break',cls="btn btn-secondary", style="font-size:0.9em;") 
   else:
      session['page'] = 0
-     return A("Finish", href=f'/{practice_num}/module/{module_number + 1}',cls="btn btn-secondary", style="font-size:0.9em;")
+     return A("Finish", href=f'/practice/{practice_num}/module/{module_number + 1}',cls="btn btn-secondary", style="font-size:0.9em;")
      
  
    
@@ -417,6 +418,73 @@ def get(practice_num:int):
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
                         Div(
                             A("Continue", href=f"/{practice_num}/module/3", cls="btn btn-primary"),
+                            style="display:flex; justify-content:center;"
+                            
+                        ),
+                        cls="container"
+                    )
+                )
+            )
+        )
+    )
+
+
+@rt("/practice/{practice_num}/check")
+def get(practice_num:int,session):
+ 
+
+ practice_en_questions = json.load(open('data.json'))['practice_test']
+
+ 
+ def checker():
+    correct_answers = []
+    results = []
+    def answer_collecter(num):
+     for question_num in practice_en_questions[practice_num][f'module_{num}']:
+      answer =  question_objects('english')[question_num]['question']['correct_answer']
+      correct_answers.append(answer)
+
+    for num in [1,2,3,4]:
+     correct_answers.clear()
+     user_answers = session[f'module_{num}']
+     answer_collecter(num)
+     # Comparison result list
+     # Loop through each dictionary in the list
+     for d in user_answers:
+     # Extract the number (as string) and the expected string
+      index_str, expected_value = list(d.items())[0]
+      index = int(index_str)  # Convert index to integer
+
+     # Check if the index is within the bounds of the list_of_values
+      if 0 <= index < len(correct_answers):
+        # Compare the value in list_of_values at index with expected_value
+        if correct_answers[index] == expected_value:
+            results.append(1)
+        else:
+            results.append(0)
+      else:
+        # If index is out of bounds, consider it a mismatch
+        results.append(0)
+     del session[f'module_{num}']       
+    return sum(results)
+
+    
+
+ return (
+        Html(
+            Head(
+                Defaults
+            ),
+            Body(
+                Main(
+                    Div(
+                       
+                        H2(f"Your Score is {checker()}/92",
+                           style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
+                        P("click continue to start the next module",
+                          style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
+                        Div(
+                            A("End", href=f"/", cls="btn btn-primary"),
                             style="display:flex; justify-content:center;"
                             
                         ),
