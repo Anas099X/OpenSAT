@@ -3,7 +3,6 @@ from settings import *
 from datetime import *
 import asyncio
 import random, json, time
-from deepdiff import DeepDiff
 from starlette.responses import StreamingResponse
 
 app,rt = fast_app(debug=True,live=True)
@@ -298,7 +297,7 @@ def get(session,practice_num:int,module_number:int):
 
  practice_en_questions = json.load(open('data.json'))['practice_test']
  
- question_obj = question_objects('english')[practice_en_questions[practice_num][module][session['page']]]
+ question_obj = question_objects('english' if module_number < 3 else 'math')[practice_en_questions[practice_num][module][session['page']]]
  def answers_session(count):
   for answer in session[module]:
      if str(count) in answer:
@@ -310,6 +309,9 @@ def get(session,practice_num:int,module_number:int):
   elif module == "module_2":
      session['page'] = 0
      return A("Finish", href=f'/practice/{practice_num}/break',cls="btn btn-secondary", style="font-size:0.9em;") 
+  elif module == "module_4":
+     session['page'] = 0
+     return A("Finish", href=f'/practice/{practice_num}/check',cls="btn btn-secondary", style="font-size:0.9em;") 
   else:
      session['page'] = 0
      return A("Finish", href=f'/practice/{practice_num}/module/{module_number + 1}',cls="btn btn-secondary", style="font-size:0.9em;")
@@ -340,7 +342,7 @@ def get(session,practice_num:int,module_number:int):
             ,
             cls="header",style="flex-direction: row; height:12vh;"
         ),
-        Main(
+        Main(Select(*[Option(f"Page {i + 1} ") for i, module in enumerate(practice_en_questions[practice_num][module])]),
              Div(
                          
                         
@@ -378,8 +380,9 @@ def get(session,practice_num:int,module_number:int):
                         ),
                         cls="practice-container"
                    )
+
                    ,Style="display:flex; margin-top:10vh;"
-    )
+                )
 ,id="practice_html")
 )
 )
@@ -465,7 +468,8 @@ def get(practice_num:int,session):
       else:
         # If index is out of bounds, consider it a mismatch
         results.append(0)
-     del session[f'module_{num}']       
+     del session[f'module_{num}']
+     session['page'] = 0       
     return sum(results)
 
     
