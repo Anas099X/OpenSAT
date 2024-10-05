@@ -26,7 +26,9 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
             Script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"),
             Script(src="https://unpkg.com/htmx.org@2.0.2"),
             Script(src="/_vercel/insights/script.js"),
+            Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
+            Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
                 Style(open("main.css").read())
                 
@@ -74,9 +76,10 @@ def get():
                         cls="container"
                     )
                 )
-            )
+            ),data_theme="cupcake"
         )
     )
+
 
 
 @rt("/explore/{section}/{domain}")
