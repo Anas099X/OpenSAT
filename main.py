@@ -29,7 +29,8 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
             Script(src="https://cdn.tailwindcss.com"),
-                Title("OpenSAT")
+                Title("OpenSAT"),
+            Style(open('main.css').read())    
                 
 )
 
@@ -49,23 +50,22 @@ def get():
                         Div(
                             A(
                                 Span("🎓", style="font-size:1.8rem;"),
-                                H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
                                 cls="btn btn-ghost normal-case text-xl", href="/"
                             ),
                             cls="navbar-start"
                         ),
                         Div(
-                            A("Tutors", href="/tutors", cls="btn btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
+                            A("Tutors", href="/tutors", cls="btn btn-sm btn-primary"),
+                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-sm btn-secondary"),
                             cls="navbar-end space-x-2"
                         ),
-                        cls="navbar bg-base-100 shadow-lg"
+                        cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
                 Main(
                         Div(
                         Span("🎓", style="display: flex; font-size: 5rem; margin-bottom: 20px; justify-content: center;"),
-                        H2("Question Bank with ", Span("Endless", cls="text-primary decoration-wavy"), 
+                        H2("Question Bank with ", U("Endless", cls="text-primary"), 
                            " Possibilities",
                            style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
                         P("OpenSAT, a free and open-source SAT question bank. "
@@ -77,11 +77,11 @@ def get():
                             A("Contribute", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
                             style="display: flex; justify-content: center; gap: 15px;"
                         ),
-                        cls="card bg-base-80 shadow-xl mx-auto p-12",
-                        style="max-width:100vh;"
+                        cls="card bg-base-80 shadow-xl mx-auto p-10 mt-10",
+                        style="max-width:100vh; background-color: white;"
                     )
                 )
-            ),data_theme="cupcake"
+            ),data_theme="pastel"
         )
     )
 
