@@ -345,17 +345,13 @@ def get():
                         # Loop through modules and create a card for each one
                         *[
                             Div(
-                                Div(
+                                A(
                                     Div("📚", cls="text-3xl"),  # Icon for each module
                                     H2(module['name'], cls="card-title text-lg font-bold mt-4"),  # Module name
-                                    P("Practice Test", cls="text-gray-500"),  # Static text for practice test
-                                    Div(
-                                        A("Start Practice", href=f"/practice/{i}/module/1", cls="btn btn-primary w-full"),  # Start practice button
-                                        cls="card-actions justify-end mt-4"
-                                    ),
-                                    cls="card-body"
-                                ),
-                                cls="card bg-base-100 w-full shadow-xl"
+                                    P("Practice Test", cls="text-primary"),
+                                    cls="card bg-base-100 shadow-xl w-96 mx-auto hover:bg-base-200 transition-all rounded-lg p-8",
+                                    href=f"/practice/{i}/module/1" 
+                                )
                             )
                             for i, module in enumerate(modules)
                         ],
