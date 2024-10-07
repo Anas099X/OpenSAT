@@ -182,246 +182,311 @@ def get(section: str, domain: str):
 
 
 @rt('/questions/{section}/{num}/{answer}')
-def get(section:str,num:int,answer:bool):
-   question_obj = question_objects(section)[num]
+def get(section: str, num: int, answer: bool):
+    question_obj = question_objects(section)[num]
 
-   def hide_switch(input):
-    return not input
+    def hide_switch(input):
+        return not input
 
-
-   return (
-     Html(
+    return (
+        Html(
             Head(
                 Defaults
             ),
             Body(
                 Header(
-                    A(
-                        Span("🎓", style="font-size:1.8rem;"),
-                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        cls="logo",href='/',style="text-decoration: none"
-                    ),
-                    Nav(
-                        A("Tutors", href="/tutors", cls="btn btn-primary"),
-                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
-                        cls="nav"
-                    ),
-                    cls="header"
+                   Div(
+                        Div(
+                            A(
+                                Span("🎓", style="font-size:1.8rem;"),
+                                H1("OpenSAT", cls="text-primary"),
+                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                            ),
+                            cls="navbar-start"
+                        ),
+                        Div(
+                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            cls="navbar-end space-x-2"
+                        ),
+                        cls="navbar bg-base-90 shadow bg-ghost"
+                    )
                 ),
                 Main(
-
                     Div(
-                         
-                        H2(f"Question #{question_obj['id']}"),
-                        P(question_obj['question'].get('paragraph', "")),
-                        B(question_obj['question']['question']),
-                        
-                        Div(B("A."), question_obj['question']['choices']['A']),
-                        Div(B("B."), question_obj['question']['choices']['B']),
-                        Div(B("C."), question_obj['question']['choices']['C']),
-                        Div(B("D."), question_obj['question']['choices']['D']),
-                        Br(),
-                        A("Reveal Answers", href=f'/questions/{section}/{num}/{hide_switch(answer)}',cls="btn btn-primary", style="font-size:0.9em;"),
-                        A("Go Back", href=f'/explore/{section}/any',cls="btn btn-secondary", style="font-size:0.9em;"),
+                        # Card component for question display
                         Div(
-                        Br(),
-                        B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
-                        P(question_obj['question']['explanation']), 
-                         hidden=bool(answer)
-                        )
-
-                        ,cls="container",style="max-width:80vh;"
-                   )
-                   ,Style="display:flex;"
+                            Div(
+                                H2(f"Question #{question_obj['id']}", cls="card-title text-2xl font-bold"),
+                                P(question_obj['question'].get('paragraph', ""), cls="text-base mt-4"),
+                                B(question_obj['question']['question'], cls="text-lg"),
+                                Div(
+                                    Div(B("A. "), question_obj['question']['choices']['A'], cls="py-2"),
+                                    Div(B("B. "), question_obj['question']['choices']['B'], cls="py-2"),
+                                    Div(B("C. "), question_obj['question']['choices']['C'], cls="py-2"),
+                                    Div(B("D. "), question_obj['question']['choices']['D'], cls="py-2"),
+                                    cls="mt-4"
+                                ),
+                                Div(
+                                    A("Reveal Answer", href=f'/questions/{section}/{num}/{hide_switch(answer)}', cls="btn btn-primary text-sm"),
+                                    A("Go Back", href=f'/explore/{section}/any', cls="btn btn-secondary text-sm ml-4"),
+                                    cls="flex mt-4 space-x-4"
+                                ),
+                                Div(
+                                    Br(),
+                                    B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
+                                    P(question_obj['question']['explanation']),
+                                    hidden=bool(answer),
+                                    cls="mt-4"
+                                ),
+                                cls="card-body"
+                            ),
+                            cls="card bg-base-100 shadow-lg mx-auto w-full max-w-2xl"
+                        ),
+                        cls="container mx-auto py-8 px-4"
+                    )
                 )
+            ), data_theme="retro"
         )
-) 
-)
+    )
 
 
 @rt("/tutors")
 def get():
- firestore_docs = db.collection('users').stream()
+    firestore_docs = db.collection('users').stream()
 
-   
- return (
-    
-       Html(
+    return (
+        Html(
             Head(
                 Defaults
             ),
             Body(
                 Header(
-                    A(
-                        Span("🎓", style="font-size:1.8rem;"),
-                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        cls="logo",href='/',style="text-decoration: none"
+                    Div(
+                        A(
+                            Span("🎓", style="font-size:1.8rem;"),
+                            H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
+                            cls="btn btn-ghost normal-case text-xl", href="/"
+                        ),
+                        cls="navbar-start"
                     ),
                     Nav(
                         A("Tutors", href="/tutors", cls="btn btn-primary"),
                         A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
-                        cls="nav"
+                        cls="navbar-end space-x-4"
                     ),
-                    cls="header"
+                    cls="navbar bg-base-100 shadow-lg w-full flex justify-between items-center px-6 py-4"
                 ),
                 Main(
                     Div(
-                        #*[Div(doc.to_dict()['age'],cls="card") for doc in firestore_docs],
-
-                       *[Div(Img(src=doc.to_dict()['banner'],cls="avatar"),Div(H3(doc.to_dict()['username']),P(doc.to_dict()['description'],cls="description"),P(doc.to_dict()['availability'],cls="status"),P(doc.to_dict()['email'],cls="email"),Div(doc.to_dict()['country'],cls="location"),cls="info"),Button(f"Contact: {doc.to_dict()['contact']}",cls="contact-btn"),cls="profile-card") for doc in firestore_docs]
-                        
-
-                        ,cls="list-content"
-                   )
-                   ,Style="display:flex;"
+                        # Tutor cards in grid format
+                        *[Div(
+                                Div(
+                                    # Avatar (Image) and Card Body
+                                    Div(
+                                        H2(Div(Img(src=doc.to_dict()['banner'],cls="rounded-full"),cls="bg-neutral text-neutral-content w-12 rounded-full"),doc.to_dict()['username'], cls="card-title"),
+                                        P(doc.to_dict()['description'], cls="text-sm text-gray-500"),
+                                        P(f"Availability: {doc.to_dict()['availability']}", cls="text-sm text-gray-500"),
+                                        P(f"Email: {doc.to_dict()['email']}", cls="text-sm text-gray-500"),
+                                        P(f"Country: {doc.to_dict()['country']}", cls="text-sm text-gray-500"),
+                                        cls="card-body"
+                                    ),
+                                    # Card Actions with Button
+                                    Div(
+                                        A(f"Contact: {doc.to_dict()['contact']}", href=f"mailto:{doc.to_dict()['email']}", cls="btn btn-primary"),
+                                        cls="card-actions justify-end"
+                                    ),
+                                    cls="card bg-base-100 w-96 shadow-xl"
+                                ),
+                                cls="max-w-sm mx-auto"
+                            ) for doc in firestore_docs],
+                        cls="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"
+                    ),
+                    cls="container mx-auto py-8"
                 )
+            ), data_theme="retro"
         )
-) 
+    )
 
-)
+
 
 @rt("/practice/explore")
 def get():
- 
- modules = json.load(open('data.json'))['practice_test']
- 
+    # Load modules from JSON file
+    modules = json.load(open('data.json'))['practice_test']
 
- return (
-    
-       Html(
+    return (
+        Html(
             Head(
                 Defaults
             ),
             Body(
                 Header(
-                    A(
-                        Span("🎓", style="font-size:1.8rem;"),
-                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        cls="logo",href='/',style="text-decoration: none"
+                    Div(
+                        A(
+                            Span("🎓", style="font-size:1.8rem;"),
+                            H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
+                            cls="btn btn-ghost normal-case text-xl", href="/"
+                        ),
+                        cls="navbar-start"
                     ),
                     Nav(
                         A("Tutors", href="/tutors", cls="btn btn-primary"),
                         A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
-                        cls="nav"
+                        cls="navbar-end space-x-4"
                     ),
-                    cls="header"
+                    cls="navbar bg-base-100 shadow-lg w-full flex justify-between items-center px-6 py-4"
                 ),
                 Main(
                     Div(
-
-                        *[ A(Div("📚", cls="icon"), Div(module['name'], cls="question-number"), Div("Practice Test", cls="category"), cls="card", href=f"/practice/{i}/module/1") for i, module in enumerate(modules)]
-                        
-
-                        ,cls="list-content"
-                   )
-                   ,Style="display:flex;"
+                        # Loop through modules and create a card for each one
+                        *[
+                            Div(
+                                Div(
+                                    Div("📚", cls="text-3xl"),  # Icon for each module
+                                    H2(module['name'], cls="card-title text-lg font-bold mt-4"),  # Module name
+                                    P("Practice Test", cls="text-gray-500"),  # Static text for practice test
+                                    Div(
+                                        A("Start Practice", href=f"/practice/{i}/module/1", cls="btn btn-primary w-full"),  # Start practice button
+                                        cls="card-actions justify-end mt-4"
+                                    ),
+                                    cls="card-body"
+                                ),
+                                cls="card bg-base-100 w-full shadow-xl"
+                            )
+                            for i, module in enumerate(modules)
+                        ],
+                        cls="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6"  # Responsive grid layout
+                    ),
+                    cls="container mx-auto py-8"
                 )
+            ), data_theme="retro"
         )
-) 
+    )
 
-)
 
 @rt("/practice/{practice_num}/module/{module_number}")
-def get(session,practice_num:int,module_number:int):
- #del session[module]
- # session['page'] = 50
- module = f'module_{module_number}'
- if 'page' not in session or session['page'] is None:
+def get(session, practice_num: int, module_number: int):
+    # Load the current module and initialize session state
+    module = f'module_{module_number}'
+    
+    if 'page' not in session or session['page'] is None:
         session['page'] = 0
- if module not in session or session[module] is None:
+    if module not in session or session[module] is None:
         session[module] = []
 
- practice_en_questions = json.load(open('data.json'))['practice_test']
- 
- question_obj = question_objects('english' if module_number < 3 else 'math')[practice_en_questions[practice_num][module][session['page']]]
- def answers_session(count):
-  for answer in session[module]:
-     if str(count) in answer:
-      return answer[str(count)]
-     
- def module_switcher():
-  if session['page'] < 53:
-     return A("Next", hx_post=f'/next_page/{practice_num}/{module_number}',hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;")
-  elif module == "module_2":
-     session['page'] = 0
-     return A("Finish", href=f'/practice/{practice_num}/break',cls="btn btn-secondary", style="font-size:0.9em;") 
-  elif module == "module_4":
-     session['page'] = 0
-     return A("Finish", href=f'/practice/{practice_num}/check',cls="btn btn-secondary", style="font-size:0.9em;") 
-  else:
-     session['page'] = 0
-     return A("Finish", href=f'/practice/{practice_num}/module/{module_number + 1}',cls="btn btn-secondary", style="font-size:0.9em;")
-     
- 
-   
- timer_time = 10
-   
- def practice_options(value:str):
-    if answers_session(session['page']) == value:
-     return Input(type="radio", name="answer", value=value, checked=True)
-    else:
-     return Input(type="radio", name="answer", value=value) 
-   
- return (
+    # Load practice questions
+    practice_en_questions = json.load(open('data.json'))['practice_test']
     
-   Html(
-    Head(
-        Defaults  # This would include meta tags, CSS links, etc.
-    ),
-    Body(
-        Header(
-            
-                H3(session[module]),
-                Div(  
-                #A('',sse_swap="TimeUpdateEvent", hx_ext="sse", sse_connect=f"/time-sender/{timer_time}",cls="timer btn btn-secondary")
-                )        
-            ,
-            cls="header",style="flex-direction: row; height:12vh;"
-        ),
-        Main(Select(*[Option(f"Page {i + 1} ") for i, module in enumerate(practice_en_questions[practice_num][module])]),
-             Div(
-                         
-                        
-                        P(question_obj['question'].get('paragraph', "")),
-                        B(question_obj['question']['question']),
-                        
-                        Form(Label(
-                            practice_options('A'),
-                            Span(question_obj['question']['choices']['A']),
-                            cls="option"
-                        ),
-                        Label(
-                            practice_options('B'),
-                            Span(question_obj['question']['choices']['B']),
-                            cls="option"
-                        ),
-                        Label(
-                            practice_options('C'),
-                            Span(question_obj['question']['choices']['C']),
-                            cls="option"
-                        ),
-                        Label(
-                            practice_options('D'),
-                            Span(question_obj['question']['choices']['D']),
-                            cls="option"
-                        ),
-                        cls="options", hx_post=f"/page/{module}/{session['page']}", hx_trigger="change", hx_swap="none"),
+    # Get the current question object
+    question_obj = question_objects('english' if module_number < 3 else 'math')[practice_en_questions[practice_num][module][session['page']]]
 
-                        Br(),
+    # Helper to retrieve answers from session
+    def answers_session(count):
+        for answer in session[module]:
+            if str(count) in answer:
+                return answer[str(count)]
+
+    # Button for navigating to the next page/module
+    def module_switcher():
+        if session['page'] < 53:
+            return A("Next", hx_post=f'/next_page/{practice_num}/{module_number}', hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-primary btn-outline")
+        elif module == "module_2":
+            session['page'] = 0
+            return A("Finish", href=f'/practice/{practice_num}/break', cls="btn btn-secondary btn-outline")
+        elif module == "module_4":
+            session['page'] = 0
+            return A("Finish", href=f'/practice/{practice_num}/check', cls="btn btn-secondary btn-outline")
+        else:
+            session['page'] = 0
+            return A("Finish", href=f'/practice/{practice_num}/module/{module_number + 1}', cls="btn btn-secondary btn-outline")
+
+    # Timer time (optional)
+    timer_time = 10
+
+    # Function for radio options (answer selection)
+    def practice_options(value: str):
+        if answers_session(session['page']) == value:
+            return Input(type="radio", name="answer", value=value, checked=True, cls="radio radio-primary")
+        else:
+            return Input(type="radio", name="answer", value=value, cls="radio radio-primary")
+
+    return (
+        Html(
+            Head(Defaults),
+            Body(
+                Header(
+                    H3(f"Practice Module {module_number}", cls="text-2xl font-bold"),
+                    cls="bg-base-300 p-4 flex justify-between items-center shadow-md"
+                ),
+                Main(
+                    Div(
+                        # Dropdown for page selection
                         Div(
-                        A("Back", hx_post=[f'/previous_page/{practice_num}/{module_number}' if session['page'] > 0 else None],hx_swap="innerHTML",hx_target='#practice_html',cls="btn btn-secondary", style="font-size:0.9em;"),
-                        H4(session['page'] + 1),
-                        module_switcher(),
-                        style="display:flex; justify-content:space-between;"
+                            Select(
+                                *[Option(f"Page {i + 1}") for i, _ in enumerate(practice_en_questions[practice_num][module])],
+                                cls="select select-bordered w-full max-w-xs mt-4"
+                            ),
+                            cls="mb-6"
                         ),
-                        cls="practice-container"
-                   )
+                        # Question content inside a DaisyUI card
+                        Div(
+                            Div(
+                                P(question_obj['question'].get('paragraph', ""), cls="text-base mb-4"),
+                                B(question_obj['question']['question'], cls="text-lg font-bold"),
+                                Form(
+                                    Div(
+                                        Label(
+                                            practice_options('A'),
+                                            Span("A. " + question_obj['question']['choices']['A'], cls="ml-2"),
+                                            cls="flex items-center space-x-2"
+                                        ),
+                                        Br(),
+                                        Label(
+                                            practice_options('B'),
+                                            Span("B. " + question_obj['question']['choices']['B'], cls="ml-2"),
+                                            cls="flex items-center space-x-2"
+                                        ),
+                                        Br(),
+                                        Label(
+                                            practice_options('C'),
+                                            Span("C. " + question_obj['question']['choices']['C'], cls="ml-2"),
+                                            cls="flex items-center space-x-2"
+                                        ),
+                                        Br(),
+                                        Label(
+                                            practice_options('D'),
+                                            Span("D. " + question_obj['question']['choices']['D'], cls="ml-2"),
+                                            cls="flex items-center space-x-2"
+                                        ),
+                                        cls="mt-4"
+                                    ),
+                                    cls="form-control",
+                                    hx_post=f"/page/{module}/{session['page']}",
+                                    hx_trigger="change",
+                                    hx_swap="none"
+                                ),
+                                cls="card-body"
+                            ),
+                            cls="card bg-base-100 shadow-xl w-full max-w-3xl mx-auto mt-8"
+                        ),
+                        # Navigation: Back, Page Number, Next/Finish
+                        Div(
+                            A("Back", hx_post=[f'/previous_page/{practice_num}/{module_number}' if session['page'] > 0 else None], hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-secondary btn-outline"),
+                            H4(f"Page {session['page'] + 1}", cls="text-lg font-bold"),
+                            module_switcher(),
+                            cls="flex justify-between items-center mt-6"
+                        ),
+                        cls="practice-container flex flex-col items-center space-y-6"
+                    ),
+                    cls="container mx-auto py-8 px-4"
+                ),
+                id="practice_html"
+            ),
+            data_theme="retro"  # Retro theme enabled
+        )
+    )
 
-                   ,Style="display:flex; margin-top:10vh;"
-                )
-,id="practice_html")
-)
-)
 
 
 
