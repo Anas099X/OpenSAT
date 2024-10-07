@@ -1,9 +1,34 @@
-body { 
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Background */
+@keyframes waveAnimation {
+    0% {
+        background-position: 0 center;
+    }
+    100% {
+        background-position: -400px center;
+    }
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    background-size: cover;
-    background-position: center center;
-    background-repeat: repeat;
-    background-image: url("data:image/svg+xml;utf8,%3Csvg width=%222000%22 height=%221400%22 xmlns=%22http:%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient id=%22a%22 gradientTransform=%22rotate(90)%22%3E%3Cstop offset=%225%25%22 stop-color=%22%23d1c0d6%22%2F%3E%3Cstop offset=%2295%25%22 stop-color=%22%23dccfe0%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath fill=%22%23fffefe%22 d=%22M0 0h2000v1400H0z%22%2F%3E%3Cpath d=%22M0 700c97.784 40.318 195.569 80.636 310 76 114.431-4.636 245.509-54.227 360-47 114.491 7.227 212.397 71.27 319 50 106.603-21.27 221.904-127.856 333-127 111.096.856 217.987 109.154 347 119 129.013 9.846 280.146-78.758 339-107 58.854-28.242 25.427 3.88 32 36l-40 700H0Z%22 fill=%22url(%23a)%22%2F%3E%3C%2Fsvg%3E");
-  }
-  
+    z-index: -1;
+    background-image: url("data:image/svg+xml;utf8,%3Csvg width=%222000%22 height=%221400%22 xmlns=%22http:%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cdefs%3E%3ClinearGradient id=%22a%22 gradientTransform=%22rotate(90)%22%3E%3Cstop offset=%225%25%22 stop-color=%22%23ef9894%22%2F%3E%3Cstop offset=%2295%25%22 stop-color=%22%23f3b1ae%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Cpath fill=%22%23ece3ca%22 d=%22M0 0h2000v1400H0z%22%2F%3E%3Cpath d=%22M0 700c122.435 32.528 244.87 65.057 354 39 109.13-26.057 204.954-110.698 311-89 106.046 21.698 222.313 149.737 337 148 114.687-1.737 227.792-133.25 326-137s181.517 120.26 313 129c131.483 8.74 311.138-97.788 379-132 67.862-34.212 23.931 3.894 20 42l-40 700H0Z%22 fill=%22url(%23a)%22%2F%3E%3C%2Fsvg%3E");
+    background-size: 150% 100%;
+    background-position: 0 center;
+}  

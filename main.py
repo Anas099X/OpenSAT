@@ -50,13 +50,14 @@ def get():
                         Div(
                             A(
                                 Span("🎓", style="font-size:1.8rem;"),
-                                cls="btn btn-ghost normal-case text-xl", href="/"
+                                H1("OpenSAT", cls="text-primary"),
+                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
                             ),
                             cls="navbar-start"
                         ),
                         Div(
-                            A("Tutors", href="/tutors", cls="btn btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-sm btn-secondary"),
+                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
                             cls="navbar-end space-x-2"
                         ),
                         cls="navbar bg-base-90 shadow bg-ghost"
@@ -73,83 +74,110 @@ def get():
                           "constantly growing thanks to a dedicated community of contributors.",
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
                         Div(
-                            A("Explore", href="/explore/english/any", cls="btn btn-primary"),
-                            A("Contribute", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
+                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-primary"),
+                            A("Contribute", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-secondary"),
                             style="display: flex; justify-content: center; gap: 15px;"
                         ),
-                        cls="card bg-base-80 shadow-xl mx-auto p-10 mt-10",
-                        style="max-width:100vh; background-color: white;"
+                        cls="card bg-base-100 shadow-xl mx-auto p-10 mt-10",
+                        style="max-width:100vh;"
                     )
                 )
-            ),data_theme="pastel"
+            ),data_theme="retro"
         )
     )
 
 
 
 @rt("/explore/{section}/{domain}")
-def get(section:str,domain:str):
- 
- def domain_lower(input):
-  return str(input).lower()
- 
- def filter_switch():
-   if section == 'english':
-     return (  
-     A("Information and Ideas", href=f'/explore/{section}/information and ideas',cls="btn btn-filter"),
-     A("Craft and Structure", href=f'/explore/{section}/craft and structure',cls="btn btn-filter"),
-     A("Expression of Ideas", href=f'/explore/{section}/expression of ideas',cls="btn btn-filter"),
-     A("Standard English Conventions", href=f'/explore/{section}/standard english conventions',cls="btn btn-filter")
-    )
-   else:
-     return (
-     A("Algebra", href=f'/explore/{section}/algebra',cls="btn btn-filter"),
-     A("Advanced Math", href=f'/explore/{section}/advanced math',cls="btn btn-filter"),
-     A("Problem-Solving and Data Analysis", href=f'/explore/{section}/problem-solving and data analysis',cls="btn btn-filter"),
-     A("Geometry and Trigonometry", href=f'/explore/{section}/geometry and trigonometry',cls="btn btn-filter")
-    )
-   
- return (
-    
-       Html(
+def get(section: str, domain: str):
+
+    def domain_lower(input):
+        return str(input).lower()
+
+    def filter_switch():
+        if section == 'english':
+            return (
+                A("Information and Ideas", href=f'/explore/{section}/information and ideas', cls="btn btn-secondary btn-sm"),
+                A("Craft and Structure", href=f'/explore/{section}/craft and structure', cls="btn btn-secondary btn-sm"),
+                A("Expression of Ideas", href=f'/explore/{section}/expression of ideas', cls="btn btn-secondary btn-sm"),
+                A("Standard English Conventions", href=f'/explore/{section}/standard english conventions', cls="btn btn-secondary btn-sm")
+            )
+        else:
+            return (
+                A("Algebra", href=f'/explore/{section}/algebra', cls="btn btn-secondary btn-sm"),
+                A("Advanced Math", href=f'/explore/{section}/advanced math', cls="btn btn-secondary btn-sm"),
+                A("Problem-Solving and Data Analysis", href=f'/explore/{section}/problem-solving and data analysis', cls="btn btn-secondary btn-sm"),
+                A("Geometry and Trigonometry", href=f'/explore/{section}/geometry and trigonometry', cls="btn btn-secondary btn-sm")
+            )
+
+    # Question card generation function
+    def generate_question_cards():
+        return [
+            A(
+                Div(
+                    Div("📚", cls="text-3xl"),  # Icon
+                    Div(f'Question #{i + 1}', cls="font-bold text-xl"),  # Question title
+                    Div(x['domain'], cls="font-bold text-primary"),  # Domain badge
+                    cls="card-body"
+                ),
+                cls="card bg-base-100 shadow-xl w-96 mx-auto hover:bg-base-200 transition-all rounded-lg",  # Fixed width and centered
+                href=f"/questions/{section}/{i}/True"
+            ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
+            for i, x in enumerate(question_objects(section))
+        ]
+
+    return (
+        Html(
             Head(
                 Defaults
             ),
             Body(
                 Header(
-                    A(
-                        Span("🎓", style="font-size:1.8rem;"),
-                        H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                        cls="logo",href='/',style="text-decoration: none"
-                    ),
-                    Nav(
-                        A("Tutors", href="/tutors", cls="btn btn-primary"),
-                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
-                        cls="nav"
-                    ),
-                    cls="header"
+                     Div(
+                        Div(
+                            A(
+                                Span("🎓", style="font-size:1.8rem;"),
+                                H1("OpenSAT", cls="text-primary"),
+                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                            ),
+                            cls="navbar-start"
+                        ),
+                        Div(
+                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            cls="navbar-end space-x-2"
+                        ),
+                        cls="navbar bg-base-90 shadow bg-ghost"
+                    )
                 ),
                 Main(
                     Div(
-                       Div(
-                         H1("🔎 Filters"),
-                         A("English", href=f'/explore/english/any',cls=["btn btn-primary" if section == 'english' else "btn btn-secondary"]),
-                         A("Math", href=f'/explore/math/any',cls=["btn btn-primary" if section == 'math' else "btn btn-secondary"]),
-                         Br(),
-                         Br(),
-                         Div(filter_switch()),
-                        cls="filter-container"),
-                        *[ A(Div("📚", cls="icon"), Div(f'Question #{i}', cls="question-number"), Div(x['domain'], cls="category"), cls="card", href=f"/questions/{section}/{i}/True" ) if domain.lower().replace('%20',' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20',' ') else Div('', hidden=True) for i, x in enumerate(question_objects(section)) ]
-                        
-
-                        ,cls="list-content"
-                   )
-                   ,Style="display:flex;"
+                        # Filters section - centered and styled
+                        Div(
+                            H1("🔎 Filters", cls="text-2xl font-bold mb-4"),
+                            Div(
+                                A("English", href=f'/explore/english/any', cls=["btn btn-primary rounded-full" if section == 'english' else "btn rounded-full"]),
+                                A("Math", href=f'/explore/math/any', cls=["btn btn-primary rounded-full" if section == 'math' else "btn rounded-full"]),
+                                cls="btn-group space-x-2"
+                            ),
+                            Br(),
+                            Div(filter_switch(), cls="flex flex-wrap gap-2 mt-4 justify-center"),  # Centered filter buttons
+                            cls="p-4 border rounded-lg shadow-xl mx-auto bg-base-100", style="max-width:100vh;"
+                        ),
+                        # Questions list section - responsive grid layout with 3 columns max
+                        Div(
+                            *generate_question_cards(),  # Generates all question cards
+                            cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
+                        ),
+                        cls="flex flex-col space-y-6"
+                    ),
+                    cls="container mx-auto py-8"
                 )
+            ), data_theme="retro"  # DaisyUI's retro theme
         )
-) 
+    )
 
-)
+
 
 
 
