@@ -5,6 +5,46 @@ import asyncio
 import random, json, time
 from starlette.responses import StreamingResponse
 
+#oauth
+
+CLIENT_ID = 'CTqlZU5Du7n2eA3yuZoRP3eOi9eqMrj89QmSZR9DuqMzVAd2cc90FC1DY_XtASv4'
+CLIENT_SECRET = '7BF-vtstFA7HjCrziAAXrCu3WSU7g81Izfem6tiBCxRIhYi9QcJxJN-kRSsPZDUk'
+REDIRECT_URI = 'http://0.0.0.0:5001/callback'
+
+AUTH_URL = 'https://www.patreon.com/oauth2/authorize'
+TOKEN_URL = 'https://www.patreon.com/api/oauth2/token'
+IDENTITY_URL = 'https://www.patreon.com/api/oauth2/v2/identity'
+
+
+def get_user_data(sess):
+    """Fetch user data and campaign ID from the Patreon API."""
+    access_token = sess.get('access_token')
+    if not access_token:
+        return None, None  # Return None for both user data and campaign ID if not logged in
+
+    headers = {'Authorization': f'Bearer {access_token}'}
+    params = {'fields[user]': 'email,full_name', 'include': 'memberships.campaign'}
+
+    try:
+        response = requests.get(IDENTITY_URL, headers=headers, params=params)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        user_data = response.json()
+    except requests.RequestException:
+        return None, None  # Handle API failure gracefully
+
+    # Extract campaign ID if available
+    campaign_id = next(
+        (item['relationships']['campaign']['data']['id']
+         for item in user_data.get('included', [])
+         if item['type'] == 'member' and 'campaign' in item.get('relationships', {})), 
+        None
+    )
+
+    return user_data, campaign_id  # Return user data and campaign ID
+
+
+
+
 app,rt = fast_app(debug=True,live=True)
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
@@ -38,12 +78,22 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
 
 
 @rt("/")
-def get():
+def get(sess):
+    """Render the home page with Login/Profile management."""
+    user_data, _ = get_user_data(sess)  # Fetch user data from session
+
+    if user_data:
+        # User is logged in; show profile and logout buttons
+        profile_button = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary")
+        logout_button = A("Logout", href="/logout", cls="btn rounded-full btn-sm btn-secondary")
+    else:
+        # User is not logged in; show login button
+        profile_button = A("Login", href="/login", cls="btn rounded-full btn-sm btn-primary")
+        logout_button = Div()  # Empty div to maintain layout consistency
+
     return (
         Html(
-            Head(
-                Defaults
-            ),
+            Head(Defaults),
             Body(
                 Header(
                     Div(
@@ -56,16 +106,18 @@ def get():
                             cls="navbar-start"
                         ),
                         Div(
-                             A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
                             A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
                             A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            profile_button,  # Login or Profile button
+                            logout_button,   # Logout button if logged in
                             cls="navbar-end space-x-2"
                         ),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
                 Main(
-                        Div(
+                    Div(
                         Span("🎓", style="display: flex; font-size: 5rem; margin-bottom: 20px; justify-content: center;"),
                         H2("Question Bank with ", U("Endless", cls="text-primary"), 
                            " Possibilities",
@@ -83,7 +135,70 @@ def get():
                         style="max-width:100vh;"
                     )
                 )
-            ),data_theme="retro"
+            ), data_theme="retro"
+        )
+    )
+
+
+@rt("/logout")
+def logout(sess):
+    """Logout the user by clearing the session."""
+    del sess['access_token']  # Remove the access token from the session
+    return RedirectResponse('/')
+
+
+@rt("/login")
+def login():
+    """Redirect to Patreon OAuth page."""
+    params = {
+        'response_type': 'code',
+        'client_id': CLIENT_ID,
+        'redirect_uri': REDIRECT_URI,
+        'scope': 'identity identity.memberships'
+    }
+    query_string = "&".join([f"{k}={v}" for k, v in params.items()])
+    return RedirectResponse(f"{AUTH_URL}?{query_string}")
+
+
+@rt("/callback")
+def callback(request, sess):
+    """Handle OAuth callback and store the access token."""
+    code = request.query_params.get('code')
+    data = {
+        'grant_type': 'authorization_code',
+        'code': code,
+        'client_id': CLIENT_ID,
+        'client_secret': CLIENT_SECRET,
+        'redirect_uri': REDIRECT_URI
+    }
+    token_response = requests.post(TOKEN_URL, data=data)
+
+    if token_response.status_code != 200:
+        return "Failed to get access token", 400
+
+    access_token = token_response.json().get('access_token')
+    sess['access_token'] = access_token  # Store the access token in session
+    return RedirectResponse('/profile')
+
+
+@rt("/profile")
+def profile(sess):
+    """Profile page showing user and campaign information."""
+    user_data, campaign_id = get_user_data(sess)
+
+    if not user_data:
+        return RedirectResponse('/')  # Redirect to home if not logged in
+
+    return Container(
+        Div(
+            Card(
+                H2(f"Welcome, {user_data['data']['attributes']['full_name']}", cls="card-title text-2xl font-bold"),
+                P(f"Email: {user_data['data']['attributes']['email']}"),
+                P(f"Campaign ID: {campaign_id or 'No campaign found'}"),
+                A("Logout", href="/logout", cls="btn btn-secondary mt-4"),
+                cls="card-body"
+            ),
+            cls="container mx-auto py-8"
         )
     )
 
@@ -163,7 +278,7 @@ def get(section: str, domain: str):
                             ),
                             Br(),
                             Div(filter_switch(), cls="flex flex-wrap gap-2 mt-4 justify-center"),  # Centered filter buttons
-                            cls="p-4 border rounded-lg shadow-xl mx-auto bg-base-100", style="max-width:100vh;"
+                            cls="p-4 rounded-lg shadow-xl mx-auto bg-base-100", style="max-width:100vh;"
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
