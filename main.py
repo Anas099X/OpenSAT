@@ -23,7 +23,7 @@ def get_user_data(sess):
         return None, None  # Return None for both user data and campaign ID if not logged in
 
     headers = {'Authorization': f'Bearer {access_token}'}
-    params = {'fields[user]': 'email,full_name', 'include': 'memberships.campaign'}
+    params = {'fields[user]': 'email,full_name,thumb_url', 'include': 'memberships.campaign'}
 
     try:
         response = requests.get(IDENTITY_URL, headers=headers, params=params)
@@ -84,12 +84,15 @@ def get(sess):
 
     if user_data:
         # User is logged in; show profile and logout buttons
-        profile_button = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary")
-        logout_button = A("Logout", href="/logout", cls="btn rounded-full btn-sm btn-secondary")
+        profile_button = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
+        logout_button = A("Logout", href="/logout", cls="btn rounded-full btn-sm btn-secondary m-1")
+        profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
+
     else:
         # User is not logged in; show login button
         profile_button = A("Login", href="/login", cls="btn rounded-full btn-sm btn-primary")
         logout_button = Div()  # Empty div to maintain layout consistency
+        profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
 
     return (
         Html(
@@ -108,9 +111,15 @@ def get(sess):
                         Div(
                             A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
                             A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
-                            profile_button,  # Login or Profile button
-                            logout_button,   # Logout button if logged in
+                            
+
+                            Div(
+                             Div(
+                                Div(
+                                    profile_image,cls=" w-12 rounded-full")
+                                    ,role="button",tabindex="0",cls="avatar"),
+                                     Ul(profile_button,logout_button,tabindex="0", cls="dropdown-content  menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
+                                    ,cls="dropdown dropdown-hover dropdown-bottom dropdown-end"),
                             cls="navbar-end space-x-2"
                         ),
                         cls="navbar bg-base-90 shadow bg-ghost"
@@ -178,27 +187,70 @@ def callback(request, sess):
 
     access_token = token_response.json().get('access_token')
     sess['access_token'] = access_token  # Store the access token in session
-    return RedirectResponse('/profile')
+    return RedirectResponse('/')
 
 
 @rt("/profile")
-def profile(sess):
-    """Profile page showing user and campaign information."""
-    user_data, campaign_id = get_user_data(sess)
+def get(sess):
+    """Render the home page with Login/Profile management."""
+    user_data, _ = get_user_data(sess)  # Fetch user data from session
 
-    if not user_data:
-        return RedirectResponse('/')  # Redirect to home if not logged in
+    if user_data:
+        # User is logged in; show profile and logout buttons
+        name = H3(user_data['data']['attributes']['full_name'],cls="card-title")
+        email = user_data['data']['attributes']['email']
+        logout_button = A("Logout", href="/logout", cls="btn btn-sm btn-secondary m-1")
+        profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
 
-    return Container(
-        Div(
-            Card(
-                H2(f"Welcome, {user_data['data']['attributes']['full_name']}", cls="card-title text-2xl font-bold"),
-                P(f"Email: {user_data['data']['attributes']['email']}"),
-                P(f"Campaign ID: {campaign_id or 'No campaign found'}"),
-                A("Logout", href="/logout", cls="btn btn-secondary mt-4"),
-                cls="card-body"
-            ),
-            cls="container mx-auto py-8"
+    else:
+        # User is not logged in; show login button
+        name = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
+        email = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
+        logout_button = Div()  # Empty div to maintain layout consistency
+        profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
+
+    return (
+        Html(
+            Head(Defaults),
+            Body(
+                Header(
+                    Div(
+                        Div(
+                            A(
+                                Span("🎓", style="font-size:1.8rem;"),
+                                H1("OpenSAT", cls="text-primary"),
+                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                            ),
+                            cls="navbar-start"
+                        ),
+                        Div(
+                            A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+
+                            Div(
+                             Div(
+                                Div(
+                                    profile_image,cls=" w-12 rounded-full")
+                                    ,role="button",tabindex="0",cls="avatar"),
+                                     Ul(logout_button,tabindex="0", cls="dropdown-content  menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
+                                    ,cls="dropdown dropdown-hover dropdown-bottom dropdown-end"),
+                            cls="navbar-end space-x-2"
+                        ),
+                        cls="navbar bg-base-90 shadow bg-ghost"
+                    )
+                ),
+                Main(
+                    Div(
+                         Div(Div(profile_image,cls="w-16 rounded-full"),cls="avatar m-1"),
+                       name,
+                       f"Email: {email}",
+                       logout_button,
+                        cls="card card-body bg-base-100 shadow-xl mx-auto p-10 mt-10",
+                        style="max-width:100vh;"
+                    )
+                )
+            ), data_theme="retro"
         )
     )
 
