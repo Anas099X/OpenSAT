@@ -257,6 +257,90 @@ def get(sess):
         )
     )
 
+@rt("/patreon")
+def get(sess):
+    """Render the home page with Login/Profile management."""
+    user_data, _ = get_user_data(sess)  # Fetch user data from session
+
+    if user_data:
+        # User is logged in; show profile and logout buttons
+        name = H3(user_data['data']['attributes']['full_name'],cls="card-title")
+        email = user_data['data']['attributes']['email']
+        logout_button = A("Logout", href="/logout", cls="btn btn-sm btn-secondary m-1")
+        profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
+
+    else:
+        # User is not logged in; show login button
+        name = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
+        email = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
+        logout_button = Div()  # Empty div to maintain layout consistency
+        profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
+
+    return (
+        Html(
+            Head(Defaults),
+            Body(
+                Header(
+                    Div(
+                        Div(
+                            A(
+                                Span("🎓", style="font-size:1.8rem;"),
+                                H1("OpenSAT", cls="text-primary"),
+                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                            ),
+                            cls="navbar-start"
+                        ),
+                        Div(
+                            A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+
+                            Div(
+                             Div(
+                                Div(
+                                    profile_image,cls=" w-12 rounded-full")
+                                    ,role="button",tabindex="0",cls="avatar"),
+                                     Ul(logout_button,tabindex="0", cls="dropdown-content  menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
+                                    ,cls="dropdown dropdown-hover dropdown-bottom dropdown-end"),
+                            cls="navbar-end space-x-2"
+                        ),
+                        cls="navbar bg-base-90 shadow bg-ghost"
+                    )
+                ),
+                Main(
+                    Div(
+            Div(
+                H2(
+                    "Become a Patron to Access Exclusive Content", 
+                    cls="text-2xl font-bold text-center"
+                ),
+                P(
+                    "To access premium content and support the project, please subscribe to our Patreon membership.",
+                    cls="text-center text-gray-600 mt-4"
+                ),
+                Div(
+                    A(
+                        Img(src='public/brand-patreon.png',cls="w-8 rounded"),"Became a Patreon", 
+                        href="https://www.patreon.com",  # Replace with actual Patreon link
+                        cls="btn btn-primary w-full mb-2"
+                    ),
+                    A(
+                        "Login", 
+                        href="/login", 
+                        cls="btn btn-secondary w-full"
+                    ),
+                    
+                    cls="card-actions justify-center mt-6"
+                ),
+                cls="card-body"
+            ),
+            cls="card bg-base-100 shadow-xl w-full max-w-lg mx-auto mt-12"
+        ),
+        cls="container mx-auto py-12 px-4"
+                )
+            ), data_theme="retro"
+        )
+    )
 
 
 @rt("/explore/{section}/{domain}")
@@ -490,7 +574,7 @@ def get(session):
 
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if camp_id != 0:
+    if camp_id == 0:
         return RedirectResponse('/patreon')
 
     return (
@@ -544,7 +628,7 @@ def get(session, practice_num: int, module_number: int):
 
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if camp_id != 0:
+    if camp_id == 0:
         return RedirectResponse('/patreon')
 
     # Load the current module and initialize session state
@@ -570,7 +654,7 @@ def get(session, practice_num: int, module_number: int):
     # Button for navigating to the next page/module
     def module_switcher():
         if session['page'] < 53:
-            return A("Next", hx_post=f'/next_page/{practice_num}/{module_number}', hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-primary rounded-full")
+            return A("Next", hx_post=f'/switch_page/{practice_num}/{module_number}/{session["page"]+1}', hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-primary rounded-full")
         elif module == "module_2":
             session['page'] = 0
             return A("Finish", href=f'/practice/{practice_num}/break', cls="btn btn-secondary rounded-full")
@@ -606,6 +690,38 @@ def get(session, practice_num: int, module_number: int):
                             cls="navbar-start"
                         ),
                         Div(
+                            Div(
+    # Dropdown Wrapper
+    Div(
+        Div(f"Question {session['page'] + 1}", cls="btn btn-primary m-1", tabindex="0", role="button"),
+        Div(
+            Div(
+                H3(f"Select a Question", cls="card-title text-lg font-semibold mb-4"),
+                Div(
+                    # Grid layout for page buttons
+                    *[
+                        A(
+                            f"{i + 1}", 
+                            hx_post=f"/switch_page/{practice_num}/{module_number}/{i}",
+                            hx_swap="innerHTML",
+                            hx_target='#practice_html', 
+                            cls="btn btn-outline btn-secondary w-12 h-12 m-1 text-lg font-semibold shadow"
+                        ) 
+                        for i, _ in enumerate(practice_en_questions[practice_num][module])
+                    ],
+                    cls="grid grid-cols-10 gap-2 justify-items-center"  # Ensures buttons align properly
+                ),
+                cls="card-body"
+            ),
+            cls="dropdown-content card bg-base-200 z-[1] w-[700px] h-[400px] absolute left-1/2 top-12 transform -translate-x-1/2 z-10 shadow",
+            tabindex="0"
+        ),
+        cls="dropdown dropdown-hover"
+    )
+)
+                        ,cls="navbar-center"
+                        ),
+                        Div(
                             A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
                             A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
                             cls="navbar-end space-x-2"
@@ -614,15 +730,10 @@ def get(session, practice_num: int, module_number: int):
                     )
                 ),
                 Main(
-                    Div(
-                        # Dropdown for page selection
-                        Div(
-                            Select(
-                                *[Option(f"Page {i + 1}") for i, _ in enumerate(practice_en_questions[practice_num][module])],
-                                cls="select select-bordered w-full max-w-xs mt-4 mx-auto"
-                            ),
-                            cls="mb-6"
-                        ),
+                  Div(
+                      # Dropdown for page selection
+                         
+                 
                         # Question content inside a DaisyUI card
                         Div(
                             Div(
@@ -663,7 +774,7 @@ def get(session, practice_num: int, module_number: int):
                                 cls="card-body"
                             ),
                             Div(
-                                A("Back", hx_post=[f'/previous_page/{practice_num}/{module_number}' if session['page'] > 0 else None], hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-secondary rounded-full"),
+                                A("Back", hx_post=[f'/switch_page/{practice_num}/{module_number}/{session["page"]-1}' if session['page'] > 0 else None], hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-secondary rounded-full"),
                                 H4(f"Page {session['page'] + 1}", cls="text-lg font-bold"),
                                 module_switcher(),
                                 cls="flex justify-between items-center mt-6 p-5"
@@ -683,105 +794,13 @@ def get(session, practice_num: int, module_number: int):
     )
 
 
-@rt("/patreon")
-def get(sess):
-    """Render the home page with Login/Profile management."""
-    user_data, _ = get_user_data(sess)  # Fetch user data from session
-
-    if user_data:
-        # User is logged in; show profile and logout buttons
-        name = H3(user_data['data']['attributes']['full_name'],cls="card-title")
-        email = user_data['data']['attributes']['email']
-        logout_button = A("Logout", href="/logout", cls="btn btn-sm btn-secondary m-1")
-        profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
-
-    else:
-        # User is not logged in; show login button
-        name = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
-        email = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
-        logout_button = Div()  # Empty div to maintain layout consistency
-        profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
-
-    return (
-        Html(
-            Head(Defaults),
-            Body(
-                Header(
-                    Div(
-                        Div(
-                            A(
-                                Span("🎓", style="font-size:1.8rem;"),
-                                H1("OpenSAT", cls="text-primary"),
-                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        Div(
-                            A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
-
-                            Div(
-                             Div(
-                                Div(
-                                    profile_image,cls=" w-12 rounded-full")
-                                    ,role="button",tabindex="0",cls="avatar"),
-                                     Ul(logout_button,tabindex="0", cls="dropdown-content  menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
-                                    ,cls="dropdown dropdown-hover dropdown-bottom dropdown-end"),
-                            cls="navbar-end space-x-2"
-                        ),
-                        cls="navbar bg-base-90 shadow bg-ghost"
-                    )
-                ),
-                Main(
-                    Div(
-            Div(
-                H2(
-                    "Become a Patron to Access Exclusive Content", 
-                    cls="text-2xl font-bold text-center"
-                ),
-                P(
-                    "To access premium content and support the project, please subscribe to our Patreon membership.",
-                    cls="text-center text-gray-600 mt-4"
-                ),
-                Div(
-                    A(
-                        Img(src='public/brand-patreon.png',cls="w-8 rounded"),"Became a Patreon", 
-                        href="https://www.patreon.com",  # Replace with actual Patreon link
-                        cls="btn btn-primary w-full mb-2"
-                    ),
-                    A(
-                        "Login", 
-                        href="/login", 
-                        cls="btn btn-secondary w-full"
-                    ),
-                    
-                    cls="card-actions justify-center mt-6"
-                ),
-                cls="card-body"
-            ),
-            cls="card bg-base-100 shadow-xl w-full max-w-lg mx-auto mt-12"
-        ),
-        cls="container mx-auto py-12 px-4"
-                )
-            ), data_theme="retro"
-        )
-    )
-
-
-@rt('/next_page/{practice}/{module_number}')
-def post(session,practice:str,module_number:str):
+@rt('/switch_page/{practice}/{module_number}/{value}')
+def post(session,practice:str,module_number:str,value:int):
  # Initialize module in the session if it doesn't exist or if it's None
     session.setdefault('page', 0)
-    session['page'] = session.get('page') + 1
+    session['page'] = value
     return RedirectResponse(f'/practice/{practice}/module/{module_number}', status_code=303)
 
-@rt('/previous_page/{practice}/{module_number}')
-def post(session,practice:str,module_number:str):
- # Initialize module in the session if it doesn't exist or if it's None
-    session.setdefault('page', 0)
-    session['page'] = session.get('page') - 1
-    return RedirectResponse(f'/practice/{practice}/module/{module_number}', status_code=303)
 
 
 @rt("/practice/{practice_num}/break")
