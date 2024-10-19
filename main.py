@@ -692,40 +692,11 @@ def get(session, practice_num: int, module_number: int):
                         Div(
                             Div(
     # Dropdown Wrapper
-    Div(
-        Div(f"Question {session['page'] + 1}", cls="btn btn-primary m-1", tabindex="0", role="button"),
-        Div(
-            Div(
-                H3(f"Select a Question", cls="card-title text-lg font-semibold mb-4"),
-                Div(
-                    # Grid layout for page buttons
-                    *[
-                        A(
-                            f"{i + 1}", 
-                            hx_post=f"/switch_page/{practice_num}/{module_number}/{i}",
-                            hx_swap="innerHTML",
-                            hx_target='#practice_html', 
-                            cls="btn btn-outline btn-secondary w-12 h-12 m-1 text-lg font-semibold shadow"
-                        ) 
-                        for i, _ in enumerate(practice_en_questions[practice_num][module])
-                    ],
-                    cls="grid grid-cols-10 gap-2 justify-items-center"  # Ensures buttons align properly
-                ),
-                cls="card-body"
-            ),
-            cls="dropdown-content card bg-base-200 z-[1] w-[700px] h-[400px] absolute left-1/2 top-12 transform -translate-x-1/2 z-10 shadow",
-            tabindex="0"
-        ),
-        cls="dropdown dropdown-hover"
-    )
+    
 )
                         ,cls="navbar-center"
                         ),
-                        Div(
-                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
-                            cls="navbar-end space-x-2"
-                        ),
+                        
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
@@ -775,7 +746,32 @@ def get(session, practice_num: int, module_number: int):
                             ),
                             Div(
                                 A("Back", hx_post=[f'/switch_page/{practice_num}/{module_number}/{session["page"]-1}' if session['page'] > 0 else None], hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-secondary rounded-full"),
-                                H4(f"Page {session['page'] + 1}", cls="text-lg font-bold"),
+                                Div(
+        Div(f"Question {session['page'] + 1}", cls="btn btn-primary m-1", tabindex="0", role="button"),
+        Div(
+            Div(
+                H3(f"Select a Question", cls="card-title text-lg font-semibold mb-4"),
+                Div(
+                    # Grid layout for page buttons
+                    *[
+                        A(
+                            f"{i + 1}", 
+                            hx_post=f"/switch_page/{practice_num}/{module_number}/{i}",
+                            hx_swap="innerHTML",
+                            hx_target='#practice_html', 
+                            cls="btn btn-outline btn-secondary w-12 h-10 m-1 text-lg font-semibold shadow"
+                        ) 
+                        for i, _ in enumerate(practice_en_questions[practice_num][module])
+                    ],
+                    cls=" gap-5 justify-items-center"  # Ensures buttons align properly
+                ),
+                cls="card-body"
+            ),
+            cls="dropdown-content card bg-base-200 z-[1] w-[300px] h-[480px] absolute left-1/2 top-12 transform -translate-x-1/2 z-10 shadow",
+            tabindex="0"
+        ),
+        cls="dropdown dropdown-top dropdown-hover"
+    ),
                                 module_switcher(),
                                 cls="flex justify-between items-center mt-6 p-5"
                             )
