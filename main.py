@@ -745,9 +745,9 @@ def get(session, practice_num: int, module_number: int):
                                 cls="card-body"
                             ),
                             Div(
-                                A("Back", hx_post=[f'/switch_page/{practice_num}/{module_number}/{session["page"]-1}' if session['page'] > 0 else None], hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-secondary rounded-full"),
+                                A("Back", hx_post=[f'/switch_page/{practice_num}/{module_number}/{session["page"]-1}' if session['page'] > 0 else None], hx_swap="innerHTML", hx_target='#practice_html', cls="btn rounded-full bg-base-300"),
                                 Div(
-        Div(f"Question {session['page'] + 1}", cls="btn btn-primary m-1", tabindex="0", role="button"),
+        Div(f"Question {session['page'] + 1}", cls="btn btn-secondary m-1", tabindex="0", role="button"),
         Div(
             Div(
                 H3(f"Select a Question", cls="card-title text-lg font-semibold mb-4"),
