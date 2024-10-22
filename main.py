@@ -625,7 +625,7 @@ def get(session):
 
 @rt("/practice/{practice_num}/module/{module_number}")
 def get(session, practice_num: int, module_number: int):
-
+    #del session['page']
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
     if camp_id == 0:
@@ -643,17 +643,24 @@ def get(session, practice_num: int, module_number: int):
     practice_en_questions = json.load(open('data.json'))['practice_test']
     
     # Get the current question object
-    question_obj = question_objects('english' if module_number < 3 else 'english')[practice_en_questions[practice_num][module][session['page']]]
+    question_obj = question_objects('english')[practice_en_questions[practice_num][module][session['page']]]
 
     # Helper to retrieve answers from session
     def answers_session(count):
         for answer in session[module]:
             if str(count) in answer:
                 return answer[str(count)]
+            
+    def module_title():
+        if module == "module_1" or module == "module_2":
+            return "Reading & Writing"
+        if module == "module_3" or module == "module_4":
+            return "Math"           
 
     # Button for navigating to the next page/module
     def module_switcher():
-        if session['page'] < 53:
+        #checking different states of module
+        if session['page'] < len(practice_en_questions[practice_num][module]) - 1:
             return A("Next", hx_post=f'/switch_page/{practice_num}/{module_number}/{session["page"]+1}', hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-primary rounded-full")
         elif module == "module_2":
             session['page'] = 0
@@ -682,11 +689,7 @@ def get(session, practice_num: int, module_number: int):
                 Header(
                     Div(
                         Div(
-                            A(
-                                Span("🎓", style="font-size:1.8rem;"),
-                                H1("OpenSAT", cls="text-primary"),
-                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
-                            ),
+                            Div(f"Module {module_number}: {module_title()}",cls="text-xl font-bold"),
                             cls="navbar-start"
                         ),
                         Div(
@@ -763,7 +766,7 @@ def get(session, practice_num: int, module_number: int):
                         ) 
                         for i, _ in enumerate(practice_en_questions[practice_num][module])
                     ],
-                    cls=" gap-5 justify-items-center"  # Ensures buttons align properly
+                    cls=" gap-3 justify-items-center"  # Ensures buttons align properly
                 ),
                 cls="card-body"
             ),
