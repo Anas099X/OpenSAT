@@ -67,10 +67,14 @@ def open_and_modify(file_path, path, new_value, append=False, create_if_missing=
 # Function to generate a new practice test
 def generate_practice_test(file_path, practice_name):
     """
-    Creates a new practice test entry and saves it to the JSON file.
+    Creates a new practice test entry and saves it to the JSON file if none exist.
     """
-    # Ensure the 'practice_test' list exists
-    open_and_modify(file_path, ['practice_test'], [], create_if_missing=True)
+    with open(file_path, 'r') as file:
+        data = json.load(file)
+
+    if 'practice_test' not in data or not data['practice_test']:
+        # If no practice tests exist, create the list and add the new practice test
+        open_and_modify(file_path, ['practice_test'], [], create_if_missing=True)
 
     new_practice_test = {
         'name': practice_name,
@@ -83,7 +87,7 @@ def generate_practice_test(file_path, practice_name):
     # Append the new practice test to the list
     open_and_modify(file_path, ['practice_test'], [new_practice_test], append=True)
 
-# Function to safely access the last practice test
+# Function to get the last practice test index
 def get_last_practice_test_index(file_path):
     with open(file_path, 'r') as file:
         data = json.load(file)
@@ -93,8 +97,9 @@ def get_last_practice_test_index(file_path):
 def populate_practice_test(file_path, practice_name, num_questions):
     """
     Populates the modules of a practice test with questions based on the section and domain.
+    If practice tests exist, questions will be added to the last one.
     """
-    # Ensure a new practice test exists
+    # Create a new practice test if none exist
     generate_practice_test(file_path, practice_name)
 
     # Get the index of the last practice test
@@ -126,6 +131,6 @@ def populate_practice_test(file_path, practice_name, num_questions):
 # Example usage
 file_path = 'data.json'
 
-# Create two practice tests and populate them with questions
-populate_practice_test(file_path, 'practice test name', 54)
+# Create and populate two practice tests with questions
+#populate_practice_test(file_path, 'practice test name', 54)
 populate_practice_test(file_path, 'practice test name2', 54)
