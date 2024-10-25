@@ -6,7 +6,7 @@ settings
 \question_generator.py
 \test.json
 \test.db
-\practicetest_generator.py
 \data.json
 \.venv
 \local_storage.json
+\question_generator2.py
