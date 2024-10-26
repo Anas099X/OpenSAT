@@ -133,23 +133,23 @@ def populate_practice_test(file_path, practice_name, num_questions):
 
 #math modules
     for module_num in [3,4]:
-     for i in range(1, num_questions + 1):
+     for i in range(1, num_questions + 2):
         if 1 <= i < 8:
             open_and_modify(
                 file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
-                question_collecter('math', 'Algebra ', 1), append=True
+                question_collecter('math', 'Algebra ', 2), append=True
             )
         elif 8 <= i < 15:
             open_and_modify(
                 file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
-                question_collecter('math', 'Advanced Math', 1), append=True
+                question_collecter('math', 'Advanced Math', 2), append=True
             )
         elif 15 <= i < 21:
             open_and_modify(
                 file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
                 question_collecter('math', 'Problem-Solving and Data Analysis', 1), append=True
             )
-        elif 21 <= i <= 30:
+        elif 21 <= i <= 32:
             open_and_modify(
                 file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
                 question_collecter('math', 'Geometry and Trigonometry', 1), append=True

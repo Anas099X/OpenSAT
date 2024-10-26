@@ -229,7 +229,7 @@ def get(sess):
                         Div(
                             A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
                             A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
 
                             Div(
                              Div(
@@ -291,9 +291,9 @@ def get(sess):
                             cls="navbar-start"
                         ),
                         Div(
-                            A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Home", href="/", cls="btn rounded-full btn-sm btn-primary"),
                             A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
 
                             Div(
                              Div(
@@ -311,7 +311,7 @@ def get(sess):
                     Div(
             Div(
                 H2(
-                    "Become a Patron to Access Exclusive Content", 
+                    "Become a Patreon to Access Exclusive Content", 
                     cls="text-2xl font-bold text-center"
                 ),
                 P(
@@ -399,7 +399,7 @@ def get(section: str, domain: str):
                         ),
                         Div(
                             A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
                             cls="navbar-end space-x-2"
                         ),
                         cls="navbar bg-base-90 shadow bg-ghost"
@@ -461,7 +461,7 @@ def get(section: str, num: int, answer: bool):
                         ),
                         Div(
                             A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
                             cls="navbar-end space-x-2"
                         ),
                         cls="navbar bg-base-90 shadow bg-ghost"
@@ -528,7 +528,7 @@ def get():
                         ),
                         Div(
                             A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
                             cls="navbar-end space-x-2"
                         ),
                         cls="navbar bg-base-90 shadow bg-ghost"
@@ -574,7 +574,7 @@ def get(session):
 
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if camp_id == 0:
+    if camp_id != 7055998:
         return RedirectResponse('/patreon')
 
     return (
@@ -595,7 +595,7 @@ def get(session):
                         ),
                         Div(
                             A("Home", href="/", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
                             cls="navbar-end space-x-2"
                         ),
                         cls="navbar bg-base-90 shadow bg-ghost"
@@ -630,7 +630,7 @@ def get(session, practice_num: int, module_number: int):
     #del session['page']
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if camp_id == 0:
+    if camp_id != 7055998:
         return RedirectResponse('/patreon')
 
     # Load the current module and initialize session state
