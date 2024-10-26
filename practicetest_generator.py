@@ -106,26 +106,53 @@ def populate_practice_test(file_path, practice_name, num_questions):
     last_practice_test_index = get_last_practice_test_index(file_path)
 
     # Loop to collect and distribute questions across modules
-    for i in range(1, num_questions + 1):
-        if 1 <= i < 15:
+
+    #english modules
+    for module_num in [1,2]:
+     for i in range(1, num_questions + 1):
+        if 1 <= i < 8:
             open_and_modify(
-                file_path, ['practice_test', last_practice_test_index, 'module_1'],
+                file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
                 question_collecter('english', 'Information and Ideas', 1), append=True
             )
-        elif 15 <= i < 29:
+        elif 8 <= i < 15:
             open_and_modify(
-                file_path, ['practice_test', last_practice_test_index, 'module_2'],
-                question_collecter('english', 'Information and Ideas', 1), append=True
+                file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
+                question_collecter('english', 'Craft and Structure', 1), append=True
             )
-        elif 29 <= i < 41:
+        elif 15 <= i < 21:
             open_and_modify(
-                file_path, ['practice_test', last_practice_test_index, 'module_3'],
-                question_collecter('english', 'Information and Ideas', 1), append=True
+                file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
+                question_collecter('english', 'Expression of Ideas', 1), append=True
             )
-        elif 41 <= i <= 54:
+        elif 21 <= i <= 27:
             open_and_modify(
-                file_path, ['practice_test', last_practice_test_index, 'module_4'],
-                question_collecter('english', 'Information and Ideas', 1), append=True
+                file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
+                question_collecter('english', 'Standard English Conventions', 1), append=True
+            )
+
+#math modules
+    for module_num in [3,4]:
+     for i in range(1, num_questions + 1):
+        if 1 <= i < 8:
+            open_and_modify(
+                file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
+                question_collecter('math', 'Algebra ', 1), append=True
+            )
+        elif 8 <= i < 15:
+            open_and_modify(
+                file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
+                question_collecter('math', 'Advanced Math', 1), append=True
+            )
+        elif 15 <= i < 21:
+            open_and_modify(
+                file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
+                question_collecter('math', 'Problem-Solving and Data Analysis', 1), append=True
+            )
+        elif 21 <= i <= 30:
+            open_and_modify(
+                file_path, ['practice_test', last_practice_test_index, f'module_{module_num}'],
+                question_collecter('math', 'Geometry and Trigonometry', 1), append=True
             )
 
 # Example usage
@@ -133,4 +160,4 @@ file_path = 'data.json'
 
 # Create and populate two practice tests with questions
 #populate_practice_test(file_path, 'practice test name', 54)
-populate_practice_test(file_path, 'practice test name2', 54)
+populate_practice_test(file_path, 'practice test name44', 27)

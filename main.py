@@ -584,20 +584,22 @@ def get(session):
             ),
             Body(
                 Header(
-                    Div(
-                        A(
-                            Span("🎓", style="font-size:1.8rem;"),
-                            H1("OpenSAT", style="color: #fc9d9a; font-weight: 700;"),
-                            cls="btn btn-ghost normal-case text-xl", href="/"
+                     Div(
+                        Div(
+                            A(
+                                Span("🎓", style="font-size:1.8rem;"),
+                                H1("OpenSAT", cls="text-primary"),
+                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                            ),
+                            cls="navbar-start"
                         ),
-                        cls="navbar-start"
-                    ),
-                    Nav(
-                        A("Tutors", href="/tutors", cls="btn btn-primary"),
-                        A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-secondary"),
-                        cls="navbar-end space-x-4"
-                    ),
-                    cls="navbar bg-base-100 shadow-lg w-full flex justify-between items-center px-6 py-4"
+                        Div(
+                            A("Home", href="/", cls="btn rounded-full btn-sm btn-primary"),
+                            A("Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-sm btn-secondary"),
+                            cls="navbar-end space-x-2"
+                        ),
+                        cls="navbar bg-base-90 shadow bg-ghost"
+                    )
                 ),
                 Main(
                     Div(
@@ -643,7 +645,7 @@ def get(session, practice_num: int, module_number: int):
     practice_en_questions = json.load(open('data.json'))['practice_test']
     
     # Get the current question object
-    question_obj = question_objects('english')[practice_en_questions[practice_num][module][session['page']]]
+    question_obj = question_objects('english' if module_number < 3 else 'math')[practice_en_questions[practice_num][module][session['page']]]
 
     # Helper to retrieve answers from session
     def answers_session(count):
@@ -840,9 +842,9 @@ def get(practice_num:int,session):
  def checker():
     correct_answers = []
     results = []
-    def answer_collecter(num):
-     for question_num in practice_en_questions[practice_num][f'module_{num}']:
-      answer =  question_objects('english')[question_num]['question']['correct_answer']
+    def answer_collecter(module_num):
+     for question_num in practice_en_questions[practice_num][f'module_{module_num}']:
+      answer =  question_objects('english' if module_num < 3 else 'math')[question_num]['question']['correct_answer']
       correct_answers.append(answer)
 
     for num in [1,2,3,4]:
