@@ -16,9 +16,9 @@ TOKEN_URL = 'https://www.patreon.com/api/oauth2/token'
 IDENTITY_URL = 'https://www.patreon.com/api/oauth2/v2/identity'
 
 
-def get_user_data(sess):
+def get_user_data(session):
     """Fetch user data and campaign ID from the Patreon API."""
-    access_token = sess.get('access_token')
+    access_token = session.get('access_token')
     if not access_token:
         return None, None  # Return None for both user data and campaign ID if not logged in
 
@@ -55,6 +55,7 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
             Meta(property="og:type" ,content="website"),
             Title("OpenSAT"),
             Link(rel="icon",href="public/graduation-cap-solid.svg", sizes="any", type="image/svg+xml"),
+            Link(rel="stylesheet" ,href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"),
             Script('''MathJax = {
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']]
@@ -75,24 +76,45 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
 )
 
 
-
-
-@rt("/")
-def get(sess):
+def menu_button(session):
     """Render the home page with Login/Profile management."""
-    user_data, _ = get_user_data(sess)  # Fetch user data from session
+    user_data, _ = get_user_data(session)  # Fetch user data from session
+    
+    home_button = tutors_button =  A(Div(cls="ti ti-home text-2xl text-neutral"),"Home", href="/", cls="btn rounded-full btn-sm btn-primary m-1")
+    practice_button = A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice",Div(
+                    Div(cls="ti ti-brand-patreon-filled w-3 h-3"),
+                    cls="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow"
+                ), href="/practice/explore", cls="btn rounded-full relative btn-sm btn-primary m-1")
+    explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary m-1")
+    tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary m-1")
 
     if user_data:
         # User is logged in; show profile and logout buttons
-        profile_button = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
-        logout_button = A("Logout", href="/logout", cls="btn rounded-full btn-sm btn-secondary m-1")
         profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
+        profile_button = A(Div(cls='ti ti-user-cog text-2xl text-neutral'),"Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
+        logout_button = A("Logout", href="/logout", cls="btn rounded-full btn-sm btn-secondary m-1")
+
+        
 
     else:
         # User is not logged in; show login button
-        profile_button = A(Img(src='public/brand-patreon.png',cls="w-6"),"login with patreon", href="/login", cls="btn rounded-full btn-sm btn-primary")
-        logout_button = Div()  # Empty div to maintain layout consistency
-        profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
+        profile_button = A(Div(cls="ti ti-brand-patreon-filled text-2xl text-neutral"),"login", href="/login", cls="btn rounded-full btn-sm btn-primary m-1")
+
+    return Div(
+                            Div(
+                             Div(
+                                Div(cls="ti ti-category-filled text-2xl text-neutral"),"Menu",role="button",tabindex="0",cls="btn btn-primary rounded-full"),
+                                     Ul(home_button,explore_button,practice_button,tutors_button,profile_button,
+                            tabindex="0", cls="dropdown-content menu menu-lg bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
+                                    ,cls="dropdown dropdown-bottom dropdown-end"),
+                            cls="navbar-end space-x-2"
+                        )
+
+
+@rt("/")
+def get(session):
+    """Render the home page with Login/Profile management."""
+    user_data, _ = get_user_data(session)  # Fetch user data from session
 
     return (
         Html(
@@ -108,23 +130,7 @@ def get(sess):
                             ),
                             cls="navbar-start"
                         ),
-                        Div(
-                            A("Practice",Div(
-                    Img(src="public/brand-patreon.png", cls="w-3 h-3"),
-                    cls="absolute -bottom-2 -right-2 bg-white rounded-full p-1 shadow"
-                ), href="/practice/explore", cls="btn rounded-full relative btn-sm btn-primary"),
-                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            
-
-                            Div(
-                             Div(
-                                Div(
-                                    profile_image,cls=" w-12 rounded-full")
-                                    ,role="button",tabindex="0",cls="avatar"),
-                                     Ul(profile_button,logout_button,tabindex="0", cls="dropdown-content  menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
-                                    ,cls="dropdown dropdown-hover dropdown-bottom dropdown-end"),
-                            cls="navbar-end space-x-2"
-                        ),
+                        menu_button(session),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
@@ -139,8 +145,11 @@ def get(sess):
                           "constantly growing thanks to a dedicated community of contributors.",
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
                         Div(
-                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-primary"),
-                            A("Contribute", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn-secondary"),
+                            A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn-primary"),
+                            A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice",Div(
+                            Div(cls="ti ti-brand-patreon-filled w-3 h-3"),
+                            cls="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow"
+                        ), href="/practice/explore", cls="btn rounded-full relative btn btn-primary"),
                             style="display: flex; justify-content: center; gap: 15px;"
                         ),
                         cls="card bg-base-100 shadow-xl mx-auto p-10 mt-10",
@@ -153,9 +162,9 @@ def get(sess):
 
 
 @rt("/logout")
-def logout(sess):
+def logout(session):
     """Logout the user by clearing the session."""
-    del sess['access_token']  # Remove the access token from the session
+    del session['access_token']  # Remove the access token from the session
     return RedirectResponse('/')
 
 
@@ -173,7 +182,7 @@ def login():
 
 
 @rt("/callback")
-def callback(request, sess):
+def callback(request, session):
     """Handle OAuth callback and store the access token."""
     code = request.query_params.get('code')
     data = {
@@ -189,14 +198,14 @@ def callback(request, sess):
         return "Failed to get access token", 400
 
     access_token = token_response.json().get('access_token')
-    sess['access_token'] = access_token  # Store the access token in session
+    session['access_token'] = access_token  # Store the access token in session
     return RedirectResponse('/')
 
 
 @rt("/profile")
-def get(sess):
+def get(session):
     """Render the home page with Login/Profile management."""
-    user_data, _ = get_user_data(sess)  # Fetch user data from session
+    user_data, _ = get_user_data(session)  # Fetch user data from session
 
     if user_data:
         # User is logged in; show profile and logout buttons
@@ -226,20 +235,7 @@ def get(sess):
                             ),
                             cls="navbar-start"
                         ),
-                        Div(
-                            A("Practice", href="/practice/explore", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
-
-                            Div(
-                             Div(
-                                Div(
-                                    profile_image,cls=" w-12 rounded-full")
-                                    ,role="button",tabindex="0",cls="avatar"),
-                                     Ul(logout_button,tabindex="0", cls="dropdown-content  menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
-                                    ,cls="dropdown dropdown-hover dropdown-bottom dropdown-end"),
-                            cls="navbar-end space-x-2"
-                        ),
+                        menu_button(session),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
@@ -258,9 +254,9 @@ def get(sess):
     )
 
 @rt("/patreon")
-def get(sess):
+def get(session):
     """Render the home page with Login/Profile management."""
-    user_data, _ = get_user_data(sess)  # Fetch user data from session
+    user_data, _ = get_user_data(session)  # Fetch user data from session
 
     if user_data:
         # User is logged in; show profile and logout buttons
@@ -290,20 +286,7 @@ def get(sess):
                             ),
                             cls="navbar-start"
                         ),
-                        Div(
-                            A("Home", href="/", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
-
-                            Div(
-                             Div(
-                                Div(
-                                    profile_image,cls=" w-12 rounded-full")
-                                    ,role="button",tabindex="0",cls="avatar"),
-                                     Ul(logout_button,tabindex="0", cls="dropdown-content  menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
-                                    ,cls="dropdown dropdown-hover dropdown-bottom dropdown-end"),
-                            cls="navbar-end space-x-2"
-                        ),
+                        menu_button(session),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
@@ -344,7 +327,7 @@ def get(sess):
 
 
 @rt("/explore/{section}/{domain}")
-def get(section: str, domain: str):
+def get(section: str, domain: str,session):
 
     def domain_lower(input):
         return str(input).lower()
@@ -388,7 +371,7 @@ def get(section: str, domain: str):
             ),
             Body(
                 Header(
-                     Div(
+                    Div(
                         Div(
                             A(
                                 Span("🎓", style="font-size:1.8rem;"),
@@ -397,11 +380,7 @@ def get(section: str, domain: str):
                             ),
                             cls="navbar-start"
                         ),
-                        Div(
-                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
-                            cls="navbar-end space-x-2"
-                        ),
+                        menu_button(session),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
@@ -437,7 +416,7 @@ def get(section: str, domain: str):
 
 
 @rt('/questions/{section}/{num}/{answer}')
-def get(section: str, num: int, answer: bool):
+def get(section: str, num: int, answer: bool, session):
     question_obj = question_objects(section)[num]
 
     def hide_switch(input):
@@ -450,7 +429,7 @@ def get(section: str, num: int, answer: bool):
             ),
             Body(
                 Header(
-                   Div(
+                    Div(
                         Div(
                             A(
                                 Span("🎓", style="font-size:1.8rem;"),
@@ -459,11 +438,7 @@ def get(section: str, num: int, answer: bool):
                             ),
                             cls="navbar-start"
                         ),
-                        Div(
-                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
-                            cls="navbar-end space-x-2"
-                        ),
+                        menu_button(session),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
@@ -507,7 +482,7 @@ def get(section: str, num: int, answer: bool):
 
 
 @rt("/tutors")
-def get():
+def get(session):
     firestore_docs = db.collection('users').stream()
 
     return (
@@ -524,13 +499,9 @@ def get():
                                 H1("OpenSAT", cls="text-primary"),
                                 cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
                             ),
-                            cls="navbar-start"
+                            cls="navbar"
                         ),
-                        Div(
-                            A("Tutors", href="/tutors", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
-                            cls="navbar-end space-x-2"
-                        ),
+                        menu_button(session),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
@@ -584,7 +555,7 @@ def get(session):
             ),
             Body(
                 Header(
-                     Div(
+                    Div(
                         Div(
                             A(
                                 Span("🎓", style="font-size:1.8rem;"),
@@ -593,11 +564,7 @@ def get(session):
                             ),
                             cls="navbar-start"
                         ),
-                        Div(
-                            A("Home", href="/", cls="btn rounded-full btn-sm btn-primary"),
-                            A("Explore", href="/explore/english/any", cls="btn rounded-full btn-sm btn-primary"),
-                            cls="navbar-end space-x-2"
-                        ),
+                        menu_button(session),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
