@@ -305,7 +305,7 @@ def get(session):
                     cls="text-2xl font-bold text-center"
                 ),
                 P(
-                    "To access premium content and support the project, please subscribe to our Patreon membership.",
+                    "To access premium content and support the project, please subscribe to our Patreon membership for little price of 2.79$/month",
                     cls="text-center text-gray-600 mt-4"
                 ),
                 Div(
