@@ -205,11 +205,11 @@ def callback(request, session):
 @rt("/profile")
 def get(session):
     """Render the home page with Login/Profile management."""
-    user_data, _ = get_user_data(session)  # Fetch user data from session
+    user_data, camp_id = get_user_data(session)  # Fetch user data from session
 
     if user_data:
         # User is logged in; show profile and logout buttons
-        name = H3(user_data['data']['attributes']['full_name'],cls="card-title")
+        name = H4(user_data['data']['attributes']['full_name'],cls="card-title text-2xl")
         email = user_data['data']['attributes']['email']
         logout_button = A("Logout", href="/logout", cls="btn btn-sm btn-secondary m-1")
         profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
@@ -220,6 +220,12 @@ def get(session):
         email = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
         logout_button = Div()  # Empty div to maintain layout consistency
         profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
+    
+    if camp_id == 7055998:
+        tier = "OpenSAT+"
+    else:
+        tier = "Free"
+
 
     return (
         Html(
@@ -241,9 +247,10 @@ def get(session):
                 ),
                 Main(
                     Div(
-                         Div(Div(profile_image,cls="w-16 rounded-full"),cls="avatar m-1"),
+                         Div(Div(profile_image,cls="w-20 rounded-full"),cls="avatar m-1"),
                        name,
-                       f"Email: {email}",
+                       Div(f"Email: {email}",cls="font-bold"),
+                       Div(f"Tier: {tier}",cls="font-bold"),
                        logout_button,
                         cls="card card-body bg-base-100 shadow-xl mx-auto p-10 mt-10",
                         style="max-width:100vh;"
@@ -353,7 +360,7 @@ def get(section: str, domain: str,session):
         return [
             A(
                 Div(
-                    Div("📚", cls="text-3xl"),  # Icon
+                    Div(Div(cls="ti ti-books text-4xl text-neutral"), cls="text-3xl"),  # Icon
                     Div(f'Question #{i + 1}', cls="font-bold text-xl"),  # Question title
                     Div(x['domain'], cls="font-bold text-primary"),  # Domain badge
                     cls="card-body"
@@ -388,10 +395,10 @@ def get(section: str, domain: str,session):
                     Div(
                         # Filters section - centered and styled
                         Div(
-                            H1("🔎 Filters", cls="text-2xl font-bold mb-4"),
+                            H1(Div(cls="ti ti-filter text-4xl text-neutral"),"Filters", cls="text-2xl font-bold mb-4"),
                             Div(
-                                A("English", href=f'/explore/english/any', cls=["btn btn-primary rounded-full" if section == 'english' else "btn rounded-full"]),
-                                A("Math", href=f'/explore/math/any', cls=["btn btn-primary rounded-full" if section == 'math' else "btn rounded-full"]),
+                                A(Div(cls="ti ti-a-b-2 text-2xl text-neutral"),"English", href=f'/explore/english/any', cls=["btn btn-primary rounded-" if section == 'english' else "btn rounded"]),
+                                A(Div(cls="ti ti-math-symbols text-2xl text-neutral"),"Math", href=f'/explore/math/any', cls=["btn btn-primary rounded" if section == 'math' else "btn rounded"]),
                                 cls="btn-group space-x-2"
                             ),
                             Br(),
@@ -545,7 +552,7 @@ def get(session):
 
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if camp_id != 7055998:
+    if camp_id == 7055998:
         return RedirectResponse('/patreon')
 
     return (
@@ -574,9 +581,9 @@ def get(session):
                         *[
                             Div(
                                 A(
-                                    Div("📚", cls="text-3xl"),  # Icon for each module
-                                    H2(module['name'], cls="card-title text-lg font-bold mt-4"),  # Module name
-                                    P("Practice Test", cls="text-primary"),
+                                    Div(Div(cls="ti ti-highlight text-4xl text-neutral"), cls="text-3xl"),  # Icon for each module
+                                    H2(module['name'], cls="card-title text-xl font-bold mt-1"),  # Module name
+                                    P("Practice Test", cls="text-primary font-bold"),
                                     cls="card bg-base-100 shadow-xl w-96 mx-auto hover:bg-base-200 transition-all rounded-lg p-8",
                                     href=f"/practice/{i}/module/1" 
                                 )
@@ -597,7 +604,7 @@ def get(session, practice_num: int, module_number: int):
     #del session['page']
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if camp_id != 7055998:
+    if camp_id == 7055998:
         return RedirectResponse('/patreon')
 
     # Load the current module and initialize session state
@@ -659,16 +666,9 @@ def get(session, practice_num: int, module_number: int):
                     Div(
                         Div(
                             Div(f"Module {module_number}: {module_title()}",cls="text-xl font-bold"),
-                            cls="navbar-start"
+                            cls="navbar"
                         ),
-                        Div(
-                            Div(
-    # Dropdown Wrapper
-    
-)
-                        ,cls="navbar-center"
-                        ),
-                        
+                        menu_button(session),
                         cls="navbar bg-base-90 shadow bg-ghost"
                     )
                 ),
