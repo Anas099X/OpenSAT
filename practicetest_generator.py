@@ -160,4 +160,5 @@ file_path = 'data.json'
 
 # Create and populate two practice tests with questions
 #populate_practice_test(file_path, 'practice test name', 54)
-populate_practice_test(file_path, 'practice test name44', 27)
+for x in range(1,200):
+ populate_practice_test(file_path, f'Practce Test #{x}', 27)
