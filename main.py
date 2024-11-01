@@ -4,9 +4,12 @@ from datetime import *
 import asyncio
 import random, json, time
 from starlette.responses import StreamingResponse
+from dotenv import load_dotenv
+
+#load env
+load_dotenv()
 
 #oauth
-
 CLIENT_ID = 'CTqlZU5Du7n2eA3yuZoRP3eOi9eqMrj89QmSZR9DuqMzVAd2cc90FC1DY_XtASv4'
 CLIENT_SECRET = '7BF-vtstFA7HjCrziAAXrCu3WSU7g81Izfem6tiBCxRIhYi9QcJxJN-kRSsPZDUk'
 REDIRECT_URI = 'http://0.0.0.0:5001/callback'
@@ -264,7 +267,7 @@ def get(session):
         logout_button = Div()  # Empty div to maintain layout consistency
         profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
     
-    if camp_id == 7055998:
+    if camp_id != 7055998 and user_data['data']['attributes']['email'] not in os.getenv("SPECIAL_ACCESS", "").split(","):
         tier = "OpenSAT+"
     else:
         tier = "Free"
@@ -592,15 +595,23 @@ def get(session):
 def get(session):
     
     # reset tests
-    del session['page']
+    if 'page' not in session or session['page'] is None:
+        session['page'] = 0
+    del session['page']    
 
     # Load modules from JSON file
     modules = json.load(open('data.json'))['practice_test']
 
-    #check if user is subbed to patreon
+    #check if user is subbed to patreon or have special access
     user_data, camp_id = get_user_data(session)
     if camp_id == 7055998:
-        return RedirectResponse('/patreon')
+     ""
+    elif user_data['data']['attributes']['email'] in os.getenv("SPECIAL_ACCESS", "").split(","):
+     ""          
+    else:
+     return RedirectResponse('/patreon')
+ 
+    
 
     return (
         Html(
@@ -652,7 +663,11 @@ def get(session, practice_num: int, module_number: int):
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
     if camp_id == 7055998:
-        return RedirectResponse('/patreon')
+     ""
+    elif user_data['data']['attributes']['email'] in os.getenv("SPECIAL_ACCESS", "").split(","):
+     ""          
+    else:
+     return RedirectResponse('/patreon')
 
     # Load the current module and initialize session state
     module = f'module_{module_number}'
@@ -897,7 +912,7 @@ def get(practice_num:int,session):
                 Main(
                     Div(
                        
-                        H2(f"Your Score is {checker()}/92",
+                        H2(f"Your Score is {checker()}/98",
                            style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
                         P("click continue to start the next module",
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),

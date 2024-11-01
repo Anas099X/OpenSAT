@@ -10,3 +10,4 @@ settings
 \.venv
 \local_storage.json
 \question_generator2.py
+\practicetest_generator2.py
