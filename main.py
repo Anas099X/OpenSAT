@@ -604,7 +604,7 @@ def get(session):
 
     #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if user_data['data']['attributes']['email'] not in os.getenv("SPECIAL_ACCESS").split(","):
+    if user_data['data']['attributes']['email'] not in os.getenv("SPECIAL_ACCESS", "").split(","):
      return RedirectResponse('/patreon')
  
     
