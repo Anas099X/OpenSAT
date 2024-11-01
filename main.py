@@ -89,6 +89,7 @@ def menu_button(session):
                 ), href="/practice/explore", cls="btn rounded-full relative btn btn-primary m-1")
     explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn- btn-primary m-1")
     tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn rounded-full btn btn-primary m-1")
+    github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn btn-secondary m-1")
 
     if user_data:
         # User is logged in; show profile and logout buttons
@@ -106,7 +107,7 @@ def menu_button(session):
                             Div(
                              Div(
                                 Div(cls="ti ti-category text-2xl text-neutral"),"Menu",role="button",tabindex="0",cls="btn btn-primary rounded-full"),
-                                     Ul(home_button,explore_button,practice_button,tutors_button,profile_button,
+                                     Ul(home_button,explore_button,practice_button,tutors_button,profile_button,github_button,
                             tabindex="0", cls="dropdown-content menu menu-lg bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
                                     ,cls="dropdown dropdown-bottom dropdown-end"),
                             cls="navbar-end space-x-2"
