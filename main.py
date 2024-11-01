@@ -6,7 +6,6 @@ import random, json, time
 from starlette.responses import StreamingResponse
 from dotenv import load_dotenv
 
-#load env
 load_dotenv()
 
 #oauth
@@ -90,6 +89,7 @@ def menu_button(session):
                 ), href="/practice/explore", cls="btn rounded-full relative btn btn-primary m-1")
     explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn- btn-primary m-1")
     tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn rounded-full btn btn-primary m-1")
+    github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn btn-secondary m-1")
 
     if user_data:
         # User is logged in; show profile and logout buttons
@@ -107,7 +107,7 @@ def menu_button(session):
                             Div(
                              Div(
                                 Div(cls="ti ti-category text-2xl text-neutral"),"Menu",role="button",tabindex="0",cls="btn btn-primary rounded-full"),
-                                     Ul(home_button,explore_button,practice_button,tutors_button,profile_button,
+                                     Ul(home_button,explore_button,practice_button,tutors_button,profile_button,github_button,
                             tabindex="0", cls="dropdown-content menu menu-lg bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
                                     ,cls="dropdown dropdown-bottom dropdown-end"),
                             cls="navbar-end space-x-2"
@@ -600,15 +600,11 @@ def get(session):
     del session['page']    
 
     # Load modules from JSON file
-    modules = json.load(open('data.json'))['practice_test']
+    modules = question_objects('practice_test')
 
-    #check if user is subbed to patreon or have special access
+    #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if camp_id == 7055998:
-     ""
-    elif user_data['data']['attributes']['email'] in os.getenv("SPECIAL_ACCESS", "").split(","):
-     ""          
-    else:
+    if user_data['data']['attributes']['email'] not in os.getenv("SPECIAL_ACCESS").split(","):
      return RedirectResponse('/patreon')
  
     
@@ -678,7 +674,7 @@ def get(session, practice_num: int, module_number: int):
         session[module] = []
 
     # Load practice questions
-    practice_en_questions = json.load(open('data.json'))['practice_test']
+    practice_en_questions = question_objects('practice_test')
     
     # Get the current question object
     question_obj = question_objects('english' if module_number < 3 else 'math')[practice_en_questions[practice_num][module][session['page']]]
