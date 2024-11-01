@@ -593,6 +593,12 @@ def get(session):
 
 @rt("/practice/explore")
 def get(session):
+
+    user_data, camp_id = get_user_data(session)
+
+    #if user not logged in, return to patreon
+    if user_data is None:
+     return RedirectResponse('/patreon')
     
     # reset tests
     if 'page' not in session or session['page'] is None:
@@ -603,7 +609,6 @@ def get(session):
     modules = question_objects('practice_test')
 
     #check if user is subbed to patreon
-    user_data, camp_id = get_user_data(session)
     if user_data['data']['attributes']['email'] not in os.getenv("SPECIAL_ACCESS", "").split(","):
      return RedirectResponse('/patreon')
  
