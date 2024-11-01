@@ -6,7 +6,6 @@ import random, json, time
 from starlette.responses import StreamingResponse
 from dotenv import load_dotenv
 
-#load env
 load_dotenv()
 
 #oauth
@@ -600,15 +599,11 @@ def get(session):
     del session['page']    
 
     # Load modules from JSON file
-    modules = json.load(open('data.json'))['practice_test']
+    modules = question_objects('practice_test')
 
-    #check if user is subbed to patreon or have special access
+    #check if user is subbed to patreon
     user_data, camp_id = get_user_data(session)
-    if camp_id == 7055998:
-     ""
-    elif user_data['data']['attributes']['email'] in os.getenv("SPECIAL_ACCESS", "").split(","):
-     ""          
-    else:
+    if user_data['data']['attributes']['email'] not in os.getenv("SPECIAL_ACCESS").split(","):
      return RedirectResponse('/patreon')
  
     
@@ -678,7 +673,7 @@ def get(session, practice_num: int, module_number: int):
         session[module] = []
 
     # Load practice questions
-    practice_en_questions = json.load(open('data.json'))['practice_test']
+    practice_en_questions = question_objects('practice_test')
     
     # Get the current question object
     question_obj = question_objects('english' if module_number < 3 else 'math')[practice_en_questions[practice_num][module][session['page']]]
