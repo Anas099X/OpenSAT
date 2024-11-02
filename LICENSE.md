@@ -6,7 +6,7 @@ OpenSAT is an open-source project. While we encourage collaboration and contribu
 
 ### License and Rules of Usage
 
-1. **No Forking or Use Under the Same Name**: Users are not permitted to fork this project or create derivative works that use the same name, "OpenSAT". This ensures that the integrity and identity of the original project are maintained.
+1. **No Forking or Use Under the Same Name**: Users are not permitted to fork this project(in case of creating a new public project) or create derivative works that use the same name, "OpenSAT". This ensures that the integrity and identity of the original project are maintained.
 
 2. **No Profit from Code**: The codebase for OpenSAT cannot be used for commercial gain. This includes, but is not limited to, selling the code or creating products based on the original code without proper authorization.
 
