@@ -11,7 +11,7 @@ load_dotenv()
 #oauth
 CLIENT_ID = 'CTqlZU5Du7n2eA3yuZoRP3eOi9eqMrj89QmSZR9DuqMzVAd2cc90FC1DY_XtASv4'
 CLIENT_SECRET = '7BF-vtstFA7HjCrziAAXrCu3WSU7g81Izfem6tiBCxRIhYi9QcJxJN-kRSsPZDUk'
-REDIRECT_URI = 'https://opensat.vercel.app/auth/callback'
+REDIRECT_URI = 'https://opensat.fun/auth/callback'
 
 AUTH_URL = 'https://www.patreon.com/oauth2/authorize'
 TOKEN_URL = 'https://www.patreon.com/api/oauth2/token'
