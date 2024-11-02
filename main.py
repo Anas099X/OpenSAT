@@ -268,7 +268,8 @@ def get(session):
         logout_button = Div()  # Empty div to maintain layout consistency
         profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
     
-    if camp_id != 7055998 and user_data['data']['attributes']['email'] not in os.getenv("SPECIAL_ACCESS", "").split(","):
+    if camp_id != 7055998 and user_data.get('data', {}).get('attributes', {}).get('email')
+ not in os.getenv("SPECIAL_ACCESS", "").split(","):
         tier = "OpenSAT+"
     else:
         tier = "Free"
@@ -611,7 +612,8 @@ def get(session):
     modules = question_objects('practice_test')
 
     #check if user is subbed to patreon
-    if user_data['data']['attributes']['email'] not in os.getenv("SPECIAL_ACCESS", "").split(","):
+    if user_data.get('data', {}).get('attributes', {}).get('email')
+ not in os.getenv("SPECIAL_ACCESS", "").split(","):
      return RedirectResponse('/patreon')
  
     
@@ -667,7 +669,8 @@ def get(session, practice_num: int, module_number: int):
     user_data, camp_id = get_user_data(session)
     if camp_id == 7055998:
      ""
-    elif user_data['data']['attributes']['email'] in os.getenv("SPECIAL_ACCESS", "").split(","):
+    elif user_data.get('data', {}).get('attributes', {}).get('email')
+ in os.getenv("SPECIAL_ACCESS", "").split(","):
      ""          
     else:
      return RedirectResponse('/patreon')
