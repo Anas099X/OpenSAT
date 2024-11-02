@@ -611,8 +611,7 @@ def get(session):
     modules = question_objects('practice_test')
 
     #check if user is subbed to patreon
-    if user_data.get('data', {}).get('attributes', {}).get('email')
- not in os.getenv("SPECIAL_ACCESS", "").split(","):
+    if user_data.get('data', {}).get('attributes', {}).get('email') not in os.getenv("SPECIAL_ACCESS", "").split(","):
      return RedirectResponse('/patreon')
  
     
@@ -668,8 +667,7 @@ def get(session, practice_num: int, module_number: int):
     user_data, camp_id = get_user_data(session)
     if camp_id == 7055998:
      ""
-    elif user_data.get('data', {}).get('attributes', {}).get('email')
- in os.getenv("SPECIAL_ACCESS", "").split(","):
+    elif user_data.get('data', {}).get('attributes', {}).get('email') in os.getenv("SPECIAL_ACCESS", "").split(","):
      ""          
     else:
      return RedirectResponse('/patreon')
