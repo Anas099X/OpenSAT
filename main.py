@@ -320,6 +320,9 @@ def get(session):
 def get(session):
     """Render the home page with Login/Profile management."""
     user_data, _ = get_user_data(session)  # Fetch user data from session
+    #if user not logged in, return to patreon
+    if user_data is None:
+     return RedirectResponse('/patreon')
 
     if user_data:
         # User is logged in; show profile and logout buttons
@@ -608,7 +611,9 @@ def get(session):
     user_data, check_membership = get_user_data(session)
 
     #if user not logged in, return to patreon
-    
+    if user_data is None:
+     return RedirectResponse('/patreon')
+
     #check membership or special access
     if check_membership:
         ""
@@ -675,6 +680,11 @@ def get(session, practice_num: int, module_number: int):
     #del session['page']
 
     user_data, check_membership = get_user_data(session)
+
+    #if user not logged in, return to patreon
+    if user_data is None:
+     return RedirectResponse('/patreon')
+
     #if user not logged in, return to patreon
     if user_data is None:
      return RedirectResponse('/patreon')
