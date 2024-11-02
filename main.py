@@ -28,6 +28,7 @@ def get_user_data(session):
     headers = {'Authorization': f'Bearer {access_token}'}
     params = {
         'fields[user]': 'email,full_name,thumb_url',
+        'fields[member]': 'patron_status,currently_entitled_amount_cents',
         'include': 'memberships.campaign'
     }
 
@@ -38,19 +39,25 @@ def get_user_data(session):
     except requests.RequestException:
         return None, None
 
-    # Extract all campaign IDs into a list
     campaign_ids = []
+    is_active_paid_member = False
+    
     for item in user_data.get('included', []):
-        if item['type'] == 'member' and 'campaign' in item.get('relationships', {}):
-            campaign_id = item['relationships']['campaign']['data']['id']
-            campaign_ids.append(campaign_id)
+        if item['type'] == 'member':
+            if 'campaign' in item.get('relationships', {}):
+                campaign_id = item['relationships']['campaign']['data']['id']
+                campaign_ids.append(campaign_id)
+                
+                # Combined check for target campaign membership and paid status
+                if campaign_id == "7055998":
+                    patron_status = item.get('attributes', {}).get('patron_status')
+                    entitled_amount = item.get('attributes', {}).get('currently_entitled_amount_cents', 0)
+                    is_active_paid_member = patron_status == 'active_patron' and entitled_amount > 0
+        
         elif item['type'] == 'campaign':
             campaign_ids.append(item['id'])
 
-    # Check if specific campaign ID is in the list
-    is_member_of_target = "7055998" in campaign_ids
-
-    return user_data, is_member_of_target
+    return user_data, is_active_paid_member
 
 app,rt = fast_app(debug=True,live=True)
 
