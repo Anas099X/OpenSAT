@@ -257,6 +257,9 @@ def callback(request, session):
 def get(session):
     """Render the home page with Login/Profile management."""
     user_data, check_membership = get_user_data(session)  # Fetch user data from session
+    #if user not logged in, return to patreon
+    if user_data is None:
+     return RedirectResponse('/patreon')
 
     if user_data:
         # User is logged in; show profile and logout buttons
@@ -319,25 +322,7 @@ def get(session):
 @rt("/patreon")
 def get(session):
     """Render the home page with Login/Profile management."""
-    user_data, _ = get_user_data(session)  # Fetch user data from session
-    #if user not logged in, return to patreon
-    if user_data is None:
-     return RedirectResponse('/patreon')
 
-    if user_data:
-        # User is logged in; show profile and logout buttons
-        name = H3(user_data['data']['attributes']['full_name'],cls="card-title")
-        email = user_data.get('data', {}).get('attributes', {}).get('email')
-
-        logout_button = A("Logout", href="/logout", cls="btn btn-sm btn-secondary m-1")
-        profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
-
-    else:
-        # User is not logged in; show login button
-        name = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
-        email = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
-        logout_button = Div()  # Empty div to maintain layout consistency
-        profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
 
     return (
         Html(
@@ -680,10 +665,6 @@ def get(session, practice_num: int, module_number: int):
     #del session['page']
 
     user_data, check_membership = get_user_data(session)
-
-    #if user not logged in, return to patreon
-    if user_data is None:
-     return RedirectResponse('/patreon')
 
     #if user not logged in, return to patreon
     if user_data is None:
