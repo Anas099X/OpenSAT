@@ -20,37 +20,37 @@ IDENTITY_URL = 'https://www.patreon.com/api/oauth2/v2/identity'
 
 
 def get_user_data(session):
-    """Fetch user data and campaign ID from the Patreon API, including non-members."""
+    """Fetch user data and campaign ID from the Patreon API."""
     access_token = session.get('access_token')
     if not access_token:
-        return None, None  # Return None if not logged in
+        return None, None
 
     headers = {'Authorization': f'Bearer {access_token}'}
     params = {
-        'fields[user]': 'email,full_name,thumb_url',  # Request essential user fields
-        # Remove 'memberships.campaign' include to avoid relying on membership data
+        'fields[user]': 'email,full_name,thumb_url',
+        'include': 'memberships.campaign'
     }
 
     try:
         response = requests.get(IDENTITY_URL, headers=headers, params=params)
-        response.raise_for_status()  # Raise an exception for HTTP errors
+        response.raise_for_status()
         user_data = response.json()
     except requests.RequestException:
-        return None, None  # Handle API failure gracefully
+        return None, None
 
-    # Attempt to find campaign ID if included in response, but don't rely on it
-    campaign_id = next(
-        (item['relationships']['campaign']['data']['id']
-         for item in user_data.get('included', [])
-         if item['type'] == 'member' and 'campaign' in item.get('relationships', {})),
-        None
-    )
+    # Extract all campaign IDs into a list
+    campaign_ids = []
+    for item in user_data.get('included', []):
+        if item['type'] == 'member' and 'campaign' in item.get('relationships', {}):
+            campaign_id = item['relationships']['campaign']['data']['id']
+            campaign_ids.append(campaign_id)
+        elif item['type'] == 'campaign':
+            campaign_ids.append(item['id'])
 
-    return user_data, campaign_id  # Return user data and campaign ID (or None if not available)
+    # Check if specific campaign ID is in the list
+    is_member_of_target = "7055998" in campaign_ids
 
-
-
-
+    return user_data, is_member_of_target
 
 app,rt = fast_app(debug=True,live=True)
 
@@ -256,7 +256,7 @@ def callback(request, session):
 @rt("/profile")
 def get(session):
     """Render the home page with Login/Profile management."""
-    user_data, camp_id = get_user_data(session)  # Fetch user data from session
+    user_data, check_membership = get_user_data(session)  # Fetch user data from session
 
     if user_data:
         # User is logged in; show profile and logout buttons
@@ -271,14 +271,17 @@ def get(session):
         logout_button = Div()  # Empty div to maintain layout consistency
         profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
     
-    if camp_id != 7055998 and user_data.get('data', {}).get('attributes', {}).get('email') not in os.getenv("SPECIAL_ACCESS", "").split(","):
-        tier = "Free"
-    else:
+    
+    if check_membership:
         tier = "OpenSAT+"
+    elif user_data.get('data', {}).get('attributes', {}).get('email') in os.getenv("SPECIAL_ACCESS", "").split(","):
+        tier = "Special Access"       
+    else:
+        tier = "Free"
 
 
     return (
-        Html(
+       Html(
             Head(Defaults),
             Body(
                 Header(
@@ -308,6 +311,10 @@ def get(session):
             ), data_theme="retro"
         )
     )
+
+
+
+
 
 @rt("/patreon")
 def get(session):
@@ -598,11 +605,17 @@ def get(session):
 @rt("/practice/explore")
 def get(session):
 
-    user_data, camp_id = get_user_data(session)
+    user_data, check_membership = get_user_data(session)
 
     #if user not logged in, return to patreon
-    if user_data is None:
-     return RedirectResponse('/patreon')
+    
+    #check membership or special access
+    if check_membership:
+        ""
+    elif user_data.get('data', {}).get('attributes', {}).get('email') in os.getenv("SPECIAL_ACCESS", "").split(","):
+        ""      
+    else:
+        return RedirectResponse('/patreon')
     
     # reset tests
     if 'page' not in session or session['page'] is None:
@@ -612,11 +625,6 @@ def get(session):
     # Load modules from JSON file
     modules = question_objects('practice_test')
 
-    #check if user is subbed to patreon
-    if user_data.get('data', {}).get('attributes', {}).get('email') not in os.getenv("SPECIAL_ACCESS", "").split(","):
-     return RedirectResponse('/patreon')
- 
-    
 
     return (
         Html(
@@ -665,14 +673,20 @@ def get(session):
 @rt("/practice/{practice_num}/module/{module_number}")
 def get(session, practice_num: int, module_number: int):
     #del session['page']
-    #check if user is subbed to patreon
-    user_data, camp_id = get_user_data(session)
-    if camp_id == 7055998:
-     ""
-    elif user_data.get('data', {}).get('attributes', {}).get('email') in os.getenv("SPECIAL_ACCESS", "").split(","):
-     ""          
-    else:
+
+    user_data, check_membership = get_user_data(session)
+    #if user not logged in, return to patreon
+    if user_data is None:
      return RedirectResponse('/patreon')
+    
+    #check membership or special access
+    if check_membership:
+        ""
+    elif user_data.get('data', {}).get('attributes', {}).get('email') in os.getenv("SPECIAL_ACCESS", "").split(","):
+        ""      
+    else:
+        return RedirectResponse('/patreon')
+
 
     # Load the current module and initialize session state
     module = f'module_{module_number}'
