@@ -268,8 +268,7 @@ def get(session):
         logout_button = Div()  # Empty div to maintain layout consistency
         profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
     
-    if camp_id != 7055998 and user_data.get('data', {}).get('attributes', {}).get('email')
- not in os.getenv("SPECIAL_ACCESS", "").split(","):
+    if camp_id != 7055998 and user_data.get('data', {}).get('attributes', {}).get('email') not in os.getenv("SPECIAL_ACCESS", "").split(","):
         tier = "OpenSAT+"
     else:
         tier = "Free"
