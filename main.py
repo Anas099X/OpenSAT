@@ -256,7 +256,8 @@ def get(session):
     if user_data:
         # User is logged in; show profile and logout buttons
         name = H4(user_data['data']['attributes']['full_name'],cls="card-title text-2xl")
-        email = user_data['data']['attributes']['email']
+        email = user_data.get('data', {}).get('attributes', {}).get('email')
+
         logout_button = A("Logout", href="/logout", cls="btn btn-sm btn-secondary m-1")
         profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
 
@@ -314,7 +315,8 @@ def get(session):
     if user_data:
         # User is logged in; show profile and logout buttons
         name = H3(user_data['data']['attributes']['full_name'],cls="card-title")
-        email = user_data['data']['attributes']['email']
+        email = user_data.get('data', {}).get('attributes', {}).get('email')
+
         logout_button = A("Logout", href="/logout", cls="btn btn-sm btn-secondary m-1")
         profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
 
