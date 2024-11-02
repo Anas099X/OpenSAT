@@ -9,14 +9,13 @@ from dotenv import load_dotenv
 load_dotenv()
 
 #oauth
-CLIENT_ID = 'CTqlZU5Du7n2eA3yuZoRP3eOi9eqMrj89QmSZR9DuqMzVAd2cc90FC1DY_XtASv4'
-CLIENT_SECRET = '7BF-vtstFA7HjCrziAAXrCu3WSU7g81Izfem6tiBCxRIhYi9QcJxJN-kRSsPZDUk'
-REDIRECT_URI = 'https://opensat.fun/callback'
+CLIENT_ID = os.getenv("CLIENT_ID")
+CLIENT_SECRET = os.getenv("CLIENT_SECRET")
+REDIRECT_URI = os.getenv("REDIRECT_URI")
 
 AUTH_URL = 'https://www.patreon.com/oauth2/authorize'
 TOKEN_URL = 'https://www.patreon.com/api/oauth2/token'
 IDENTITY_URL = 'https://www.patreon.com/api/oauth2/v2/identity'
-
 
 
 
@@ -262,7 +261,6 @@ def get(session):
     if user_data:
         # User is logged in; show profile and logout buttons
         name = H4(user_data['data']['attributes']['full_name'],cls="card-title text-2xl")
-        email = user_data.get('data', {}).get('attributes', {}).get('email')
 
         logout_button = A("Logout", href="/logout", cls="btn btn-sm btn-secondary m-1")
         profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
@@ -270,14 +268,13 @@ def get(session):
     else:
         # User is not logged in; show login button
         name = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
-        email = A("Profile", href="/profile", cls="btn rounded-full btn-sm btn-primary m-1")
         logout_button = Div()  # Empty div to maintain layout consistency
         profile_image = Img(src="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true")
     
     if camp_id != 7055998 and user_data.get('data', {}).get('attributes', {}).get('email') not in os.getenv("SPECIAL_ACCESS", "").split(","):
-        tier = "OpenSAT+"
-    else:
         tier = "Free"
+    else:
+        tier = "OpenSAT+"
 
 
     return (
@@ -302,7 +299,6 @@ def get(session):
                     Div(
                          Div(Div(profile_image,cls="w-20 rounded-full"),cls="avatar m-1"),
                        name,
-                       Div(f"Email: {email}",cls="font-bold"),
                        Div(f"Tier: {tier}",cls="font-bold"),
                        logout_button,
                         cls="card card-body bg-base-100 shadow-xl mx-auto p-10 mt-10",
