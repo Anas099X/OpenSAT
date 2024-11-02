@@ -101,7 +101,7 @@ def menu_button(session):
 
     else:
         # User is not logged in; show login button
-        profile_button = A(Div(cls="ti ti-brand-patreon-filled text-2xl text-neutral"),"login", href="/login", cls="btn rounded-full btn-sm btn-primary m-1")
+        profile_button = A(Div(cls="ti ti-brand-patreon-filled text-2xl text-neutral"),"login", href="/login", cls="btn rounded-full btn btn-primary m-1")
 
     return Div(
                             Div(
