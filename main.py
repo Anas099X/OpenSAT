@@ -18,14 +18,19 @@ TOKEN_URL = 'https://www.patreon.com/api/oauth2/token'
 IDENTITY_URL = 'https://www.patreon.com/api/oauth2/v2/identity'
 
 
+
+
 def get_user_data(session):
-    """Fetch user data and campaign ID from the Patreon API."""
+    """Fetch user data and campaign ID from the Patreon API, including non-members."""
     access_token = session.get('access_token')
     if not access_token:
-        return None, None  # Return None for both user data and campaign ID if not logged in
+        return None, None  # Return None if not logged in
 
     headers = {'Authorization': f'Bearer {access_token}'}
-    params = {'fields[user]': 'email,full_name,thumb_url', 'include': 'memberships.campaign'}
+    params = {
+        'fields[user]': 'email,full_name,thumb_url',  # Request essential user fields
+        # Remove 'memberships.campaign' include to avoid relying on membership data
+    }
 
     try:
         response = requests.get(IDENTITY_URL, headers=headers, params=params)
@@ -34,15 +39,16 @@ def get_user_data(session):
     except requests.RequestException:
         return None, None  # Handle API failure gracefully
 
-    # Extract campaign ID if available
+    # Attempt to find campaign ID if included in response, but don't rely on it
     campaign_id = next(
         (item['relationships']['campaign']['data']['id']
          for item in user_data.get('included', [])
-         if item['type'] == 'member' and 'campaign' in item.get('relationships', {})), 
+         if item['type'] == 'member' and 'campaign' in item.get('relationships', {})),
         None
     )
 
-    return user_data, campaign_id  # Return user data and campaign ID
+    return user_data, campaign_id  # Return user data and campaign ID (or None if not available)
+
 
 
 
