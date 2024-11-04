@@ -882,7 +882,7 @@ def get(practice_num:int):
 def get(practice_num:int,session):
  
 
- practice_en_questions = json.load(open('data.json'))['practice_test']
+ practice_en_questions = question_objects('practice_test')
 
  
  def checker():
