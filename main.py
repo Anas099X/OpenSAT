@@ -59,7 +59,7 @@ def get_user_data(session):
 
     return user_data, is_active_paid_member
 
-app,rt = fast_app(debug=True,live=True)
+app,rt = fast_app(debug=True,live=True,exts='ws')
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
             Meta(property="og:title" ,content="OpenSAT: Question Bank with Endless Possibilities"),
@@ -101,6 +101,7 @@ def menu_button(session):
                 ), href="/practice/explore", cls="btn rounded-full relative btn btn-primary m-1")
     explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn- btn-primary m-1")
     tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn rounded-full btn btn-primary m-1")
+    report_button = A(Div(cls="ti ti-bug-off text-2xl text-neutral"),"Bug Report", href="https://tally.so/r/312ovO", cls="btn rounded-full btn btn-error m-1")
     github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn btn-secondary m-1")
 
     if user_data:
@@ -119,7 +120,7 @@ def menu_button(session):
                             Div(
                              Div(
                                 Div(cls="ti ti-category text-2xl text-neutral"),"Menu",role="button",tabindex="0",cls="btn btn-primary rounded-full"),
-                                     Ul(home_button,explore_button,practice_button,tutors_button,profile_button,github_button,
+                                     Ul(home_button,explore_button,practice_button,tutors_button,profile_button,report_button,
                             tabindex="0", cls="dropdown-content menu menu-lg bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
                                     ,cls="dropdown dropdown-bottom dropdown-end"),
                             cls="navbar-end space-x-2"
@@ -198,7 +199,7 @@ def get(session):
                         H2("Question Bank with ", U("Endless", cls="text-primary"), 
                            " Possibilities",
                            style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
-                        P("OpenSAT, a free and ",A(U("open-source"),href="https://github.com/Anas099X/OpenSAT",cls="text-secondary font-bold")," SAT question bank. "
+                        P("OpenSAT, a free and ",A(U("open-source"),href="https://github.com/Anas099X/OpenSAT",cls="text-info font-bold")," SAT question bank. "
                           "Dive into a massive pool of SAT practice problems, "
                           "constantly growing thanks to a dedicated community of contributors.",
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
