@@ -481,11 +481,31 @@ def get(section: str, num: int, answer: bool, session):
 
     def hide_switch(input):
         return not input
+    
+
+    
+    copy_question_btn = Button(Div(cls="ti ti-link text-3xl text-info"),cls="tooltip",data_tip="click to copy",onclick="copyHref(this)",copy_href=f"opensat.fun/questions/{section}/{num}/{answer}")
 
     return (
         Html(
             Head(
-                Defaults
+                Defaults,
+                Script('''function copyHref(button) {
+      // Get the href from the button's data-href attribute
+      var href = button.getAttribute("copy-href");
+
+      // Create a temporary textarea to hold the href value
+      var textArea = document.createElement('textarea');
+      textArea.value = href;
+      document.body.appendChild(textArea);
+
+      // Select and copy the content of the textarea
+      textArea.select();
+      document.execCommand('copy');
+
+      // Remove the temporary textarea
+      document.body.removeChild(textArea);
+    }''')
             ),
             Body(
                 Header(
@@ -507,7 +527,7 @@ def get(section: str, num: int, answer: bool, session):
                         # Card component for question display
                         Div(
                             Div(
-                                H2(f"Question #{question_obj['id']}", cls="card-title text-2xl font-bold"),
+                                H2(copy_question_btn,f"Question #{question_obj['id']}", cls="card-title text-2xl font-bold"),
                                 P(question_obj['question'].get('paragraph', ""), cls="text-base mt-4"),
                                 B(question_obj['question']['question'], cls="text-lg"),
                                 Div(
