@@ -101,7 +101,7 @@ def menu_button(session):
                 ), href="/practice/explore", cls="btn rounded-full relative btn btn-primary m-1")
     explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn- btn-primary m-1")
     tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn rounded-full btn btn-primary m-1")
-    report_button = A(Div(cls="ti ti-bug-off text-2xl text-neutral"),"Bug Report", href="https://tally.so/r/312ovO", cls="btn rounded-full btn btn-error m-1")
+    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"),"Issue Report", href="https://tally.so/r/312ovO", cls="btn rounded-full btn btn-error m-1")
     github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT", cls="btn rounded-full btn btn-secondary m-1")
 
     if user_data:
