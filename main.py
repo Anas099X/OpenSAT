@@ -70,14 +70,18 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
             Title("OpenSAT"),
             Link(rel="icon",href="public/graduation-cap-solid.svg", sizes="any", type="image/svg+xml"),
             Link(rel="stylesheet" ,href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"),
-            Script('''MathJax = {
+            Script('''
+MathJax = {
   tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']]
+    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    displayMath: [['$$', '$$'], ['\\[', '\\]']]
   },
   svg: {
     fontCache: 'global'
   }
-};'''),
+};
+''')
+,
             Script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"),
             Script(src="https://unpkg.com/htmx.org@2.0.2"),
             Script(src="/_vercel/insights/script.js"),
