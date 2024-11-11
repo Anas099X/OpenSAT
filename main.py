@@ -527,7 +527,7 @@ def get(section: str, num: int, answer: bool, session):
                         # Card component for question display
                         Div(
                             Div(
-                                H2(copy_question_btn,f"Question #{question_obj['id']}", cls="card-title text-2xl font-bold"),
+                                H2(copy_question_btn,f"Question #N{num}", cls="card-title text-2xl font-bold"),
                                 P(question_obj['question'].get('paragraph', ""), cls="text-base mt-4"),
                                 B(question_obj['question']['question'], cls="text-lg"),
                                 Div(
@@ -898,73 +898,110 @@ def get(practice_num:int):
         )
     )
 
-
 @rt("/practice/{practice_num}/check")
-def get(practice_num:int,session):
- 
+def get(practice_num: int, session):
+    practice_en_questions = question_objects('practice_test')
 
- practice_en_questions = question_objects('practice_test')
+    def checker():
+        correct_answers = []
+        results = []
+        mistakes = []
 
- 
- def checker():
-    correct_answers = []
-    results = []
-    def answer_collecter(module_num):
-     for question_num in practice_en_questions[practice_num][f'module_{module_num}']:
-      answer =  question_objects('english' if module_num < 3 else 'math')[question_num]['question']['correct_answer']
-      correct_answers.append(answer)
+        def answer_collecter(module_num):
+            section = 'english' if module_num < 3 else 'math'
+            for question_num in practice_en_questions[practice_num][f'module_{module_num}']:
+                answer = question_objects(section)[question_num]['question']['correct_answer']
+                correct_answers.append((answer, section, question_num))
 
-    for num in [1,2,3,4]:
-     correct_answers.clear()
-     user_answers = session[f'module_{num}']
-     answer_collecter(num)
-     # Comparison result list
-     # Loop through each dictionary in the list
-     for d in user_answers:
-     # Extract the number (as string) and the expected string
-      index_str, expected_value = list(d.items())[0]
-      index = int(index_str)  # Convert index to integer
+        for num in [1, 2, 3, 4]:
+            correct_answers.clear()
+            user_answers = session[f'module_{num}']
+            answer_collecter(num)
 
-     # Check if the index is within the bounds of the list_of_values
-      if 0 <= index < len(correct_answers):
-        # Compare the value in list_of_values at index with expected_value
-        if correct_answers[index] == expected_value:
-            results.append(1)
-        else:
-            results.append(0)
-      else:
-        # If index is out of bounds, consider it a mismatch
-        results.append(0)
-     del session[f'module_{num}']
-     session['page'] = 0       
-    return sum(results)
+            for d in user_answers:
+                index_str, user_answer = list(d.items())[0]
+                index = int(index_str)
 
-    
+                if 0 <= index < len(correct_answers):
+                    correct_answer, section, question_num = correct_answers[index]
+                    if correct_answer == user_answer:
+                        results.append(1)
+                    else:
+                        results.append(0)
+                        mistakes.append((question_num, user_answer, correct_answer, section))
+                else:
+                    results.append(0)
+                    mistakes.append((index + 1, user_answer, "Out of bounds", "N/A"))
 
- return (
-        Html(
-            Head(
-                Defaults
-            ),
-            Body(
-                Main(
+            del session[f'module_{num}']
+            session['page'] = 0
+        return sum(results), mistakes
+
+    # Calculate score and gather mistakes
+    score, mistakes = checker()
+
+    # HTML structure with score and mistakes table inside cards using DaisyUI classes
+    return (
+    Html(
+        Head(
+            Defaults
+        ),
+        Body(
+            Main(
+                # Card for score display
+                Div(
+                    H2("Your Score", style="font-size: 2.25rem; font-weight: 700; text-align: center; color: #333;"),
+                    P(f"{score}/96", style="font-size: 1.5rem; text-align: center; color: #333; margin-top: 10px; font-weight: 600;"),
+                    Br(),
                     Div(
-                       
-                        H2(f"Your Score is {checker()}/98",
-                           style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
-                        P("click continue to start the next module",
-                          style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
-                        Div(
-                            A("End", href=f"/", cls="btn btn-primary"),
+                            A("Finish", href=f"/practice/{practice_num}/module/3", cls="btn btn-primary"),
                             style="display:flex; justify-content:center;"
-                            
+                       ),
+
+                    cls="card bg-base-100 w-96 shadow-xl mx-auto py-8 mb-6"
+                ),
+                
+                # Card for mistakes table
+                Div(
+                    H2("Mistakes", style="font-size: 1.5rem; font-weight: 600; text-align: center; color: #333; margin-bottom: 20px;"),
+                    Div(
+                        Table(
+                            Thead(
+                                Tr(
+                                    Th("Questions", cls="px-8 py-2"),
+                                    Th("Your Answer", cls="px-8 py-2"),
+                                    Th("Correct Answer", cls="px-8 py-2"),
+                                    Th("Action", cls="px-8 py-2")
+                                )
+                            ),
+                            Tbody(
+                                *[
+                                    Tr(
+                                        Td(str(question_num), cls="border border-neutral px-8 py-2"),
+                                        Td(user_answer, cls="border border-neutral px-8 py-2"),
+                                        Td(correct_answer, cls="border border-neutral px-8 py-2"),
+                                        Td(
+                                            A("Go to question", href=f"/questions/{section}/{question_num}/True", cls="text-info underline"),
+                                            cls="border border-neutral px-8 py-2"
+                                        )
+                                    )
+                                    for question_num, user_answer, correct_answer, section in mistakes
+                                ]
+                            ),
+                            cls="table w-full border-collapse border border-neutral"
                         ),
-                        cls="card bg-base-100 w-96 shadow-xl mx-auto py-8"
-                    )
-                ),cls="flex items-center justify-center"
-            ),data_theme="retro"
-        )
+                        cls="overflow-x-auto px-4"  # Responsive container for table
+                    ),
+                    cls="card bg-base-100 shadow-xl mx-auto w-full max-w-3xl py-8"
+                )
+            ),
+            cls="flex items-center justify-center min-h-screen"
+        ),
+        data_theme="retro"
     )
+)
+    
+    
 
 
 @rt('/page/{module}/{count}')
