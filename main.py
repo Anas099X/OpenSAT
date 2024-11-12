@@ -73,7 +73,7 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
             Script('''
 MathJax = {
   tex: {
-    inlineMath: [['$', '$'], ['\\(', '\\)']],
+    inlineMath: [['$', '$'],['$$', '$$'],['\\(', '\\)']],
     displayMath: [['$$', '$$'], ['\\[', '\\]']]
   },
   svg: {
@@ -532,7 +532,7 @@ def get(section: str, num: int, answer: bool, session):
                         Div(
                             Div(
                                 H2(copy_question_btn,f"Question #N{num}", cls="card-title text-2xl font-bold"),
-                                P(question_obj['question'].get('paragraph', ""), cls="text-base mt-4"),
+                                P(question_obj['question'].get('paragraph', "").replace('null',''), cls="text-base mt-4"),
                                 B(question_obj['question']['question'], cls="text-lg"),
                                 Div(
                                     Div(B("A. "), question_obj['question']['choices']['A'], cls="py-2"),
@@ -784,7 +784,7 @@ def get(session, practice_num: int, module_number: int):
                         # Question content inside a DaisyUI card
                         Div(
                             Div(
-                                P(question_obj['question'].get('paragraph', ""), cls="text-base mb-4"),
+                                P(question_obj['question'].get('paragraph', "").replace('null',''), cls="text-base mb-4"),
                                 B(question_obj['question']['question'], cls="text-lg font-bold"),
                                 Form(
                                     Div(
