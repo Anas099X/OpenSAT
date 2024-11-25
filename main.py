@@ -429,16 +429,15 @@ def get(section: str, domain: str,session):
             for i, x in enumerate(question_objects(section))
         ]
     def ad_maven_card():
-     return Html(
-                '''<amp-ad width="100vw" height="320"
+     return '''<amp-ad width="100vw" height="320"
      type="adsense"
      data-ad-client="ca-pub-2090178937498462"
      data-ad-slot="8188391527"
      data-auto-format="rspv"
      data-full-width="">
-  <div overflow=""></div>
-</amp-ad>'''
-            )
+     <div overflow=""></div>
+     </amp-ad>'''
+            
         
     
 
