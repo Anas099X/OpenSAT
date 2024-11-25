@@ -74,7 +74,7 @@ Defaults = (Meta(name="viewport", content="width=device-width"),
 MathJax = {
   tex: {
     inlineMath: [['$', '$'],['$$', '$$'],['\\(', '\\)']],
-    displayMath: [['$$', '$$'], ['\\[', '\\]']]
+    displayMath: [['$$', '$$'], ['\\[', '\\]'],['\\(', '\\)']]
   },
   svg: {
     fontCache: 'global'
