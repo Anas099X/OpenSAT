@@ -88,6 +88,7 @@ MathJax = {
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
             Meta(name='admaven-placement' ,content="BqdnGrTwE"),
+            Script(data_cfasync="false" ,src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1122896"),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -428,18 +429,7 @@ def get(section: str, domain: str,session):
             ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
             for i, x in enumerate(question_objects(section))
         ]
-    def ad_maven_card():
-     return Div(
-        Div(
-            Div(H3("Advertisement", cls="text-xl font-semibold"),cls="card-body items-center text-center"),
-            Script(
-                "data-cfasync='false' src='//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1122894'",
-                type="text/javascript"
-            ),
-            cls="card bg-base-100 shadow-xl w-96 h-48 mx-auto border border-gray-300 p-4 text-center rounded-lg"
-        )
-    )
-
+    
 
     return (
         Html(
@@ -477,7 +467,6 @@ def get(section: str, domain: str,session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            ad_maven_card(),
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
