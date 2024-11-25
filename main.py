@@ -428,11 +428,11 @@ def get(section: str, domain: str,session):
             ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
             for i, x in enumerate(question_objects(section))
         ]
-def ad_maven_card():
-    """
+    def ad_maven_card():
+     """
     Returns a FastHTML component rendering an AdSense advertisement card.
     """
-    return Div(
+     return Div(
         Script(
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
             crossorigin="anonymous"
