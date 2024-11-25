@@ -428,7 +428,7 @@ def get(section: str, domain: str,session):
             ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
             for i, x in enumerate(question_objects(section))
         ]
-    def ad_maven_card():
+    def ads_card():
      return Div(
                 Script(
                     src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462',
@@ -443,7 +443,7 @@ def get(section: str, domain: str,session):
                     data_ad_slot="7186574111"
                 ),
                 Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
-                cls="card bg-base-200 shadow-xl w-96 h-auto mx-auto rounded-lg"
+                cls="card bg-base-200 shadow-xl w-96 h-44 mx-auto rounded-lg"
             )
         
     
