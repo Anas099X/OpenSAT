@@ -429,15 +429,22 @@ def get(section: str, domain: str,session):
             for i, x in enumerate(question_objects(section))
         ]
     def ad_maven_card():
-     return '''<amp-ad width="100vw" height="320"
-     type="adsense"
-     data-ad-client="ca-pub-2090178937498462"
-     data-ad-slot="8188391527"
-     data-auto-format="rspv"
-     data-full-width="">
-     <div overflow=""></div>
-     </amp-ad>'''
-            
+     return Div(
+                Script(
+                    src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462',
+                    crossorigin='anonymous'
+                ),
+                Ins(
+                    cls="adsbygoogle",
+                    style="display:block",
+                    data_ad_format="fluid",
+                    data_ad_layout_key="-6w+ed+2i-1n-4w",
+                    data_ad_client="ca-pub-2090178937498462",
+                    data_ad_slot="7186574111"
+                ),
+                Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
+                cls="w-96 h-auto"
+            )
         
     
 
