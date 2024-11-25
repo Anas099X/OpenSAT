@@ -442,7 +442,7 @@ def get(section: str, domain: str,session):
                     data_ad_client="ca-pub-2090178937498462",
                     data_ad_slot="7186574111"
                 ),
-                Script("(adsbygoogle = window.adsbygoogle || []).push({});", type="text/javascript"),
+                Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
                 cls="card bg-base-100 shadow-xl w-96 h-44 mx-auto rounded-lg"
             )
         
