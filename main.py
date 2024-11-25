@@ -87,8 +87,7 @@ MathJax = {
             Script(src="/_vercel/insights/script.js"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-            Meta(name='admaven-placement' ,content="BqdnGrTwE"),
-            Script(data_cfasync="false" ,src="//dcbbwymp1bhlf.cloudfront.net/?wbbcd=1122896"),
+            Script('src="https://phicmune.net/act/files/tag.min.js?z=8561364",data-cfasync="false" async'),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -429,7 +428,6 @@ def get(section: str, domain: str,session):
             ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
             for i, x in enumerate(question_objects(section))
         ]
-    
 
     return (
         Html(
