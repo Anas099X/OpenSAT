@@ -87,7 +87,7 @@ MathJax = {
             Script(src="/_vercel/insights/script.js"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-            Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
+            Script(custom_element="amp-ad" ,src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -429,7 +429,7 @@ def get(section: str, domain: str,session):
             for i, x in enumerate(question_objects(section))
         ]
     def ad_maven_card():
-     return Html(
+     return Div(
                 Script(
                     src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462',
                     crossorigin='anonymous'
