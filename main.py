@@ -428,23 +428,26 @@ def get(section: str, domain: str,session):
             ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
             for i, x in enumerate(question_objects(section))
         ]
-    def ad_maven_card():
-     return Div(
-                Script(
-                    src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462',
-                    crossorigin='anonymous'
-                ),
-                Ins(
-                    cls="adsbygoogle",
-                    style="display:block",
-                    data_ad_format="fluid",
-                    data_ad_layout_key="-6w+ed+2i-1n-4w",
-                    data_ad_client="ca-pub-2090178937498462",
-                    data_ad_slot="7186574111"
-                ),
-                Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
-                cls="w-96 h-auto"
-            )
+def ad_maven_card():
+    """
+    Returns a FastHTML component rendering an AdSense advertisement card.
+    """
+    return Div(
+        Script(
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
+            crossorigin="anonymous"
+        ),
+        Ins(
+            cls="adsbygoogle",
+            style="display:block",
+            data_ad_client="ca-pub-2090178937498462",
+            data_ad_slot="8188391527",
+            data_ad_format="auto",
+            data_full_width_responsive="true"
+        ),
+        Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
+        cls="w-96 h-auto mx-auto my-4 shadow-lg border rounded-lg p-4"
+    )
         
     
 
