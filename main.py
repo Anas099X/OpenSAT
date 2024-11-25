@@ -485,7 +485,7 @@ def get(section: str, domain: str,session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            ad_maven_card(),
+                            ads_card(),
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
