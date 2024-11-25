@@ -87,7 +87,7 @@ MathJax = {
             Script(src="/_vercel/insights/script.js"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-            Script(custom_element="amp-ad" ,src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"),
+            Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -429,25 +429,22 @@ def get(section: str, domain: str,session):
             for i, x in enumerate(question_objects(section))
         ]
     def ad_maven_card():
-     """
-    Returns a FastHTML component rendering an AdSense advertisement card.
-    """
      return Div(
-        Script(
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
-            crossorigin="anonymous"
-        ),
-        Ins(
-            cls="adsbygoogle",
-            style="display:block",
-            data_ad_client="ca-pub-2090178937498462",
-            data_ad_slot="8188391527",
-            data_ad_format="auto",
-            data_full_width_responsive="true"
-        ),
-        Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
-        cls="w-96 h-auto mx-auto my-4 shadow-lg border rounded-lg p-4"
-    )
+                Script(
+                    src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462',
+                    crossorigin='anonymous'
+                ),
+                Ins(
+                    cls="adsbygoogle",
+                    style="display:block",
+                    data_ad_format="fluid",
+                    data_ad_layout_key="-6w+ed+2i-1n-4w",
+                    data_ad_client="ca-pub-2090178937498462",
+                    data_ad_slot="7186574111"
+                ),
+                Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
+                cls="card bg-base-200 shadow-xl w-96 h-auto mx-auto rounded-lg"
+            )
         
     
 
