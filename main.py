@@ -443,7 +443,7 @@ def get(section: str, domain: str,session):
                     data_ad_slot="7186574111"
                 ),
                 Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
-                cls="card bg-base-100 shadow-xl w-auto h-44 mx-auto rounded-lg"
+                cls="card bg-base-100 shadow-xl w-96 h-auto mx-auto rounded-lg"
             )
         
     
