@@ -87,7 +87,7 @@ MathJax = {
             Script(src="/_vercel/insights/script.js"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-            #Script("(function(d,z,s){s.src='https://'+d+'/400/'+z;try{(document.body||document.documentElement).appendChild(s)}catch(e){}})('vemtoutcheeg.com',8559858,document.createElement('script'))"),
+            Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -428,6 +428,27 @@ def get(section: str, domain: str,session):
             ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
             for i, x in enumerate(question_objects(section))
         ]
+    def ad_maven_card():
+     return Div(
+                Script(
+                    "async src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462' "
+                    "crossorigin='anonymous'",
+                    type="text/javascript"
+                ),
+                Ins(
+                    cls="adsbygoogle",
+                    style="display:block",
+                    data_ad_format="fluid",
+                    data_ad_layout_key="-6w+ed+2i-1n-4w",
+                    data_ad_client="ca-pub-2090178937498462",
+                    data_ad_slot="7186574111"
+                ),
+                Script("(adsbygoogle = window.adsbygoogle || []).push({});", type="text/javascript"),
+                cls="card bg-base-100 shadow-xl w-96 h-44 mx-auto rounded-lg"
+            )
+        
+    
+
 
     return (
         Html(
@@ -465,6 +486,7 @@ def get(section: str, domain: str,session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
+                            ad_maven_card(),
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
