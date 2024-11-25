@@ -429,11 +429,10 @@ def get(section: str, domain: str,session):
             for i, x in enumerate(question_objects(section))
         ]
     def ad_maven_card():
-     return Div(
+     return Html(
                 Script(
-                    "async src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462' "
-                    "crossorigin='anonymous'",
-                    type="text/javascript"
+                    src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462',
+                    crossorigin='anonymous'
                 ),
                 Ins(
                     cls="adsbygoogle",
