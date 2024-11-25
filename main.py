@@ -430,6 +430,7 @@ def get(section: str, domain: str,session):
         ]
     def ads_card():
      return Div(
+             H3("Advertisement", cls="text-xl font-semibold mb-4 text-center"),
                 Script(
                     src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462',
                     crossorigin='anonymous'
@@ -485,7 +486,7 @@ def get(section: str, domain: str,session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            ads_card(),
+                            #ads_card(),
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
