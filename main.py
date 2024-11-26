@@ -94,19 +94,43 @@ MathJax = {
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
-                
-)
+                )
 
+
+def hilltopads_ad_card(top:str):
+     """
+     Returns a FastHTML component rendering a custom advertisement card.
+     """
+     return Div(
+     Div(
+        # Overlay content
+        "Ads provided here",
+        cls="absolute inset-0 flex items-center justify-center bg-success text-white font-bold",
+        style="pointer-events: none; z-index: 10;"
+     ),
+     Script("""
+     (function(sqghlu){
+        var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+        s.settings = sqghlu || {};
+        s.src = "//illinformed-imagination.com/bpXHVTs.dqGflA0cYLWZdpi/YwWR5YuSZqX/IM/NexmU9cu/ZqULlskKPlTrUH3AOXT/cz5/NDDTMwtTNfT_cm5wNezNkk0UNjAi";
+        s.async = false;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        l.parentNode.insertBefore(s, l);
+     })({});
+     """),
+     cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto",
+     style=f"width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
+
+    )
 
 def menu_button(session):
     """Render the home page with Login/Profile management."""
     user_data, _ = get_user_data(session)  # Fetch user data from session
     
     home_button = tutors_button =  A(Div(cls="ti ti-home text-2xl text-neutral"),"Home", href="/", cls="btn rounded-full btn btn-primary m-1")
-    practice_button = A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice",Div(
-                    Div(cls="ti ti-brand-patreon-filled w-3 h-3"),
-                    cls="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow"
-                ), href="/practice/explore", cls="btn rounded-full relative btn btn-primary m-1")
+    practice_button = A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice", href="/practice/explore", cls="btn rounded-full relative btn btn-primary m-1")
     explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn- btn-primary m-1")
     tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn rounded-full btn btn-primary m-1")
     report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"),"Issue Report", href="https://tally.so/r/312ovO",cls="btn rounded-full btn btn-error m-1")
@@ -128,7 +152,7 @@ def menu_button(session):
                             Div(
                              Div(
                                 Div(cls="ti ti-category text-2xl text-neutral"),"Menu",role="button",tabindex="0",cls="btn btn-primary rounded-full"),
-                                     Ul(home_button,explore_button,practice_button,tutors_button,profile_button,report_button,
+                                     Ul(home_button,explore_button,practice_button,tutors_button,report_button,
                             tabindex="0", cls="dropdown-content menu menu-lg bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
                                     ,cls="dropdown dropdown-bottom dropdown-end"),
                             cls="navbar-end space-x-2"
@@ -213,10 +237,7 @@ def get(session):
                           style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
                         Div(
                             A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn-primary"),
-                            A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice",Div(
-                            Div(cls="ti ti-brand-patreon-filled w-3 h-3"),
-                            cls="absolute -bottom-1 -right-1 bg-white rounded-full p-1 shadow"
-                        ), href="/practice/explore", cls="btn rounded-full relative btn btn-primary"),
+                            A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice", href="/practice/explore", cls="btn rounded-full relative btn btn-primary"),
                             style="display: flex; justify-content: center; gap: 15px;"
                         ),
                         cls="card bg-base-100 shadow-xl mx-auto p-10 mt-10",
@@ -450,29 +471,6 @@ def get(section: str, domain: str,session):
                 cls="card bg-base-200 shadow-xl w-96 h-44 mx-auto rounded-lg"
             )
 
-    def custom_ad_card():
-     """
-     Returns a FastHTML component rendering a custom advertisement card.
-     """
-     return Div(
-        Script("""
-        (function(sqghlu){
-            var d = document,
-                s = d.createElement('script'),
-                l = d.scripts[d.scripts.length - 1];
-            s.settings = sqghlu || {};
-            s.src = "//illinformed-imagination.com/bpXHVTs.dqGflA0cYLWZdpi/YwWR5YuSZqX/IM/NexmU9cu/ZqULlskKPlTrUH3AOXT/cz5/NDDTMwtTNfT_cm5wNezNkk0UNjAi";
-            s.async = true;
-            s.referrerPolicy = 'no-referrer-when-downgrade';
-            l.parentNode.insertBefore(s, l);
-        })({});
-        """),
-        cls="card bg-base-200 shadow-xl w-96 h-auto mx-auto rounded-lg"
-    )
-    
-    
-
-
     return (
         Html(
             Head(
@@ -504,12 +502,14 @@ def get(section: str, domain: str,session):
                                 cls="btn-group space-x-2"
                             ),
                             Br(),
-                            Div(filter_switch(), cls="flex flex-wrap gap-2 mt-4 justify-center"),  # Centered filter buttons
-                            cls="p-4 rounded-lg shadow-xl mx-auto bg-base-100", style="max-width:100vh;"
+                            Div(filter_switch()
+                             ,cls="flex flex-wrap gap-2 mt-4 justify-center"),
+                                hilltopads_ad_card("5vh"),  # Centered filter buttons
+                            cls="p-4 rounded-lg shadow-xl mx-auto bg-base-100", style="max-width:100vh; margin-bottom:4vh;"
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            #custom_ad_card(),
+                            
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
@@ -575,7 +575,9 @@ def get(section: str, num: int, answer: bool, session):
                 Main(
                     Div(
                         # Card component for question display
+                        
                         Div(
+                            hilltopads_ad_card("-1vh"),
                             Div(
                                 H2(copy_question_btn,f"Question #N{num}", cls="card-title text-2xl font-bold"),
                                 P(question_obj['question'].get('paragraph', "").replace('null',''), cls="text-base mt-4"),
@@ -673,6 +675,7 @@ def get(session):
 
     user_data, check_membership = get_user_data(session)
 
+    unused_membership = '''
     #if user not logged in, return to patreon
     if user_data is None:
      return RedirectResponse('/patreon')
@@ -684,6 +687,7 @@ def get(session):
         ""      
     else:
         return RedirectResponse('/patreon')
+    '''    
     
     # reset tests
     if 'page' not in session or session['page'] is None:
@@ -743,18 +747,6 @@ def get(session, practice_num: int, module_number: int):
     #del session['page']
 
     user_data, check_membership = get_user_data(session)
-
-    #if user not logged in, return to patreon
-    if user_data is None:
-     return RedirectResponse('/patreon')
-    
-    #check membership or special access
-    if check_membership:
-        ""
-    elif user_data.get('data', {}).get('attributes', {}).get('email') in os.getenv("SPECIAL_ACCESS", "").split(","):
-        ""      
-    else:
-        return RedirectResponse('/patreon')
 
 
     # Load the current module and initialize session state
@@ -829,6 +821,7 @@ def get(session, practice_num: int, module_number: int):
                  
                         # Question content inside a DaisyUI card
                         Div(
+    
                             Div(
                                 P(question_obj['question'].get('paragraph', "").replace('null',''), cls="text-base mb-4"),
                                 B(question_obj['question']['question'], cls="text-lg font-bold"),
@@ -930,8 +923,8 @@ def get(practice_num:int):
             ),
             Body(
                 Main(
+                     hilltopads_ad_card("3vh"),
                     Div(
-                       
                         H2("Break Time!",
                            style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
                         P("click continue to start the next module",
