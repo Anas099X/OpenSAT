@@ -454,21 +454,23 @@ def get(section: str, domain: str,session):
      """
      Returns a FastHTML component rendering a custom advertisement card.
      """
-     return Hidden(
+     return Div(
+        # Script for ad configuration
         Script("""
-        (function(sqghlu){
-            var d = document,
-                s = d.createElement('script'),
-                l = d.scripts[d.scripts.length - 1];
-            s.settings = sqghlu || {};
-            s.src = "//illinformed-imagination.com/bpXHVTs.dqGflA0cYLWZdpi/YwWR5YuSZqX/IM/NexmU9cu/ZqULlskKPlTrUH3AOXT/cz5/NDDTMwtTNfT_cm5wNezNkk0UNjAi";
-            s.async = true;
-            s.referrerPolicy = 'no-referrer-when-downgrade';
-            l.parentNode.insertBefore(s, l);
-        })({});
+        atOptions = {
+            'key' : 'eb98e0b9ec6efd646a861d0b8b3bbdc1',
+            'format' : 'iframe',
+            'height' : 250,
+            'width' : 300,
+            'params' : {}
+        };
         """),
-        cls="card bg-base-200 shadow-xl w-96 h-auto mx-auto rounded-lg"
+        # Script to invoke the ad
+        Script(src="//www.highperformanceformat.com/eb98e0b9ec6efd646a861d0b8b3bbdc1/invoke.js"),
+        cls="card bg-base-200 shadow-xl rounded-lg mx-auto",
+        style="width: 300px; height: 250px; overflow: hidden; display: flex; align-items: center; justify-content: center;"
     )
+
     
     
 
