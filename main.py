@@ -448,7 +448,27 @@ def get(section: str, domain: str,session):
                 Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
                 cls="card bg-base-200 shadow-xl w-96 h-44 mx-auto rounded-lg"
             )
-        
+
+    def custom_ad_card():
+     """
+     Returns a FastHTML component rendering a custom advertisement card.
+     """
+     return Div(
+        Script("""
+        (function(sqghlu){
+            var d = document,
+                s = d.createElement('script'),
+                l = d.scripts[d.scripts.length - 1];
+            s.settings = sqghlu || {};
+            s.src = "//illinformed-imagination.com/bpXHVTs.dqGflA0cYLWZdpi/YwWR5YuSZqX/IM/NexmU9cu/ZqULlskKPlTrUH3AOXT/cz5/NDDTMwtTNfT_cm5wNezNkk0UNjAi";
+            s.async = true;
+            s.referrerPolicy = 'no-referrer-when-downgrade';
+            l.parentNode.insertBefore(s, l);
+        })({});
+        """),
+        cls="card bg-base-200 shadow-xl w-96 h-44 mx-auto rounded-lg"
+    )
+    
     
 
 
@@ -488,7 +508,7 @@ def get(section: str, domain: str,session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            #ads_card(),
+                            custom_ad_card(),
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
