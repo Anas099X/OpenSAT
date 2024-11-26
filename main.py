@@ -455,6 +455,7 @@ def get(section: str, domain: str,session):
      Returns a FastHTML component rendering a custom advertisement card.
      """
      return Div(
+           return Div(
         # Script for ad configuration
         Script("""
         atOptions = {
@@ -470,7 +471,7 @@ def get(section: str, domain: str,session):
         cls="card bg-base-200 shadow-xl rounded-lg mx-auto",
         style="width: 300px; height: 250px; overflow: hidden; display: flex; align-items: center; justify-content: center;"
     )
-
+    )
     
     
 
@@ -511,7 +512,7 @@ def get(section: str, domain: str,session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            custom_ad_card(),
+                            #custom_ad_card(),
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
