@@ -454,7 +454,7 @@ def get(section: str, domain: str,session):
      """
      Returns a FastHTML component rendering a custom advertisement card.
      """
-     return Div(
+     return Hidden(
         Script("""
         (function(sqghlu){
             var d = document,
@@ -467,7 +467,7 @@ def get(section: str, domain: str,session):
             l.parentNode.insertBefore(s, l);
         })({});
         """),
-        cls="card bg-base-200 shadow-xl w-96 h-44 mx-auto rounded-lg"
+        cls="card bg-base-200 shadow-xl w-96 h-auto mx-auto rounded-lg"
     )
     
     
@@ -509,7 +509,7 @@ def get(section: str, domain: str,session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            #custom_ad_card(),
+                            custom_ad_card(),
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
