@@ -105,7 +105,7 @@ def hilltopads_ad_card(top:str):
      Div(
         # Overlay content
         "Ads provided here",
-        cls="absolute inset-0 flex items-center justify-center text-white bg-green-50 bg-opacity-40  font-bold",
+        cls="absolute inset-0 flex items-center justify-center text-black bg-green-50 bg-opacity-80  font-bold",
         style="pointer-events: none; z-index: 10;"
      ),
      Script(src="//optiads.org/lib-js-static-load?width=300&height=50&u=50220&w=10520&z=33085"),
