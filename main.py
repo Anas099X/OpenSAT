@@ -454,20 +454,7 @@ def get(section: str, domain: str,session):
         ]
     def ads_card():
      return Div(
-             H3("Advertisement", cls="text-xl font-semibold mb-4 text-center"),
-                Script(
-                    src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462',
-                    crossorigin='anonymous'
-                ),
-                Ins(
-                    cls="adsbygoogle",
-                    style="display:block",
-                    data_ad_format="fluid",
-                    data_ad_layout_key="-6w+ed+2i-1n-4w",
-                    data_ad_client="ca-pub-2090178937498462",
-                    data_ad_slot="7186574111"
-                ),
-                Script("(adsbygoogle = window.adsbygoogle || []).push({});"),
+             Script('''<script type="text/javascript" src="//optiads.org/lib-js-static-load?width=468&height=60&u=50220&w=10520&z=33085"></script>'''),
                 cls="card bg-base-200 shadow-xl w-96 h-44 mx-auto rounded-lg"
             )
 
@@ -509,7 +496,7 @@ def get(section: str, domain: str,session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            
+                            ads_card(),
                             *generate_question_cards(),  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
                         ),
