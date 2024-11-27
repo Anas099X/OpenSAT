@@ -454,7 +454,7 @@ def get(section: str, domain: str,session):
         ]
     def ads_card():
      return Div(
-             Script(src="//optiads.org/lib-js-static-load?width=468&height=60&u=50220&w=10520&z=33085",type="text/javascript"),
+             Script(src="//optiads.org/lib-js-static-load?width=384&height=176&u=50220&w=10520&z=33085",type="text/javascript"),
                 cls="card bg-base-200 shadow-xl w-96 h-44 mx-auto rounded-lg"
             )
 
