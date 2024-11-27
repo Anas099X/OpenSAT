@@ -108,7 +108,7 @@ def hilltopads_ad_card(top:str):
         cls="absolute inset-0 flex items-center justify-center text-white font-bold",
         style="pointer-events: none; z-index: 10;"
      ),
-     Script(src="//optiads.org/lib-js-static-load?width=468&height=60&u=50220&w=10520&z=33085"),
+     Script(src="//optiads.org/lib-js-static-load?width=728&height=90&u=50220&w=10520&z=33085"),
      cls="relative card bg-success shadow-xl rounded-lg mx-auto",
      style=f"width: 80%; height: 45px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
 
