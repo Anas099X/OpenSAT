@@ -575,7 +575,7 @@ def get(section: str, num: int, session):
                                 ),
                                 Div(
                                    Input(type="checkbox"),
-                                    Div("Click to reveal/hide answer", cls="collapse-title flex items-center justify-center text-l font-bold"),
+                                    Div("Click to reveal answer", cls="collapse-title flex items-center justify-center text-l font-bold"),
                                     Div(
                                      B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
                                      Br(),
