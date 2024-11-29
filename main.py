@@ -449,7 +449,7 @@ def get(section: str, domain: str,session):
                     cls="card-body"
                 ),
                 cls="card bg-base-100 shadow-xl w-96 mx-auto hover:bg-base-200 transition-all rounded-lg",  # Fixed width and centered
-                href=f"/questions/{section}/{i}/True"
+                href=f"/questions/{section}/{i}"
             ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
             for i, x in enumerate(question_objects(section))
         ]
@@ -512,16 +512,13 @@ def get(section: str, domain: str,session):
 
 
 
-@rt('/questions/{section}/{num}/{answer}')
-def get(section: str, num: int, answer: bool, session):
+@rt('/questions/{section}/{num}')
+def get(section: str, num: int, session):
     question_obj = question_objects(section)[num]
 
-    def hide_switch(input):
-        return not input
-    
 
     
-    copy_question_btn = Button(Div(cls="ti ti-link text-3xl text-info"),cls="tooltip",data_tip="click to copy",onclick="copyHref(this)",copy_href=f"opensat.fun/questions/{section}/{num}/{answer}")
+    copy_question_btn = Button(Div(cls="ti ti-link text-3xl text-info"),cls="tooltip",data_tip="click to copy",onclick="copyHref(this)",copy_href=f"opensat.fun/questions/{section}/{num}")
 
     return (
         Html(
@@ -566,7 +563,7 @@ def get(section: str, num: int, answer: bool, session):
                         Div(
                             hilltopads_ad_card("-1vh"),
                             Div(
-                                H2(copy_question_btn,f"Question #N{num}", cls="card-title text-2xl font-bold"),
+                                H2(copy_question_btn,f"Question #N{num + 1}", cls="card-title text-2xl font-bold"),
                                 P(question_obj['question'].get('paragraph', "").replace('null',''), cls="text-base mt-4"),
                                 B(question_obj['question']['question'], cls="text-lg"),
                                 Div(
@@ -577,16 +574,16 @@ def get(section: str, num: int, answer: bool, session):
                                     cls="mt-4"
                                 ),
                                 Div(
-                                    A("Reveal Answer", href=f'/questions/{section}/{num}/{hide_switch(answer)}', cls="btn btn-primary text-sm"),
-                                    A("Go Back", href=f'/explore/{section}/any', cls="btn btn-secondary text-sm ml-4"),
-                                    cls="flex mt-4 space-x-4"
-                                ),
-                                Div(
-                                    Br(),
-                                    B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
-                                    P(question_obj['question']['explanation']),
-                                    hidden=bool(answer),
-                                    cls="mt-4"
+                                   Input(type="checkbox"),
+                                    Div("Click to reveal/hide answer", cls="collapse-title flex items-center justify-center text-l font-bold"),
+                                    Div(
+                                     B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
+                                     Br(),
+
+                                     P(question_obj['question']['explanation']),
+                                     cls="collapse-content"
+                                    ),
+                                   cls="collapse collapse-plus bg-base-300"
                                 ),
                                 cls="card-body"
                             ),
