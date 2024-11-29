@@ -120,7 +120,7 @@ def hilltopads_ad_card(top:str):
         l.parentNode.insertBefore(s, l);
      })({});
      """),
-     Script(src="//optiads.org/lib-js-static-load?width=468&height=60&u=50220&w=10520&z=33085"),
+     Script(src="//optiads.org/lib-js-static-load?width=300&height=50&u=50220&w=10520&z=33085"),
      cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto",
      style=f"width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
 
