@@ -130,83 +130,137 @@ def menu_button(session):
     """Render the home page with Login/Profile management."""
     user_data, _ = get_user_data(session)  # Fetch user data from session
     
-    home_button = tutors_button =  A(Div(cls="ti ti-home text-2xl text-neutral"),"Home", href="/", cls="btn rounded-full btn btn-primary m-1")
-    practice_button = A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice", href="/practice/explore", cls="btn rounded-full relative btn btn-primary m-1")
-    explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn- btn-primary m-1")
-    tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn rounded-full btn btn-primary m-1")
-    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"),"Issue Report", href="https://tally.so/r/312ovO",cls="btn rounded-full btn btn-error m-1")
-    github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT",cls="btn rounded-full btn btn-secondary m-1")
+    home_button = tutors_button =  A(Div(cls="ti ti-home text-2xl text-neutral"),"Home", href="/", cls="btn btn-primary m-1")
+    practice_button = A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice", href="/practice/explore", cls="btn btn-primary m-1")
+    explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn btn-primary m-1")
+    tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn btn-primary m-1")
+    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"),"Issue Report", href="https://tally.so/r/312ovO",cls="btn btn-error m-1")
+    github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT",cls="btn btn-ghost m-1")
 
     if user_data:
         # User is logged in; show profile and logout buttons
         profile_image = Img(src=user_data['data']['attributes']['thumb_url'])
-        profile_button = A(Div(cls='ti ti-user-cog text-2xl text-neutral'),"Profile", href="/profile", cls="btn rounded-full btn btn-primary m-1")
+        profile_button = A(Div(cls='ti ti-user-cog text-2xl text-neutral'),"Profile", href="/profile", cls="btn btn-primary m-1")
         logout_button = A("Logout", href="/logout", cls="btn rounded-full btn- btn-secondary m-1")
 
         
 
     else:
         # User is not logged in; show login button
-        profile_button = A(Div(cls="ti ti-brand-patreon-filled text-2xl text-neutral"),"login", href="/login", cls="btn rounded-full btn btn-primary m-1")
+        profile_button = A(Div(cls="ti ti-brand-patreon-filled text-2xl text-neutral"),"login", href="/login", cls="btn btn-primary m-1")
 
     return Div(
                             Div(
                              Div(
-                                Div(cls="ti ti-category text-2xl text-neutral"),"Menu",role="button",tabindex="0",cls="btn btn-primary rounded-full"),
+                                Div(cls="ti ti-category text-xl text-neutral"),"Menu",role="button",tabindex="0",cls="btn btn-ghost rounded"),
                                      Ul(home_button,explore_button,practice_button,tutors_button,report_button,
-                            tabindex="0", cls="dropdown-content menu menu-lg bg-base-100 rounded-box z-[1] w-52 p-2 shadow")
+                            tabindex="0", cls="dropdown-content menu menu-sm bg-base-200 rounded-box z-[1] w-44 p-2 shadow")
                                     ,cls="dropdown dropdown-bottom dropdown-end"),
                             cls="navbar-end space-x-2"
                         )
 
 
 
-def footer():
-    """Reusable footer component for FastHTML routes."""
-    return Footer(
-        Div(
-            Svg(
-                Path(
-                    d="M22.672 15.226l-2.432.811.841 2.515c.33 1.019-.209 2.127-1.23 2.456-1.15.325-2.148-.321-2.463-1.226l-.84-2.518-5.013 1.677.84 2.517c.391 1.203-.434 2.542-1.831 2.542-.88 0-1.601-.564-1.86-1.314l-.842-2.516-2.431.809c-1.135.328-2.145-.317-2.463-1.229-.329-1.018.211-2.127 1.231-2.456l2.432-.809-1.621-4.823-2.432.808c-1.355.384-2.558-.59-2.558-1.839 0-.817.509-1.582 1.327-1.846l2.433-.809-.842-2.515c-.33-1.02.211-2.129 1.232-2.458 1.02-.329 2.13.209 2.461 1.229l.842 2.515 5.011-1.677-.839-2.517c-.403-1.238.484-2.553 1.843-2.553.819 0 1.585.509 1.85 1.326l.841 2.517 2.431-.81c1.02-.33 2.131.211 2.461 1.229.332 1.018-.21 2.126-1.23 2.456l-2.433.809 1.622 4.823 2.433-.809c1.242-.401 2.557.484 2.557 1.838 0 .819-.51 1.583-1.328 1.847m-8.992-6.428l-5.01 1.675 1.619 4.828 5.011-1.674-1.62-4.829z",
-                    fill_rule="evenodd", clip_rule="evenodd"
-                ),
-                width="50", height="50", viewBox="0 0 24 24", 
-                xmlns="http://www.w3.org/2000/svg", cls="fill-current"
-            ),
-            P(
-                "ACME Industries Ltd.",
-                Br(),
-                "Providing reliable tech since 1992"
-            )
-        ),
-        Nav(
-            H6("Services", cls="footer-title"),
-            A("Branding", cls="link link-hover"),
-            A("Design", cls="link link-hover"),
-            A("Marketing", cls="link link-hover"),
-            A("Advertisement", cls="link link-hover")
-        ),
-        Nav(
-            H6("Company", cls="footer-title"),
-            A("About us", cls="link link-hover"),
-            A("Contact", cls="link link-hover"),
-            A("Jobs", cls="link link-hover"),
-            A("Press kit", cls="link link-hover")
-        ),
-        Nav(
-            H6("Legal", cls="footer-title"),
-            A("Terms of use", cls="link link-hover"),
-            A("Privacy policy", cls="link link-hover"),
-            A("Cookie policy", cls="link link-hover")
-        ),
-        cls="footer bg-ghost shadow-lg text-base-content p-10"
-    )
-
 
 @rt("/")
 def get(session):
-    """Render the home page with Login/Profile management."""
+    """Render the home page with fully responsive hero sections."""
     user_data, _ = get_user_data(session)  # Fetch user data from session
+
+    first_hero = Div(
+     Div(
+        Div(
+            Span("🎓", cls="text-9xl block mx-auto mb-4"),  # Adjusted spacing
+                H2(
+                    "Question Bank with ", 
+                    U("Endless", cls="text-primary"), 
+                    " Possibilities",
+                    cls="text-4xl lg:text-5xl font-bold text-center mb-4"  # Reduced bottom margin
+                ),
+                P(
+                    "OpenSAT, a free and ",
+                    A(U("open-source"), href="https://github.com/Anas099X/OpenSAT", cls="text-info font-bold"),
+                    " SAT question bank. Dive into a massive pool of SAT practice problems and tests, "
+                    "constantly growing thanks to a dedicated community of contributors.",
+                    cls="text-lg lg:text-xl text-center max-w-2xl mx-auto mb-4"  # Reduced bottom margin
+                ),
+                cls="text-center"
+        ),
+        cls="hero-content text-center"
+    ),
+    cls="hero bg-ghost min-h-screen mb-0"
+ )
+
+
+    second_hero = Div(
+        Div(
+            Img(
+                src="https://i.ibb.co/sq8ptWZ/Screenshot-from-2024-11-30-19-24-43.png",
+                cls="max-w-full sm:max-w-sm md:max-w-lg rounded-lg shadow-xl glass mx-auto mb-4"  # Made image fully responsive
+            ),
+            Div(
+                H1("Practice SAT with over 1000 Unique Questions!", cls="text-3xl md:text-4xl font-bold mb-3"),
+                P(
+                    "Get access to lots of SAT questions just like the real test. New questions are always being added—start learning now!",
+                    cls="py-4 text-sm md:text-lg mb-3"
+                ),
+                A(
+                    Div(cls="ti ti-compass text-xl text-neutral"),
+                    "Explore",
+                    href="/explore/english/any",
+                    cls="btn btn-primary mt-2"
+                ),
+                cls="text-center md:text-left px-4"  # Added padding for smaller screens
+            ),
+            cls="hero-content flex-col lg:flex-row items-center"
+        ),
+        cls="hero bg-ghost min-h-screen mb-0"
+    )
+
+    third_hero = Div(
+        Div(
+            Img(
+                src="https://i.ibb.co/hyd1dDN/Screenshot-from-2024-11-30-21-55-31.png",
+                cls="max-w-full sm:max-w-sm md:max-w-lg rounded-lg shadow-xl glass mx-auto mb-4"
+            ),
+            Div(
+                H1("Level Up with Practice Tests!", cls="text-3xl md:text-4xl font-bold mb-3"),
+                P(
+                    "Try full-length, unique practice tests for free. Sharpen your skills, track your progress, and get fully prepared for test day!",
+                    cls="py-4 text-sm md:text-lg mb-3"
+                ),
+                A(
+                    Div(cls="ti ti-highlight text-xl text-neutral"),
+                    "Practice",
+                    href="/practice/explore",
+                    cls="btn btn-primary mt-2"
+                ),
+                cls="text-center md:text-left px-4"
+            ),
+            cls="hero-content flex-col lg:flex-row-reverse items-center"
+        ),
+        cls="hero bg-ghost min-h-screen mb-0"
+    )
+
+    footer = Footer(
+        Aside(
+            Span(cls="ti ti-school text-6xl"),
+            Div("OpenSAT", cls="text-lg font-bold"),
+            Div("Your go-to platform for SAT practice and preparation.", cls="font-bold"),
+            Div("NOT AFFILIATED WITH OR ENDORSED BY COLLEGE BOARD.", cls="text-xs"),
+            cls="text-center"
+        ),
+        Nav(
+            H6("Links", cls="footer-title"),
+            Div(
+                A(cls="ti ti-brand-github-filled text-2xl", href="https://github.com/Anas099X/OpenSAT"),
+                A(cls="ti ti-brand-discord-filled text-2xl",href="https://discord.gg/7KNg9zHRUk"),
+                A(cls="ti ti-brand-instagram-filled text-2xl",href="https://www.instagram.com/anas099x/"),
+                cls="grid grid-flow-col gap-4"
+            )
+        ),
+        cls="footer bg-base-300 text-base-content p-10"
+    )
 
     return (
         Html(
@@ -216,36 +270,26 @@ def get(session):
                     Div(
                         Div(
                             A(
-                                Span("🎓", style="font-size:1.8rem;"),
+                                Span("🎓", style="font-size:2rem;"),
                                 H1("OpenSAT", cls="text-primary"),
-                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                                cls="btn rounded-full btn-ghost normal-case text-lg",
+                                href="/"
                             ),
                             cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar bg-base-90 shadow bg-ghost"
+                        cls="navbar shadow-lg bg-ghost"
                     )
                 ),
                 Main(
-                    Div(
-                        Span("🎓", style="display: flex; font-size: 5rem; margin-bottom: 20px; justify-content: center;"),
-                        H2("Question Bank with ", U("Endless", cls="text-primary"), 
-                           " Possibilities",
-                           style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
-                        P("OpenSAT, a free and ",A(U("open-source"),href="https://github.com/Anas099X/OpenSAT",cls="text-info font-bold")," SAT question bank. "
-                          "Dive into a massive pool of SAT practice problems, "
-                          "constantly growing thanks to a dedicated community of contributors.",
-                          style="text-align: center; max-width: 36rem; margin: 0 auto 20px; color: #555; font-size: 1rem;"),
-                        Div(
-                            A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn rounded-full btn-primary"),
-                            A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice", href="/practice/explore", cls="btn rounded-full relative btn btn-primary"),
-                            style="display: flex; justify-content: center; gap: 15px;"
-                        ),
-                        cls="card bg-base-100 shadow-xl mx-auto p-10 mt-10",
-                        style="max-width:100vh;"
-                    )
-                )
-            ), data_theme="retro"
+                    first_hero,
+                    second_hero,
+                    third_hero
+                ),
+                footer,
+                data_theme="retro",
+                cls="bg-base-200"
+            )
         )
     )
 
@@ -448,7 +492,7 @@ def get(section: str, domain: str,session):
                     Div(x['domain'], cls="font-bold text-primary"),  # Domain badge
                     cls="card-body"
                 ),
-                cls="card bg-base-100 shadow-xl w-96 mx-auto hover:bg-base-200 transition-all rounded-lg",  # Fixed width and centered
+                cls="card bg-base-200 shadow-2xl w-96 mx-auto hover:bg-base-300 transition-all rounded-lg",  # Fixed width and centered
                 href=f"/questions/{section}/{i}"
             ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
             for i, x in enumerate(question_objects(section))
@@ -456,7 +500,7 @@ def get(section: str, domain: str,session):
     def ads_card():
      return Div(
              Script(src="//optiads.org/lib-js-static-load?width=468&height=60&u=50220&w=10520&z=33085"),
-                cls="card bg-base-200 shadow-xl w-96 h-44 mx-auto rounded-lg"
+                cls="card bg-base-100 shadow-xl w-96 h-44 mx-auto rounded-lg"
             )
 
     return (
@@ -469,14 +513,15 @@ def get(section: str, domain: str,session):
                     Div(
                         Div(
                             A(
-                                Span("🎓", style="font-size:1.8rem;"),
+                                Span("🎓", style="font-size:2rem;"),
                                 H1("OpenSAT", cls="text-primary"),
-                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                                cls="btn rounded-full btn-ghost normal-case text-lg",
+                                href="/"
                             ),
                             cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar bg-base-90 shadow bg-ghost"
+                        cls="navbar shadow bg-ghost"
                     )
                 ),
                 Main(
@@ -485,26 +530,26 @@ def get(section: str, domain: str,session):
                         Div(
                             H1(Div(cls="ti ti-filter text-4xl text-neutral"),"Filters", cls="text-2xl font-bold mb-4"),
                             Div(
-                                A(Div(cls="ti ti-a-b-2 text-2xl text-neutral"),"English", href=f'/explore/english/any', cls=["btn btn-primary rounded-" if section == 'english' else "btn rounded"]),
-                                A(Div(cls="ti ti-math-symbols text-2xl text-neutral"),"Math", href=f'/explore/math/any', cls=["btn btn-primary rounded" if section == 'math' else "btn rounded"]),
+                                A(Div(cls="ti ti-a-b-2 text-2xl text-neutral"),"English", href=f'/explore/english/any', cls=["btn btn-primary rounded-" if section == 'english' else "btn btn-active btn-secondary rounded"]),
+                                A(Div(cls="ti ti-math-symbols text-2xl text-neutral"),"Math", href=f'/explore/math/any', cls=["btn btn-primary rounded" if section == 'math' else "btn btn-active btn-secondary rounded"]),
                                 cls="btn-group space-x-2"
                             ),
                             Br(),
                             Div(filter_switch()
                              ,cls="flex flex-wrap gap-2 mt-4 justify-center"),
                                 hilltopads_ad_card("5vh"),  # Centered filter buttons
-                            cls="p-4 rounded-lg shadow-xl mx-auto bg-base-100", style="max-width:100vh; margin-bottom:4vh;"
+                            cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200", style="max-width:100vh; margin-bottom:4vh;"
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
                             *generate_question_cards(),  # Generates all question cards
-                            cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"  # Responsive grid with 1, 2, or 3 columns
+                            cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid with 1, 2, or 3 columns
                         ),
                         cls="flex flex-col space-y-6"
                     ),
                     cls="container mx-auto py-8"
                 )
-            ), data_theme="retro"  # DaisyUI's retro theme
+            ), data_theme="retro",cls='bg-base-200'  # DaisyUI's retro theme
         )
     )
 
@@ -546,14 +591,15 @@ def get(section: str, num: int, session):
                     Div(
                         Div(
                             A(
-                                Span("🎓", style="font-size:1.8rem;"),
+                                Span("🎓", style="font-size:2rem;"),
                                 H1("OpenSAT", cls="text-primary"),
-                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                                cls="btn rounded-full btn-ghost normal-case text-lg",
+                                href="/"
                             ),
                             cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar bg-base-90 shadow bg-ghost"
+                        cls="navbar shadow bg-ghost"
                     )
                 ),
                 Main(
@@ -583,16 +629,16 @@ def get(section: str, num: int, session):
                                      P(question_obj['question']['explanation']),
                                      cls="collapse-content"
                                     ),
-                                   cls="collapse collapse-plus bg-base-300"
+                                   cls="collapse collapse-plus glass"
                                 ),
                                 cls="card-body"
                             ),
-                            cls="card bg-base-100 shadow-lg mx-auto w-full max-w-2xl"
+                            cls="card bg-base-200 shadow-lg mx-auto w-full max-w-2xl"
                         ),
                         cls="container mx-auto py-8 px-4"
                     )
                 )
-            ), data_theme="retro"
+            ), data_theme="retro",cls="bg-base-200"
         )
     )
 
@@ -610,15 +656,16 @@ def get(session):
                 Header(
                     Div(
                         Div(
-                            A(
-                                Span("🎓", style="font-size:1.8rem;"),
+                           A(
+                                Span("🎓", style="font-size:2rem;"),
                                 H1("OpenSAT", cls="text-primary"),
-                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                                cls="btn rounded-full btn-ghost normal-case text-lg",
+                                href="/"
                             ),
                             cls="navbar"
                         ),
                         menu_button(session),
-                        cls="navbar bg-base-90 shadow bg-ghost"
+                        cls="navbar shadow bg-ghost"
                     )
                 ),
                 Main(
@@ -640,7 +687,7 @@ def get(session):
                                         A(f"Contact: {doc.to_dict()['contact']}", href=f"mailto:{doc.to_dict()['email']}", cls="btn btn-primary"),
                                         cls="card-actions justify-end"
                                     ),
-                                    cls="card bg-base-100 w-96 shadow-xl p-2"
+                                    cls="card bg-base-200 w-96 shadow-xl p-2"
                                 ),
                                 cls="max-w-sm mx-auto"
                             ) for doc in firestore_docs],
@@ -648,7 +695,7 @@ def get(session):
                     ),
                     cls="container mx-auto py-6"
                 )
-            ), data_theme="retro"
+            ), data_theme="retro",cls="bg-base-200"
         )
     )
 
@@ -692,14 +739,15 @@ def get(session):
                     Div(
                         Div(
                             A(
-                                Span("🎓", style="font-size:1.8rem;"),
+                                Span("🎓", style="font-size:2rem;"),
                                 H1("OpenSAT", cls="text-primary"),
-                                cls="btn rounded-full btn-ghost normal-case text-xl", href="/"
+                                cls="btn rounded-full btn-ghost normal-case text-lg",
+                                href="/"
                             ),
                             cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar bg-base-90 shadow bg-ghost"
+                        cls="navbar shadow bg-ghost"
                     )
                 ),
                 Main(
@@ -711,7 +759,7 @@ def get(session):
                                     Div(Div(cls="ti ti-highlight text-4xl text-neutral"), cls="text-3xl"),  # Icon for each module
                                     H2(module['name'], cls="card-title text-xl font-bold mt-1"),  # Module name
                                     P("Practice Test", cls="text-primary font-bold"),
-                                    cls="card bg-base-100 shadow-xl w-96 mx-auto hover:bg-base-200 transition-all rounded-lg p-8",
+                                    cls="card bg-base-200 shadow-xl w-96 mx-auto hover:bg-base-300 transition-all rounded-lg p-8",
                                     href=f"/practice/{i}/module/1" 
                                 )
                             )
@@ -721,7 +769,7 @@ def get(session):
                     ),
                     cls="container mx-auto py-8"
                 )
-            ), data_theme="retro"
+            ), data_theme="retro",cls="bg-base-200"
         )
     )
 
@@ -795,7 +843,7 @@ def get(session, practice_num: int, module_number: int):
                             cls="navbar"
                         ),
                         menu_button(session),
-                        cls="navbar bg-base-90 shadow bg-ghost"
+                        cls="navbar shadow bg-ghost"
                     )
                 ),
                 Main(
@@ -875,7 +923,7 @@ def get(session, practice_num: int, module_number: int):
                                 cls="flex justify-between items-center mt-6 p-5"
                             )
                             ,
-                            cls="card bg-base-100 shadow-xl w-full max-w-3xl mx-auto mt-8"
+                            cls="card bg-base-200 shadow-xl w-full max-w-3xl mx-auto mt-8"
                         ),
                         # Navigation: Back, Page Number, Next/Finish
                        
@@ -884,7 +932,7 @@ def get(session, practice_num: int, module_number: int):
                 ),
                 id="practice_html"
             ),
-            data_theme="retro"  # Retro theme enabled
+            data_theme="retro",cls="bg-base-200"  # Retro theme enabled
         )
     )
 
@@ -918,10 +966,10 @@ def get(practice_num:int):
                             style="display:flex; justify-content:center;"
                             
                         ),
-                        cls="card bg-base-100 w-96 shadow-xl mx-auto py-8"
+                        cls="card bg-base-200 w-96 shadow-xl mx-auto py-8"
                     )
                 ),cls="flex items-center justify-center"
-            ),data_theme="retro"
+            ),data_theme="retro",cls="bg-base-200"
         )
     )
 
@@ -985,7 +1033,7 @@ def get(practice_num: int, session):
                             style="display:flex; justify-content:center;"
                        ),
 
-                    cls="card bg-base-100 w-96 shadow-xl mx-auto py-8 mb-6"
+                    cls="card bg-base-200 w-96 shadow-xl mx-auto py-8 mb-6"
                 ),
                 
                 # Card for mistakes table
@@ -1024,7 +1072,7 @@ def get(practice_num: int, session):
             ),
             cls="flex items-center justify-center min-h-screen"
         ),
-        data_theme="retro"
+        data_theme="retro",cls="bg-base-200"
     )
 )
     
