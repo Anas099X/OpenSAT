@@ -108,6 +108,19 @@ def hilltopads_ad_card(top:str):
      Returns a FastHTML component rendering a custom advertisement card.
      """
      return Div(
+     Script("""
+     (function(sqghlu){
+        var d = document,
+            s = d.createElement('script'),
+            l = d.scripts[d.scripts.length - 1];
+        s.settings = sqghlu || {};
+        s.src = "//illinformed-imagination.com/bpXHVTs.dqGflA0cYLWZdpi/YwWR5YuSZqX/IM/NexmU9cu/ZqULlskKPlTrUH3AOXT/cz5/NDDTMwtTNfT_cm5wNezNkk0UNjAi";
+        s.async = false;
+        s.referrerPolicy = 'no-referrer-when-downgrade';
+        l.parentNode.insertBefore(s, l);
+     })({});
+     """),
+     Script(src="//optiads.org/lib-js-static-load?width=300&height=50&u=50220&w=10520&z=33085"),
      Script('''aclib.runBanner({
             zoneId: '9101210',
         });'''),
