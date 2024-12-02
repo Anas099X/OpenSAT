@@ -91,6 +91,11 @@ MathJax = {
             Meta(name="optiads" ,content="VWluQ2hwS3JPV2FQL0JJNWZIdk50dz09"),
             Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
             Meta(name="galaksion-domain-verification" ,content="50bfe4c013ec723a19294b484ba29c88d78c5298250a4691c7a722adec6b7a47"),
+            Script('''
+                    aclib.runAutoTag({
+                      zoneId: 'r7zb6a6avz',
+                       });
+                    '''),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
