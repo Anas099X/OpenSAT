@@ -108,6 +108,12 @@ def hilltopads_ad_card(top:str):
      Returns a FastHTML component rendering a custom advertisement card.
      """
      return Div(
+     Div(
+        # Overlay content
+        "Ads provided here",
+        cls="absolute inset-0 flex items-center justify-center bg-success text-white font-bold",
+        style="pointer-events: none; z-index: 10;"
+     ),
      Script("""
      (function(sqghlu){
         var d = document,
@@ -124,7 +130,8 @@ def hilltopads_ad_card(top:str):
      Script('''aclib.runBanner({
             zoneId: '9101210',
         });'''),
-     cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto"
+     cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto",
+     style=f"width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
 
     )
 
