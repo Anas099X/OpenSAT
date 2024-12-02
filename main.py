@@ -96,6 +96,7 @@ MathJax = {
                       zoneId: 'r7zb6a6avz',
                        });
                     '''),
+            Script(id="aclib" ,type="text/javascript" ,src="//acscdn.com/script/aclib.js"),        
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -126,6 +127,9 @@ def hilltopads_ad_card(top:str):
      })({});
      """),
      Script(src="//optiads.org/lib-js-static-load?width=300&height=50&u=50220&w=10520&z=33085"),
+     Script('''aclib.runBanner({
+            zoneId: '9101210',
+        });'''),
      cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto",
      style=f"width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
 
