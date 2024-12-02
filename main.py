@@ -108,30 +108,10 @@ def hilltopads_ad_card(top:str):
      Returns a FastHTML component rendering a custom advertisement card.
      """
      return Div(
-     Div(
-        # Overlay content
-        "Ads provided here",
-        cls="absolute inset-0 flex items-center justify-center bg-success text-white font-bold",
-        style="pointer-events: none; z-index: 10;"
-     ),
-     Script("""
-     (function(sqghlu){
-        var d = document,
-            s = d.createElement('script'),
-            l = d.scripts[d.scripts.length - 1];
-        s.settings = sqghlu || {};
-        s.src = "//illinformed-imagination.com/bpXHVTs.dqGflA0cYLWZdpi/YwWR5YuSZqX/IM/NexmU9cu/ZqULlskKPlTrUH3AOXT/cz5/NDDTMwtTNfT_cm5wNezNkk0UNjAi";
-        s.async = false;
-        s.referrerPolicy = 'no-referrer-when-downgrade';
-        l.parentNode.insertBefore(s, l);
-     })({});
-     """),
-     Script(src="//optiads.org/lib-js-static-load?width=300&height=50&u=50220&w=10520&z=33085"),
      Script('''aclib.runBanner({
             zoneId: '9101210',
         });'''),
-     cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto",
-     style=f"width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
+     cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto"
 
     )
 
