@@ -96,8 +96,7 @@ MathJax = {
                       zoneId: 'r7zb6a6avz',
                        });
                     '''),
-            Script(id="aclib" ,type="text/javascript" ,src="//acscdn.com/script/aclib.js"),  
-            Script('async src="https://js.wpadmngr.com/static/adManager.js" data-admpid="265061"'),      
+            Script(id="aclib" ,type="text/javascript" ,src="//acscdn.com/script/aclib.js"),        
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
