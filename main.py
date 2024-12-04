@@ -88,6 +88,7 @@ MathJax = {
             Script(src="/_vercel/insights/script.js"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
+                        Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
             Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),      
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
@@ -591,6 +592,16 @@ def get(request, session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
+                            Script('''(function(eqsg){
+var d = document,
+    s = d.createElement('script'),
+    l = d.scripts[d.scripts.length - 1];
+s.settings = eqsg || {};
+s.src = "\/\/palecount.com\/b\/XaV.sgdNGNlw0\/YjWfd\/iQYQW\/5YulZVXEIX\/MeSmC9WuhZTUdlbkwPWT-U\/3UOKTWcn5iNnD\/MetJNHTVcH5BNqzzkB0dNYAA";
+s.async = true;
+s.referrerPolicy = 'no-referrer-when-downgrade';
+l.parentNode.insertBefore(s, l);
+})({})'''),
                             *question_cards,  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid
                         ),
