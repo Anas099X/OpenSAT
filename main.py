@@ -592,12 +592,12 @@ def get(request, session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            Script('''(function(eqsg){
+                            Script('''(function(dbl){
 var d = document,
     s = d.createElement('script'),
     l = d.scripts[d.scripts.length - 1];
-s.settings = eqsg || {};
-s.src = "\/\/palecount.com\/b\/XaV.sgdNGNlw0\/YjWfd\/iQYQW\/5YulZVXEIX\/MeSmC9WuhZTUdlbkwPWT-U\/3UOKTWcn5iNnD\/MetJNHTVcH5BNqzzkB0dNYAA";
+s.settings = dbl || {};
+s.src = "\/\/palecount.com\/bdXxV.sKdNGLlf0lYaWvdwi\/YrWq5fuTZ\/XdIi\/EeLmw9\/urZpU\/l-kqPYTZUA4lNIDBknyaNXT\/EpteNnTkgp0KOuTXIe1sMDgY";
 s.async = true;
 s.referrerPolicy = 'no-referrer-when-downgrade';
 l.parentNode.insertBefore(s, l);
