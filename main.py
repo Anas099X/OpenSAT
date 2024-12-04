@@ -516,11 +516,31 @@ def get(request, session):
             for i, x in enumerate(questions)
         ]
 
+    # AdSense card
     def ads_card():
-        return Div(
-            Script(src="//optiads.org/lib-js-static-load?width=468&height=60&u=50220&w=10520&z=33085"),
-            cls="card bg-base-100 shadow-xl w-96 h-44 mx-auto rounded-lg"
-        )
+     return Div(
+        Div(
+            Span("Ad", cls="indicator-item badge badge-success"),  # Badge with "Ad"
+            Div(
+                Script(
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
+                    crossorigin="anonymous"
+                ),
+                Ins(
+                    cls="adsbygoogle",
+                    style="display:block",
+                    data_ad_format="fluid",
+                    data_ad_layout_key="-gs-3+1f-3d+2z",
+                    data_ad_client="ca-pub-2090178937498462",
+                    data_ad_slot="8018346033"
+                ),
+                Script('(adsbygoogle = window.adsbygoogle || []).push({});')
+            ),
+            cls="indicator"  # Indicator class for styling
+        ),
+        cls="card shadow-2xl w-96 mx-auto bg-base-300 rounded-lg"
+    )
+
 
     # Generate filter buttons
     filter_buttons = filter_switch()
@@ -553,55 +573,46 @@ def get(request, session):
                     Div(
                         # Filters section - centered and styled
                         Div(
-                     H1(
-                      Div(cls="ti ti-filter text-4xl text-neutral"), 
-                      "Filters", 
-                      cls="text-2xl font-bold mb-4"
-                     ),
-                    # Section Filters with Labels
-                 Div(
-                   Div("Section:", cls="text text-gray-600 font-semibold mb-2"),  # Section Label
-                  Div(
-               A(
-                Div(cls="ti ti-a-b-2 text-2xl text-neutral"), 
-                "English",
-                href=f"?{urlencode({'section': 'english', 'domain': 'any'})}",
-                cls=f"btn btn-primary btn-sm {'btn-active' if section == 'english' else ''}"
-             ),
-             A(
-                Div(cls="ti ti-math-symbols text-2xl text-neutral"), 
-                "Math",
-                href=f"?{urlencode({'section': 'math', 'domain': 'any'})}",
-                cls=f"btn btn-primary btn-sm {'btn-active' if section == 'math' else ''}"
-             ),
-             cls="btn-group space-x-2"
-            ),
-            cls="mb-6"  # Adds spacing between section and domain filters
-           ),
-            # Domain Filters with Labels
-          Div(
-             Div("Domain:", cls="text text-gray-600 font-semibold mb-2"),  # Domain Label
-                Div(
-                   *filter_buttons,  # Dynamically generated domain filter buttons
-                   cls="flex flex-wrap gap-2"
-                   ),
-                   cls="mb-4"
-                   ),
-                    cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200", 
-                       style="max-width:100vh; margin-bottom:4vh;"
+                            H1(
+                                Div(cls="ti ti-filter text-4xl text-neutral"), 
+                                "Filters", 
+                                cls="text-2xl font-bold mb-4"
+                            ),
+                            # Section Filters with Labels
+                            Div(
+                                Div("Section:", cls="text-sm text-gray-600 font-semibold mb-2"),  # Section Label
+                                Div(
+                                    A(
+                                        Div(cls="ti ti-a-b-2 text-2xl text-neutral"), 
+                                        "English",
+                                        href=f"?{urlencode({'section': 'english', 'domain': 'any'})}",
+                                        cls=f"btn btn-primary btn-sm {'btn-active' if section == 'english' else ''}"
+                                    ),
+                                    A(
+                                        Div(cls="ti ti-math-symbols text-2xl text-neutral"), 
+                                        "Math",
+                                        href=f"?{urlencode({'section': 'math', 'domain': 'any'})}",
+                                        cls=f"btn btn-primary btn-sm {'btn-active' if section == 'math' else ''}"
+                                    ),
+                                    cls="btn-group space-x-2"
+                                ),
+                                cls="mb-6"  # Adds spacing between section and domain filters
+                            ),
+                            # Domain Filters with Labels
+                            Div(
+                                Div("Domain:", cls="text-sm text-gray-600 font-semibold mb-2"),  # Domain Label
+                                Div(
+                                    *filter_buttons,  # Dynamically generated domain filter buttons
+                                    cls="flex flex-wrap gap-2"
+                                ),
+                                cls="mb-4"
+                            ),
+                            cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200", 
+                            style="max-width:100vh; margin-bottom:4vh;"
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            Script('''(function(dbl){
-var d = document,
-    s = d.createElement('script'),
-    l = d.scripts[d.scripts.length - 1];
-s.settings = dbl || {};
-s.src = "\/\/palecount.com\/bdXxV.sKdNGLlf0lYaWvdwi\/YrWq5fuTZ\/XdIi\/EeLmw9\/urZpU\/l-kqPYTZUA4lNIDBknyaNXT\/EpteNnTkgp0KOuTXIe1sMDgY";
-s.async = true;
-s.referrerPolicy = 'no-referrer-when-downgrade';
-l.parentNode.insertBefore(s, l);
-})({})'''),
+                            ads_card(),
                             *question_cards,  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid
                         ),
