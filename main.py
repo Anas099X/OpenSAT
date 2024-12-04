@@ -543,22 +543,28 @@ def get(request, session):
     def responsive_ads_card():
      return Div(
         Div(
-            Script(
-                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
-                crossorigin="anonymous"
+            Span("Ad", cls="indicator-item badge badge-success"),  # Ad indicator badge
+            Div(
+                Script(
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
+                    crossorigin="anonymous"
+                ),
+                Ins(
+                    cls="adsbygoogle",
+                    style="display:block",
+                    data_ad_client="ca-pub-2090178937498462",
+                    data_ad_slot="8188391527",
+                    data_ad_format="auto",
+                    data_full_width_responsive="true"
+                ),
+                Script('(adsbygoogle = window.adsbygoogle || []).push({});'),
+                cls="card bg-base-200 mx-auto rounded-lg"
             ),
-            Ins(
-                cls="adsbygoogle",
-                style="display:block",
-                data_ad_client="ca-pub-2090178937498462",
-                data_ad_slot="8188391527",
-                data_ad_format="auto",
-                data_full_width_responsive="true"
-            ),
-            Script('(adsbygoogle = window.adsbygoogle || []).push({});')
+            cls="indicator"  # Indicator class for proper positioning
         ),
-        cls="card bg-base-100 shadow-xl w-96 mx-auto my-8"
+         cls="card bg-base-200 shadow-2xl w-96 mx-auto rounded-lg"
     )
+
 
 
     # Generate filter buttons
