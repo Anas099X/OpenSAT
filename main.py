@@ -534,8 +534,7 @@ def get(request, session):
                     data_ad_client="ca-pub-2090178937498462",
                     data_ad_slot="8018346033"
                 ),
-                Script('(adsbygoogle = window.adsbygoogle || []).push({});'),
-                cls="bg-base-300 grid w-full place-items-center rounded-lg shadow"
+                Script('(adsbygoogle = window.adsbygoogle || []).push({});')
             ),
             cls="indicator"  # Indicator class for styling
         ),
