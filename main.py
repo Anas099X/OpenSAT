@@ -5,6 +5,7 @@ import asyncio
 import random, json, time
 from starlette.responses import StreamingResponse
 from dotenv import load_dotenv
+from urllib.parse import urlencode
 
 load_dotenv()
 
@@ -87,16 +88,7 @@ MathJax = {
             Script(src="/_vercel/insights/script.js"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-            Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
-            Meta(name="optiads" ,content="VWluQ2hwS3JPV2FQL0JJNWZIdk50dz09"),
-            Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
-            Meta(name="galaksion-domain-verification" ,content="50bfe4c013ec723a19294b484ba29c88d78c5298250a4691c7a722adec6b7a47"),
-            Script('''
-                    aclib.runAutoTag({
-                      zoneId: 'r7zb6a6avz',
-                       });
-                    '''),
-            Script(id="aclib" ,type="text/javascript" ,src="//acscdn.com/script/aclib.js"),        
+            Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),      
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -141,7 +133,7 @@ def menu_button(session):
     
     home_button = tutors_button =  A(Div(cls="ti ti-home text-2xl text-neutral"),"Home", href="/", cls="btn btn-primary m-1")
     practice_button = A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice", href="/practice/explore", cls="btn btn-primary m-1")
-    explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore/english/any", cls="btn btn-primary m-1")
+    explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore", cls="btn btn-primary m-1")
     tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn btn-primary m-1")
     report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"),"Issue Report", href="https://tally.so/r/312ovO",cls="btn btn-error m-1")
     github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT",cls="btn btn-ghost m-1")
@@ -210,13 +202,13 @@ def get(session):
             Div(
                 H1("Practice SAT with over 1000 Unique Questions!", cls="text-3xl md:text-4xl font-bold mb-3"),
                 P(
-                    "Get access to lots of SAT questions just like the real test. New questions are always being added—start learning now!",
+                    "Get access to lots of Unique Custom SAT questions just like the real test. New questions are always being added—start learning now!",
                     cls="py-4 text-sm md:text-lg mb-3"
                 ),
                 A(
                     Div(cls="ti ti-compass text-xl text-neutral"),
                     "Explore",
-                    href="/explore/english/any",
+                    href="/explore",
                     cls="btn btn-primary mt-2"
                 ),
                 cls="text-center md:text-left px-4"  # Added padding for smaller screens
@@ -235,7 +227,7 @@ def get(session):
             Div(
                 H1("Level Up with Practice Tests!", cls="text-3xl md:text-4xl font-bold mb-3"),
                 P(
-                    "Try full-length, unique practice tests for free. Sharpen your skills, track your progress, and get fully prepared for test day!",
+                    "Try full-length, uniquely made practice tests for free. Sharpen your skills, track your progress, and get fully prepared for test day!",
                     cls="py-4 text-sm md:text-lg mb-3"
                 ),
                 A(
@@ -469,48 +461,71 @@ def get(session):
     )
 
 
-@rt("/explore/{section}/{domain}")
-def get(section: str, domain: str,session):
+@rt("/explore")
+def get(request, session):
+
+    # Get section and domain from query parameters, with defaults
+    section = request.query_params.get("section", "english")  # Default section: English
+    domain = request.query_params.get("domain", "any")  # Default domain: any
 
     def domain_lower(input):
         return str(input).lower()
 
+    # Generate filter buttons dynamically
     def filter_switch():
-        if section == 'english':
-            return (
-                A("Information and Ideas", href=f'/explore/{section}/information and ideas', cls="btn btn-secondary btn-sm"),
-                A("Craft and Structure", href=f'/explore/{section}/craft and structure', cls="btn btn-secondary btn-sm"),
-                A("Expression of Ideas", href=f'/explore/{section}/expression of ideas', cls="btn btn-secondary btn-sm"),
-                A("Standard English Conventions", href=f'/explore/{section}/standard english conventions', cls="btn btn-secondary btn-sm")
+        filters = {
+            "english": [
+                {"label": "Information and Ideas", "value": "information and ideas"},
+                {"label": "Craft and Structure", "value": "craft and structure"},
+                {"label": "Expression of Ideas", "value": "expression of ideas"},
+                {"label": "Standard English Conventions", "value": "standard english conventions"}
+            ],
+            "math": [
+                {"label": "Algebra", "value": "algebra"},
+                {"label": "Advanced Math", "value": "advanced math"},
+                {"label": "Problem-Solving and Data Analysis", "value": "problem-solving and data analysis"},
+                {"label": "Geometry and Trigonometry", "value": "geometry and trigonometry"}
+            ]
+        }
+
+        category_filters = filters.get(section.lower(), [])
+        return [
+            A(
+                f["label"],
+                href=f"?{urlencode({'section': section, 'domain': f['value']})}",
+                cls=f"btn btn-secondary btn-sm {'btn-active' if domain == f['value'] else ''}"
             )
-        else:
-            return (
-                A("Algebra", href=f'/explore/{section}/algebra', cls="btn btn-secondary btn-sm"),
-                A("Advanced Math", href=f'/explore/{section}/advanced math', cls="btn btn-secondary btn-sm"),
-                A("Problem-Solving and Data Analysis", href=f'/explore/{section}/problem-solving and data analysis', cls="btn btn-secondary btn-sm"),
-                A("Geometry and Trigonometry", href=f'/explore/{section}/geometry and trigonometry', cls="btn btn-secondary btn-sm")
-            )
+            for f in category_filters
+        ]
 
     # Question card generation function
     def generate_question_cards():
+        questions = question_objects(section)  # Fetch questions for the section
         return [
             A(
                 Div(
                     Div(Div(cls="ti ti-books text-4xl text-neutral"), cls="text-3xl"),  # Icon
                     Div(f'Question #{i + 1}', cls="font-bold text-xl"),  # Question title
-                    Div(x['domain'], cls="font-bold text-primary"),  # Domain badge
+                    Div(x['domain'], cls="font-bold text-pink-400"),  # Domain badge
                     cls="card-body"
                 ),
-                cls="card bg-base-200 shadow-2xl w-96 mx-auto hover:bg-base-300 transition-all rounded-lg",  # Fixed width and centered
-                href=f"/questions/{section}/{i}"
-            ) if domain.lower().replace('%20', ' ') == 'any' or domain_lower(x['domain']) == domain.lower().replace('%20', ' ') else Div('', hidden=True)
-            for i, x in enumerate(question_objects(section))
+                cls="card bg-base-200 shadow-2xl w-96 mx-auto hover:bg-base-300 transition-all rounded-lg",
+                href=f"/questions?{urlencode({'section': section, 'index': i})}"
+            ) if domain.lower() == "any" or domain_lower(x['domain']) == domain.lower() else Div('', hidden=True)
+            for i, x in enumerate(questions)
         ]
+
     def ads_card():
-     return Div(
-             Script(src="//optiads.org/lib-js-static-load?width=468&height=60&u=50220&w=10520&z=33085"),
-                cls="card bg-base-100 shadow-xl w-96 h-44 mx-auto rounded-lg"
-            )
+        return Div(
+            Script(src="//optiads.org/lib-js-static-load?width=468&height=60&u=50220&w=10520&z=33085"),
+            cls="card bg-base-100 shadow-xl w-96 h-44 mx-auto rounded-lg"
+        )
+
+    # Generate filter buttons
+    filter_buttons = filter_switch()
+
+    # Generate question cards
+    question_cards = generate_question_cards()
 
     return (
         Html(
@@ -537,43 +552,76 @@ def get(section: str, domain: str,session):
                     Div(
                         # Filters section - centered and styled
                         Div(
-                            H1(Div(cls="ti ti-filter text-4xl text-neutral"),"Filters", cls="text-2xl font-bold mb-4"),
-                            Div(
-                                A(Div(cls="ti ti-a-b-2 text-2xl text-neutral"),"English", href=f'/explore/english/any', cls=["btn btn-primary rounded-" if section == 'english' else "btn btn-active btn-secondary rounded"]),
-                                A(Div(cls="ti ti-math-symbols text-2xl text-neutral"),"Math", href=f'/explore/math/any', cls=["btn btn-primary rounded" if section == 'math' else "btn btn-active btn-secondary rounded"]),
-                                cls="btn-group space-x-2"
-                            ),
-                            Br(),
-                            Div(filter_switch()
-                             ,cls="flex flex-wrap gap-2 mt-4 justify-center"),
-                                hilltopads_ad_card("5vh"),  # Centered filter buttons
-                            cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200", style="max-width:100vh; margin-bottom:4vh;"
+                     H1(
+                      Div(cls="ti ti-filter text-4xl text-neutral"), 
+                      "Filters", 
+                      cls="text-2xl font-bold mb-4"
+                     ),
+                    # Section Filters with Labels
+                 Div(
+                   Div("Section:", cls="text text-gray-600 font-semibold mb-2"),  # Section Label
+                  Div(
+               A(
+                Div(cls="ti ti-a-b-2 text-2xl text-neutral"), 
+                "English",
+                href=f"?{urlencode({'section': 'english', 'domain': 'any'})}",
+                cls=f"btn btn-primary btn-sm {'btn-active' if section == 'english' else ''}"
+             ),
+             A(
+                Div(cls="ti ti-math-symbols text-2xl text-neutral"), 
+                "Math",
+                href=f"?{urlencode({'section': 'math', 'domain': 'any'})}",
+                cls=f"btn btn-primary btn-sm {'btn-active' if section == 'math' else ''}"
+             ),
+             cls="btn-group space-x-2"
+            ),
+            cls="mb-6"  # Adds spacing between section and domain filters
+           ),
+            # Domain Filters with Labels
+          Div(
+             Div("Domain:", cls="text text-gray-600 font-semibold mb-2"),  # Domain Label
+                Div(
+                   *filter_buttons,  # Dynamically generated domain filter buttons
+                   cls="flex flex-wrap gap-2"
+                   ),
+                   cls="mb-4"
+                   ),
+                    cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200", 
+                       style="max-width:100vh; margin-bottom:4vh;"
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            *generate_question_cards(),  # Generates all question cards
-                            cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid with 1, 2, or 3 columns
+                            *question_cards,  # Generates all question cards
+                            cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid
                         ),
                         cls="flex flex-col space-y-6"
                     ),
                     cls="container mx-auto py-8"
                 )
-            ), data_theme="retro",cls='bg-base-200'  # DaisyUI's retro theme
+            ), data_theme="retro", cls='bg-base-200'  # DaisyUI's retro theme
         )
     )
 
 
+@rt('/questions')
+def get(request, session):
+    # Extract query parameters
+    section = request.query_params.get("section", "english")  # Default section: English
+    num = int(request.query_params.get("num", 0))  # Default question number: 0
 
-
-
-@rt('/questions/{section}/{num}')
-def get(section: str, num: int, session):
+    # Fetch the specified question object
     question_obj = question_objects(section)[num]
 
+    # Button for copying the question's URL
+    copy_question_btn = Button(
+        Div(cls="ti ti-link text-3xl text-info"),
+        cls="tooltip",
+        data_tip="Click to copy",
+        onclick="copyHref(this)",
+        copy_href=f"opensat.fun/questions?section={section}&num={num}"
+    )
 
-    
-    copy_question_btn = Button(Div(cls="ti ti-link text-3xl text-info"),cls="tooltip",data_tip="click to copy",onclick="copyHref(this)",copy_href=f"opensat.fun/questions/{section}/{num}")
-
+    # Return the HTML response
     return (
         Html(
             Head(
@@ -614,12 +662,10 @@ def get(section: str, num: int, session):
                 Main(
                     Div(
                         # Card component for question display
-                        
                         Div(
-                            hilltopads_ad_card("-1vh"),
                             Div(
-                                H2(copy_question_btn,f"Question #N{num + 1}", cls="card-title text-2xl font-bold"),
-                                P(question_obj['question'].get('paragraph', "").replace('null',''), cls="text-base mt-4"),
+                                H2(copy_question_btn, f"Question #N{num + 1}", cls="card-title text-2xl font-bold"),
+                                P(question_obj['question'].get('paragraph', "").replace('null', ""), cls="text-base mt-4"),
                                 B(question_obj['question']['question'], cls="text-lg"),
                                 Div(
                                     Div(B("A. "), question_obj['question']['choices']['A'], cls="py-2"),
@@ -629,16 +675,15 @@ def get(section: str, num: int, session):
                                     cls="mt-4"
                                 ),
                                 Div(
-                                   Input(type="checkbox"),
+                                    Input(type="checkbox"),
                                     Div("Click to reveal answer", cls="collapse-title flex items-center justify-center text-l font-bold"),
                                     Div(
-                                     B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
-                                     Br(),
-
-                                     P(question_obj['question']['explanation']),
-                                     cls="collapse-content"
+                                        B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
+                                        Br(),
+                                        P(question_obj['question']['explanation']),
+                                        cls="collapse-content"
                                     ),
-                                   cls="collapse collapse-plus glass"
+                                    cls="collapse collapse-plus glass"
                                 ),
                                 cls="card-body"
                             ),
@@ -647,7 +692,7 @@ def get(section: str, num: int, session):
                         cls="container mx-auto py-8 px-4"
                     )
                 )
-            ), data_theme="retro",cls="bg-base-200"
+            ), data_theme="retro", cls="bg-base-200"
         )
     )
 
