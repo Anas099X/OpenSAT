@@ -555,8 +555,7 @@ def get(request, session):
                 data_ad_format="auto",
                 data_full_width_responsive="true"
             ),
-            Script('(adsbygoogle = window.adsbygoogle || []).push({});'),
-            cls="bg-base-300 grid h-44 w-full place-items-center rounded-lg shadow"
+            Script('(adsbygoogle = window.adsbygoogle || []).push({});')
         ),
         cls="card bg-base-100 shadow-xl w-96 mx-auto my-8"
     )
