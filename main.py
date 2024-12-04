@@ -540,6 +540,26 @@ def get(request, session):
         ),
         cls="card shadow-2xl mx-auto bg- rounded-lg"
     )
+    def responsive_ads_card():
+     return Div(
+        Div(
+            Script(
+                src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
+                crossorigin="anonymous"
+            ),
+            Ins(
+                cls="adsbygoogle",
+                style="display:block",
+                data_ad_client="ca-pub-2090178937498462",
+                data_ad_slot="8188391527",
+                data_ad_format="auto",
+                data_full_width_responsive="true"
+            ),
+            Script('(adsbygoogle = window.adsbygoogle || []).push({});'),
+            cls="bg-base-300 grid h-44 w-full place-items-center rounded-lg shadow"
+        ),
+        cls="card bg-base-100 shadow-xl w-96 mx-auto my-8"
+    )
 
 
     # Generate filter buttons
@@ -612,7 +632,7 @@ def get(request, session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            ads_card(),
+                           responsive_ads_card(),
                             *question_cards,  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid
                         ),
