@@ -534,7 +534,8 @@ def get(request, session):
                     data_ad_client="ca-pub-2090178937498462",
                     data_ad_slot="8018346033"
                 ),
-                Script('(adsbygoogle = window.adsbygoogle || []).push({});')
+                Script('(adsbygoogle = window.adsbygoogle || []).push({});'),
+                cls="w-full"
             ),
             cls="indicator"  # Indicator class for styling
         ),
@@ -637,7 +638,7 @@ def get(request, session):
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                           responsive_ads_card(),
+                            ads_card(),
                             *question_cards,  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid
                         ),
