@@ -527,21 +527,19 @@ def get(request, session):
                     crossorigin="anonymous"
                 ),
                 Ins(
-                    cls="adsbygoogle",
-                    style="display:block",
+                    cls="adsbygoogle w-96",
+                    style="display:block;",
                     data_ad_format="fluid",
                     data_ad_layout_key="-gs-3+1f-3d+2z",
                     data_ad_client="ca-pub-2090178937498462",
                     data_ad_slot="8018346033"
                 ),
-                Script('(adsbygoogle = window.adsbygoogle || []).push({});'),
-                cls="bg-base-300 grid h-44 w-full place-items-center rounded-lg shadow"
+                Script('(adsbygoogle = window.adsbygoogle || []).push({});')
             ),
             cls="indicator"  # Indicator class for styling
         ),
-        cls="card bg-base-100 shadow-xl w-96 mx-auto my-8"
+        cls="card shadow-2xl mx-auto bg-base-300 rounded-lg"
     )
-
     def responsive_ads_card():
      return Div(
         Div(
