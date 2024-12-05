@@ -535,12 +535,13 @@ def get(request, session):
                     data_ad_slot="8018346033"
                 ),
                 Script('(adsbygoogle = window.adsbygoogle || []).push({});'),
-                cls="w-full"
+                cls="bg-base-300 grid h-44 w-full place-items-center rounded-lg shadow"
             ),
             cls="indicator"  # Indicator class for styling
         ),
-        cls="card shadow-2xl mx-auto bg- rounded-lg"
+        cls="card bg-base-100 shadow-xl w-96 mx-auto my-8"
     )
+
     def responsive_ads_card():
      return Div(
         Div(
