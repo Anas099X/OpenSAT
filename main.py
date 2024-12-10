@@ -89,7 +89,8 @@ MathJax = {
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
                         Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
-            Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),      
+            Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
+            Meta(name="clckd" ,content="ce1194de510ea49abaf9e24bc42a5193")  
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
