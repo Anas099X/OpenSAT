@@ -91,6 +91,7 @@ MathJax = {
                         Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
             Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
             Meta(name="mnd-ver" ,content="abysxla5bnhhtfnlvwpq"),
+            Script(src="https://ss.mrmnd.com/native.js"),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -523,7 +524,19 @@ def get(request, session):
         Div(
             Span("Ad", cls="indicator-item badge badge-success"),  # Badge with "Ad"
             Div(
-                data_mndazid="54740ac2-34e1-4bcb-b575-b9e67b4d11e0"
+                Script(
+                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
+                    crossorigin="anonymous"
+                ),
+                Ins(
+                    cls="adsbygoogle w-96",
+                    style="display:block;",
+                    data_ad_format="fluid",
+                    data_ad_layout_key="-gs-3+1f-3d+2z",
+                    data_ad_client="ca-pub-2090178937498462",
+                    data_ad_slot="8018346033"
+                ),
+                Script('(adsbygoogle = window.adsbygoogle || []).push({});')
             ),
             cls="indicator"  # Indicator class for styling
         ),
