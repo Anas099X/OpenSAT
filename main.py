@@ -91,14 +91,14 @@ MathJax = {
                         Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
             Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
             Meta(name="mnd-ver" ,content="abysxla5bnhhtfnlvwpq"),
-            Script(src="https://ss.mrmnd.com/native.js"),
+            Script(src="https://ss.mrmnd.com/banner.js"),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
                 )
 
 
-def hilltopads_ad_card(top:str):
+def mondiad_ad_card(top:str):
      """
      Returns a FastHTML component rendering a custom advertisement card.
      """
@@ -106,28 +106,12 @@ def hilltopads_ad_card(top:str):
      Div(
         # Overlay content
         "Ads provided here",
-        cls="absolute inset-0 flex items-center justify-center bg-success text-white font-bold",
-        style="pointer-events: none; z-index: 10;"
+        cls="absolute inset-0 flex items-center justify-center text-black font-bold",
+        style="z-index: 10;",
+        data_mndbanid="44750640-a162-4ff6-8dfd-0b26283ea347"
      ),
-     Script("""
-     (function(sqghlu){
-        var d = document,
-            s = d.createElement('script'),
-            l = d.scripts[d.scripts.length - 1];
-        s.settings = sqghlu || {};
-        s.src = "//illinformed-imagination.com/bpXHVTs.dqGflA0cYLWZdpi/YwWR5YuSZqX/IM/NexmU9cu/ZqULlskKPlTrUH3AOXT/cz5/NDDTMwtTNfT_cm5wNezNkk0UNjAi";
-        s.async = false;
-        s.referrerPolicy = 'no-referrer-when-downgrade';
-        l.parentNode.insertBefore(s, l);
-     })({});
-     """),
-     Script(src="//optiads.org/lib-js-static-load?width=300&height=50&u=50220&w=10520&z=33085"),
-     Script('''aclib.runBanner({
-            zoneId: '9101210',
-        });'''),
      cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto",
-     style=f"width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
-
+     style=f"max-width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
     )
 
 def menu_button(session):
@@ -523,24 +507,10 @@ def get(request, session):
      return Div(
         Div(
             Span("Ad", cls="indicator-item badge badge-success"),  # Badge with "Ad"
-            Div(
-                Script(
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
-                    crossorigin="anonymous"
-                ),
-                Ins(
-                    cls="adsbygoogle w-96",
-                    style="display:block;",
-                    data_ad_format="fluid",
-                    data_ad_layout_key="-gs-3+1f-3d+2z",
-                    data_ad_client="ca-pub-2090178937498462",
-                    data_ad_slot="8018346033"
-                ),
-                Script('(adsbygoogle = window.adsbygoogle || []).push({});')
-            ),
+            data_mndazid="54740ac2-34e1-4bcb-b575-b9e67b4d11e0",
             cls="indicator"  # Indicator class for styling
         ),
-        cls="card shadow-2xl mx-auto bg-base-300 rounded-lg"
+        cls="card bg-base-200 shadow-2xl w-96 h-20 mx-auto rounded-lg"
     )
     def responsive_ads_card():
      return Div(
@@ -634,12 +604,12 @@ def get(request, session):
                                 ),
                                 cls="mb-4"
                             ),
+                            mondiad_ad_card(35),
                             cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200", 
                             style="max-width:100vh; margin-bottom:4vh;"
                         ),
                         # Questions list section - responsive grid layout with 3 columns max
                         Div(
-                            ads_card(),
                             *question_cards,  # Generates all question cards
                             cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid
                         ),
@@ -1058,7 +1028,7 @@ def get(practice_num:int):
             ),
             Body(
                 Main(
-                     hilltopads_ad_card("3vh"),
+                     mondiad_ad_card("3vh"),
                     Div(
                         H2("Break Time!",
                            style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
