@@ -523,19 +523,7 @@ def get(request, session):
         Div(
             Span("Ad", cls="indicator-item badge badge-success"),  # Badge with "Ad"
             Div(
-                Script(
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
-                    crossorigin="anonymous"
-                ),
-                Ins(
-                    cls="adsbygoogle w-96",
-                    style="display:block;",
-                    data_ad_format="fluid",
-                    data_ad_layout_key="-gs-3+1f-3d+2z",
-                    data_ad_client="ca-pub-2090178937498462",
-                    data_ad_slot="8018346033"
-                ),
-                Script('(adsbygoogle = window.adsbygoogle || []).push({});')
+                data_mndazid="54740ac2-34e1-4bcb-b575-b9e67b4d11e0"
             ),
             cls="indicator"  # Indicator class for styling
         ),
