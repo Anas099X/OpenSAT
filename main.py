@@ -90,9 +90,10 @@ MathJax = {
             Script(src="/_vercel/insights/script.js"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-                        Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
+            Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
             Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
             Meta(name="mnd-ver" ,content="abysxla5bnhhtfnlvwpq"),
+            Script(src="https://ss.mrmnd.com/banner.js"),
             Script(src="https://cdn.tailwindcss.com"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
@@ -103,22 +104,16 @@ def mondiad_ad_card(top:str):
      """
      Returns a FastHTML component rendering a custom advertisement card.
      """
-
-     Ads_API = requests.get('https://hilltopads.com/api/publisher/antiAdBlock?zoneId=5797944&key=CkhwiAY9DDrYcjeUjei1DSdtdAxK0VjLU5h3xotp5VAdTXrYADlnAUkxpDfkFvpn').json()
-
      return Div(
      Div(
         # Overlay content
         "Ads provided here",
-        cls="absolute inset-0 flex items-center justify-center bg-success text-white font-bold",
-        style="pointer-events: none; z-index: 10;"
+        cls="absolute inset-0 flex items-center justify-center text-black font-bold",
+        style="z-index: 10;",
+        data_mndbanid="44750640-a162-4ff6-8dfd-0b26283ea347"
      ),
-     Script(f"""
-     {Ads_API.get("result", []).get("code",[])}
-     """),
      cls="relative card bg-base-200 shadow-xl rounded-lg mx-auto",
-     style=f"width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
-
+     style=f"max-width: 80%; height: 25px; top:{top}; overflow: hidden; display: flex; align-items: center; justify-content: center;"
     )
 
 def menu_button(session):
@@ -554,8 +549,7 @@ def get(request, session):
     return (
         Html(
             Head(
-                Defaults,
-                Script(src="https://ss.mrmnd.com/banner.js")
+                Defaults
             ),
             Body(
                 Header(
