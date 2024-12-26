@@ -605,7 +605,6 @@ def get(request, session):
                                 ),
                                 cls="mb-4"
                             ),
-                            mondiad_ad_card(35),
                             cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200", 
                             style="max-width:100vh; margin-bottom:4vh;"
                         ),
@@ -1029,7 +1028,6 @@ def get(practice_num:int):
             ),
             Body(
                 Main(
-                     mondiad_ad_card("3vh"),
                     Div(
                         H2("Break Time!",
                            style="font-size: 2.25rem; font-weight: 700; text-align: center; margin-bottom: 20px; color: #333;"),
