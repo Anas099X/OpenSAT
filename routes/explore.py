@@ -1,5 +1,10 @@
 from main import *
 
+
+
+
+
+
 @rt("/explore")
 def get(request, session):
 
@@ -54,42 +59,6 @@ def get(request, session):
             for i, x in enumerate(questions)
         ]
 
-    # AdSense card
-    def ads_card():
-     return Div(
-        Div(
-            Span("Ad", cls="indicator-item badge badge-success"),  # Badge with "Ad"
-            data_mndazid="54740ac2-34e1-4bcb-b575-b9e67b4d11e0",
-            cls="indicator"  # Indicator class for styling
-        ),
-        cls="card bg-base-200 shadow-2xl w-96 h-20 mx-auto rounded-lg"
-    )
-    def responsive_ads_card():
-     return Div(
-        Div(
-            Span("Ad", cls="indicator-item badge badge-success"),  # Ad indicator badge
-            Div(
-                Script(
-                    src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-2090178937498462",
-                    crossorigin="anonymous"
-                ),
-                Ins(
-                    cls="adsbygoogle",
-                    style="display:block",
-                    data_ad_client="ca-pub-2090178937498462",
-                    data_ad_slot="8188391527",
-                    data_ad_format="auto",
-                    data_full_width_responsive="true"
-                ),
-                Script('(adsbygoogle = window.adsbygoogle || []).push({});'),
-                cls="card bg-base-200 mx-auto rounded-lg"
-            ),
-            cls="indicator"  # Indicator class for proper positioning
-        ),
-         cls="card bg-base-200 shadow-2xl w-96 mx-auto rounded-lg"
-    )
-
-
     # Generate filter buttons
     filter_buttons = filter_switch()
 
@@ -97,7 +66,7 @@ def get(request, session):
     question_cards = generate_question_cards()
 
     return (
-        Html(
+        Div(
             Head(
                 Defaults
             ),
@@ -167,6 +136,7 @@ def get(request, session):
                     ),
                     cls="container mx-auto py-8"
                 )
-            ), data_theme="retro", cls='bg-base-200'  # DaisyUI's retro theme
+            )
+            ,data_theme="lofi", cls='bg-base-200'  # DaisyUI's lofi theme
         )
     )

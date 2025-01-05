@@ -22,7 +22,7 @@ def get(request, session):
 
     # Return the HTML response
     return (
-        Html(
+        Div(
             Head(
                 Defaults,
                 Script('''function copyHref(button) {
@@ -91,7 +91,7 @@ def get(request, session):
                         cls="container mx-auto py-8 px-4"
                     )
                 )
-            ), data_theme="retro", cls="bg-base-200"
+            ), data_theme="lofi", cls="bg-base-200"
         )
     )
 
@@ -148,6 +148,6 @@ def get(session):
                     ),
                     cls="container mx-auto py-6"
                 )
-            ), data_theme="retro",cls="bg-base-200"
+            ), data_theme="lofi",cls="bg-base-200"
         )
     )

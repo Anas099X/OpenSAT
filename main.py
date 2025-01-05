@@ -9,6 +9,7 @@ from urllib.parse import urlencode
 
 load_dotenv()
 
+
 app = FastHTML(exts='ws')
 rt = app.route
 
@@ -55,12 +56,12 @@ def menu_button(session):
     """Render the home page with Login/Profile management."""
       # Fetch user data from session
     
-    home_button = tutors_button =  A(Div(cls="ti ti-home text-2xl text-neutral"),"Home", href="/", cls="btn btn-primary m-1")
-    practice_button = A(Div(cls="ti ti-highlight text-2xl text-neutral"),"Practice", href="/practice/explore", cls="btn btn-primary m-1")
-    explore_button =  A(Div(cls="ti ti-compass text-2xl text-neutral"),"Explore", href="/explore", cls="btn btn-primary m-1")
-    tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl text-neutral"),"Tutors", href="/tutors", cls="btn btn-primary m-1")
-    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"),"Issue Report", href="https://tally.so/r/312ovO",cls="btn btn-error m-1")
-    github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT",cls="btn btn-ghost m-1")
+    home_button = tutors_button =  A(Div(cls="ti ti-home text-2xl"),"Home", href="/", cls="btn btn-primary btn-rounded btn-outline rounded-lg m-1")
+    practice_button = A(Div(cls="ti ti-highlight text-2xl"),"Practice", href="/practice/explore", cls="btn btn-primary btn-rounded btn-outline rounded-lg m-1")
+    explore_button =  A(Div(cls="ti ti-compass text-2xl"),"Explore", href="/explore", cls="btn btn-primary btn-outline btn-rounded rounded-lg m-1")
+    tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl"),"Tutors", href="/tutors", cls="btn btn-primary btn-outline btn-rounded rounded-lg m-1")
+    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"),"Issue Report", href="https://tally.so/r/312ovO",cls="btn btn-error btn-rounded rounded-lg m-1")
+    github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT",cls="btn btn-ghost btn-rounded rounded-lg m-1")
 
 
     return Div(
@@ -74,6 +75,8 @@ def menu_button(session):
                         )
 
 
+graduation_icon = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'
+graduation_icon_white = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'
 
 
 @rt("/")
@@ -84,25 +87,25 @@ def get(session):
     first_hero = Div(
      Div(
         Div(
-            Span("🎓", cls="text-9xl block mx-auto mb-4"),  # Adjusted spacing
+            Img(src=graduation_icon_white,cls="avatar w-48 mb-3"),  # Adjusted spacing
                 H2(
                     "Question Bank with ", 
-                    U("Endless", cls="text-primary"), 
+                    P("Endless", cls="text-pink puff"), 
                     " Possibilities",
-                    cls="text-4xl lg:text-5xl font-bold text-center mb-4"  # Reduced bottom margin
+                    cls="text-4xl text-white lg:text-5xl font-bold text-center mb-4"  # Reduced bottom margin
                 ),
                 P(
                     "OpenSAT, a free and ",
-                    A(U("open-source"), href="https://github.com/Anas099X/OpenSAT", cls="text-info font-bold"),
+                    A("open-source", href="https://github.com/Anas099X/OpenSAT", cls="text-info font-bold"),
                     " SAT question bank. Dive into a massive pool of SAT practice problems and tests, "
                     "constantly growing thanks to a dedicated community of contributors.",
-                    cls="text-lg lg:text-xl text-center max-w-2xl mx-auto mb-4"  # Reduced bottom margin
+                    cls="text-lg text-white lg:text-xl text-center max-w-2xl mx-auto mb-4"  # Reduced bottom margin
                 ),
                 cls="text-center"
         ),
         cls="hero-content text-center"
     ),
-    cls="hero bg-ghost min-h-screen mb-0"
+    cls="hero bg-black min-h-screen mb-0"
  )
 
 
@@ -119,16 +122,16 @@ def get(session):
                     cls="py-4 text-sm md:text-lg mb-3"
                 ),
                 A(
-                    Div(cls="ti ti-compass text-xl text-neutral"),
+                    Div(cls="ti ti-compass text-xl"),
                     "Explore",
                     href="/explore",
-                    cls="btn btn-primary mt-2"
+                    cls="btn btn-rounded btn-primary btn-outline mt-2"
                 ),
                 cls="text-center md:text-left px-4"  # Added padding for smaller screens
             ),
             cls="hero-content flex-col lg:flex-row items-center"
         ),
-        cls="hero bg-ghost min-h-screen mb-0"
+        cls="hero pink min-h-screen mb-0"
     )
 
     third_hero = Div(
@@ -144,10 +147,10 @@ def get(session):
                     cls="py-4 text-sm md:text-lg mb-3"
                 ),
                 A(
-                    Div(cls="ti ti-highlight text-xl text-neutral"),
+                    Div(cls="ti ti-highlight text-xl"),
                     "Practice",
                     href="/practice/explore",
-                    cls="btn btn-primary mt-2"
+                    cls="btn btn-rounded btn-primary btn-outline mt-2"
                 ),
                 cls="text-center md:text-left px-4"
             ),
@@ -177,23 +180,23 @@ def get(session):
     )
 
     return (
-        Html(
             Head(Defaults),
             Body(
                 Header(
                     Div(
                         Div(
                             A(
-                                Span("🎓", style="font-size:2rem;"),
-                                H1("OpenSAT", cls="text-primary"),
+                                Img(src=graduation_icon,cls="avatar w-8"),
+                                P("opensat", cls="puff text-xl"),
                                 cls="btn rounded-full btn-ghost normal-case text-lg",
                                 href="/"
                             ),
                             cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar shadow-lg bg-ghost"
-                    )
+                        cls="navbar pink"
+                    ),
+                    cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
                     first_hero,
@@ -201,11 +204,11 @@ def get(session):
                     third_hero
                 ),
                 footer,
-                data_theme="retro",
-                cls="bg-base-200"
+                data_theme="lofi",
+                cls=""
             )
         )
-    )
+
 
 
 

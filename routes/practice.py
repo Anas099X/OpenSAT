@@ -15,7 +15,7 @@ def get(session):
 
 
     return (
-        Html(
+        Div(
             Head(
                 Defaults
             ),
@@ -54,7 +54,7 @@ def get(session):
                     ),
                     cls="container mx-auto py-8"
                 )
-            ), data_theme="retro",cls="bg-base-200"
+            ), data_theme="lofi",cls="bg-base-200"
         )
     )
 
@@ -217,7 +217,7 @@ def get(session, practice_num: int, module_number: int):
                 ),
                 id="practice_html"
             ),
-            data_theme="retro",cls="bg-base-200"  # Retro theme enabled
+            data_theme="lofi",cls="bg-base-200"  # lofi theme enabled
         )
     )
 
@@ -253,7 +253,7 @@ def get(practice_num:int):
                         cls="card bg-base-200 w-96 shadow-xl mx-auto py-8"
                     )
                 ),cls="flex items-center justify-center"
-            ),data_theme="retro",cls="bg-base-200"
+            ),data_theme="lofi",cls="bg-base-200"
         )
     )
 
@@ -356,7 +356,7 @@ def get(practice_num: int, session):
             ),
             cls="flex items-center justify-center min-h-screen"
         ),
-        data_theme="retro",cls="bg-base-200"
+        data_theme="lofi",cls="bg-base-200"
     )
 )
     
