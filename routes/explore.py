@@ -58,7 +58,7 @@ def get(request, session):
                     ),
                     cls="flex items-center bg-base-200 hover:bg-base-300 rounded-lg shadow-md p-4 transition-all"
                 ),
-                href=f"/questions?{urlencode({'section': section, 'index': i})}",
+                href=f"/questions?{urlencode({'section': section, 'num': i})}",
                 cls="block w-full mb-3"
             ) if domain.lower() == "any" or domain_lower(x['domain']) == domain.lower() else Div("", hidden=True)
             for i, x in enumerate(questions)

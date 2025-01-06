@@ -53,26 +53,55 @@ MathJax = {
 
 
 def menu_button(session):
-    """Render the home page with Login/Profile management."""
-      # Fetch user data from session
-    
-    home_button = tutors_button =  A(Div(cls="ti ti-home text-2xl"),"Home", href="/", cls="btn btn-primary btn-rounded btn-outline rounded-lg m-1")
-    practice_button = A(Div(cls="ti ti-highlight text-2xl"),"Practice", href="/practice/explore", cls="btn btn-primary btn-rounded btn-outline rounded-lg m-1")
-    explore_button =  A(Div(cls="ti ti-compass text-2xl"),"Explore", href="/explore", cls="btn btn-primary btn-outline btn-rounded rounded-lg m-1")
-    tutors_button =  A(Div(cls="ti ti-bookmarks text-2xl"),"Tutors", href="/tutors", cls="btn btn-primary btn-outline btn-rounded rounded-lg m-1")
-    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"),"Issue Report", href="https://tally.so/r/312ovO",cls="btn btn-error btn-rounded rounded-lg m-1")
-    github_button =  A(Div(cls="ti ti-brand-github text-2xl text-neutral"),"Github", href="https://github.com/Anas099X/OpenSAT",cls="btn btn-ghost btn-rounded rounded-lg m-1")
+    """Render the home page with Login/Profile management using DaisyUI drawer."""
 
+    # Define menu items as links
+    home_button = A(Div(cls="ti ti-home text-2xl"), "Home", href="/", cls="btn btn-wide btn-primary btn-rounded btn-outline rounded-lg m-1.5")
+    practice_button = A(Div(cls="ti ti-highlight text-2xl"), "Practice", href="/practice/explore", cls="btn btn-wide btn-primary btn-rounded btn-outline rounded-lg m-1.5")
+    explore_button = A(Div(cls="ti ti-compass text-2xl"), "Explore", href="/explore", cls="btn btn-wide btn-primary btn-outline btn-rounded rounded-lg m-1.5")
+    tutors_button = A(Div(cls="ti ti-bookmarks text-2xl"), "Tutors", href="/tutors", cls="btn btn-wide btn-primary btn-outline btn-rounded rounded-lg m-1.5")
+    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"), "Issue Report", href="https://tally.so/r/312ovO", cls="btn btn-wide btn-error btn-rounded rounded-lg m-1.5")
+    github_button = A(Div(cls="ti ti-brand-github text-2xl text-neutral"), "Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-wide btn-ghost btn-rounded rounded-lg m-1.5")
 
+    # Drawer structure
     return Div(
-                            Div(
-                             Div(
-                                Div(cls="ti ti-category text-xl text-neutral"),"Menu",role="button",tabindex="0",cls="btn btn-ghost rounded"),
-                                     Ul(home_button,explore_button,practice_button,tutors_button,report_button,
-                            tabindex="0", cls="dropdown-content menu menu-sm bg-base-200 rounded-box z-[1] w-44 p-2 shadow")
-                                    ,cls="dropdown dropdown-bottom dropdown-end"),
-                            cls="navbar-end space-x-2"
-                        )
+        Div(
+            # Drawer input (toggle)
+            Input(
+                id="menu-drawer",
+                type="checkbox",
+                cls="drawer-toggle"
+            ),
+            # Drawer content
+            Div(
+                Label("Menu", cls="drawer-button btn btn-primary btn-outline btn-rounded", **{"for": "menu-drawer"}),  # Open drawer button
+                cls="drawer-content"
+            ),
+            # Drawer sidebar (menu items)
+            Div(
+                Label(
+                    cls="drawer-overlay",
+                    **{"for": "menu-drawer"}  # Close drawer overlay
+                ),
+                Div(
+                    Div(
+                        Div("Navigation", cls="flex justify-center text-xl font-bold mb-4"),
+                        home_button,
+                        practice_button,
+                        explore_button,
+                        tutors_button,
+                        report_button,
+                        github_button,
+                        cls="menu bg-base-200 rounded-lg text-base-content mt-4 max-w-2xl"
+                    ),
+                    cls="p-4"
+                ),
+                cls="drawer-side"
+            ),
+            cls="drawer drawer-end navbar-end space-x-2"
+        ),
+        cls="navbar-end space-x-2"
+    )
 
 
 graduation_icon = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'

@@ -92,7 +92,9 @@ def get(request, session):
                         cls="container mx-auto py-8 px-4"
                     )
                 )
-            ), data_theme="lofi", cls="pink"
+                , cls="pink"
+            )
+            ,data_theme="lofi", cls="pink"
         )
     )
 
