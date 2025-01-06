@@ -76,7 +76,7 @@ def menu_button(session):
 
 
 graduation_icon = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'
-graduation_icon_white = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'
+graduation_icon_white = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/0fd7e3b980f71fe315b286fec9c87d1d53cc39ed/public/graduation-cap-solid-white.svg'
 
 
 @rt("/")
@@ -156,7 +156,7 @@ def get(session):
             ),
             cls="hero-content flex-col lg:flex-row-reverse items-center"
         ),
-        cls="hero bg-ghost min-h-screen mb-0"
+        cls="hero bg-base-200 min-h-screen mb-0"
     )
 
     footer = Footer(
@@ -176,7 +176,7 @@ def get(session):
                 cls="grid grid-flow-col gap-4"
             )
         ),
-        cls="footer bg-base-300 text-base-content p-10"
+        cls="footer bg-base-200 text-base-content p-10"
     )
 
     return (

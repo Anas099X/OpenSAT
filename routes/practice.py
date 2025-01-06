@@ -24,16 +24,17 @@ def get(session):
                     Div(
                         Div(
                             A(
-                                Span("🎓", style="font-size:2rem;"),
-                                H1("OpenSAT", cls="text-primary"),
+                                Img(src=graduation_icon, cls="avatar w-8"),
+                                P("opensat", cls="puff text-xl"),
                                 cls="btn rounded-full btn-ghost normal-case text-lg",
                                 href="/"
                             ),
                             cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar shadow bg-ghost"
-                    )
+                        cls="navbar pink"
+                    ),
+                    cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
                     Div(
@@ -124,12 +125,18 @@ def get(session, practice_num: int, module_number: int):
                 Header(
                     Div(
                         Div(
-                            Div(f"Module {module_number}: {module_title()}",cls="text-xl font-bold"),
-                            cls="navbar"
+                            A(
+                                Img(src=graduation_icon, cls="avatar w-8"),
+                                P("opensat", cls="puff text-xl"),
+                                cls="btn rounded-full btn-ghost normal-case text-lg",
+                                href="/"
+                            ),
+                            cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar shadow bg-ghost"
-                    )
+                        cls="navbar pink"
+                    ),
+                    cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
                   Div(
@@ -351,7 +358,7 @@ def get(practice_num: int, session):
                         ),
                         cls="overflow-x-auto px-4"  # Responsive container for table
                     ),
-                    cls="card bg-base-100 shadow-xl mx-auto w-full max-w-3xl py-8"
+                    cls="card bg-base-200 shadow-xl mx-auto w-full max-w-3xl py-8"
                 )
             ),
             cls="flex items-center justify-center min-h-screen"

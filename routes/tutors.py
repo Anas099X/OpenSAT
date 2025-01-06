@@ -15,17 +15,18 @@ def get(session):
                 Header(
                     Div(
                         Div(
-                           A(
-                                Span("🎓", style="font-size:2rem;"),
-                                H1("OpenSAT", cls="text-primary"),
+                            A(
+                                Img(src=graduation_icon, cls="avatar w-8"),
+                                P("opensat", cls="puff text-xl"),
                                 cls="btn rounded-full btn-ghost normal-case text-lg",
                                 href="/"
                             ),
-                            cls="navbar"
+                            cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar shadow bg-ghost"
-                    )
+                        cls="navbar pink"
+                    ),
+                    cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
                     Div(

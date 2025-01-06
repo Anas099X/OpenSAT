@@ -1,10 +1,5 @@
 from main import *
 
-
-
-
-
-
 @rt("/explore")
 def get(request, session):
 
@@ -37,33 +32,43 @@ def get(request, session):
             A(
                 f["label"],
                 href=f"?{urlencode({'section': section, 'domain': f['value']})}",
-                cls=f"btn btn-secondary btn-sm {'btn-active' if domain == f['value'] else ''}"
+                cls=f"btn btn-pink btn-rounded btn-outline btn-sm {'btn-active' if domain == f['value'] else ''}"
             )
             for f in category_filters
         ]
 
-    # Question card generation function
-    def generate_question_cards():
+    # Question list view generation function
+    def generate_question_list_view():
         questions = question_objects(section)  # Fetch questions for the section
         return [
             A(
                 Div(
-                    Div(Div(cls="ti ti-books text-4xl text-neutral"), cls="text-3xl"),  # Icon
-                    Div(f'Question #{i + 1}', cls="font-bold text-xl"),  # Question title
-                    Div(x['domain'], cls="font-bold text-pink-400"),  # Domain badge
-                    cls="card-body"
+                    Div(  # Icon section
+                        Div(cls="ti ti-books text-4xl text-primary"),  # Example icon, adjust as needed
+                        cls="flex-shrink-0 p-2"
+                    ),
+                    Div(  # Content section
+                        H2(f"Question #{i + 1}", cls="font-bold text-lg"),  # Question title
+                        P(x["domain"], cls="text-sm text-gray-500"),  # Domain or category
+                        Div(  # Metadata (e.g., stats)
+                            Div(f"Difficulty: {x.get('difficulty', 'N/A')}", cls="text-xs text-gray-400"),
+                            cls="flex space-x-4 mt-1"
+                        ),
+                        cls="flex-grow"
+                    ),
+                    cls="flex items-center bg-base-200 hover:bg-base-300 rounded-lg shadow-md p-4 transition-all"
                 ),
-                cls="card bg-base-200 shadow-2xl w-96 mx-auto hover:bg-base-300 transition-all rounded-lg",
-                href=f"/questions?{urlencode({'section': section, 'index': i})}"
-            ) if domain.lower() == "any" or domain_lower(x['domain']) == domain.lower() else Div('', hidden=True)
+                href=f"/questions?{urlencode({'section': section, 'index': i})}",
+                cls="block w-full mb-3"
+            ) if domain.lower() == "any" or domain_lower(x['domain']) == domain.lower() else Div("", hidden=True)
             for i, x in enumerate(questions)
         ]
 
     # Generate filter buttons
     filter_buttons = filter_switch()
 
-    # Generate question cards
-    question_cards = generate_question_cards()
+    # Generate question list view
+    question_list_view = generate_question_list_view()
 
     return (
         Div(
@@ -75,68 +80,73 @@ def get(request, session):
                     Div(
                         Div(
                             A(
-                                Span("🎓", style="font-size:2rem;"),
-                                H1("OpenSAT", cls="text-primary"),
+                                Img(src=graduation_icon, cls="avatar w-8"),
+                                P("opensat", cls="puff text-xl"),
                                 cls="btn rounded-full btn-ghost normal-case text-lg",
                                 href="/"
                             ),
                             cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar shadow bg-ghost"
-                    )
+                        cls="navbar pink"
+                    ),
+                    cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
                     Div(
-                        # Filters section - centered and styled
                         Div(
-                            H1(
-                                Div(cls="ti ti-filter text-4xl text-neutral"), 
-                                "Filters", 
-                                cls="text-2xl font-bold mb-4"
-                            ),
-                            # Section Filters with Labels
                             Div(
-                                Div("Section:", cls="text-sm text-gray-600 font-semibold mb-2"),  # Section Label
-                                Div(
-                                    A(
-                                        Div(cls="ti ti-a-b-2 text-2xl text-neutral"), 
-                                        "English",
-                                        href=f"?{urlencode({'section': 'english', 'domain': 'any'})}",
-                                        cls=f"btn btn-primary btn-sm {'btn-active' if section == 'english' else ''}"
-                                    ),
-                                    A(
-                                        Div(cls="ti ti-math-symbols text-2xl text-neutral"), 
-                                        "Math",
-                                        href=f"?{urlencode({'section': 'math', 'domain': 'any'})}",
-                                        cls=f"btn btn-primary btn-sm {'btn-active' if section == 'math' else ''}"
-                                    ),
-                                    cls="btn-group space-x-2"
+                                H1(
+                                    Div(cls="ti ti-filter text-4xl text-neutral"),
+                                    "Filters",
+                                    cls="text-2xl font-bold mb-4"
                                 ),
-                                cls="mb-6"  # Adds spacing between section and domain filters
-                            ),
-                            # Domain Filters with Labels
-                            Div(
-                                Div("Domain:", cls="text-sm text-gray-600 font-semibold mb-2"),  # Domain Label
+                                # Section Filters with Labels
                                 Div(
-                                    *filter_buttons,  # Dynamically generated domain filter buttons
-                                    cls="flex flex-wrap gap-2"
+                                    Div("Section:", cls="text-sm text-gray-600 font-semibold mb-2"),  # Section Label
+                                    Div(
+                                        A(
+                                            Div(cls="ti ti-a-b-2 text-2xl"),
+                                            "English",
+                                            href=f"?{urlencode({'section': 'english', 'domain': 'any'})}",
+                                            cls=f"btn btn-primary btn-rounded btn-outline btn-sm {'btn-active' if section == 'english' else ''}"
+                                        ),
+                                        A(
+                                            Div(cls="ti ti-math-symbols text-2xl"),
+                                            "Math",
+                                            href=f"?{urlencode({'section': 'math', 'domain': 'any'})}",
+                                            cls=f"btn btn-primary btn-rounded btn-outline btn-sm {'btn-active' if section == 'math' else ''}"
+                                        ),
+                                        cls="btn-group space-x-2"
+                                    ),
+                                    cls="mb-6"  # Adds spacing between section and domain filters
                                 ),
-                                cls="mb-4"
+                                # Domain Filters with Labels
+                                Div(
+                                    Div("Domain:", cls="text-sm text-gray-600 font-semibold mb-2"),  # Domain Label
+                                    Div(
+                                        *filter_buttons,  # Dynamically generated domain filter buttons
+                                        cls="flex flex-wrap gap-2"
+                                    ),
+                                    cls="mb-4"
+                                ),
+                                cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200 max-w-xl mt-10"
                             ),
-                            cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200", 
-                            style="max-width:100vh; margin-bottom:4vh;"
+                            cls="card bg-ghost max-w-lg rounded-box flex-grow"
                         ),
-                        # Questions list section - responsive grid layout with 3 columns max
+                        Div(cls="divider divider-horizontal p-3"),
                         Div(
-                            *question_cards,  # Generates all question cards
-                            cls="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4"  # Responsive grid
+                            Div(
+                                *question_list_view,  # Generates all questions in list view
+                                cls="overflow-auto max-h-[500px]"  # Adds scrollable overflow to questions
+                            ),
+                            cls="card bg-ghost rounded-box flex flex-grow"
                         ),
-                        cls="flex flex-col space-y-6"
+                        cls="flex w-full flex-col lg:flex-row"
                     ),
-                    cls="container mx-auto py-8"
+                    cls="container mx-auto py-4"
                 )
-            )
-            ,data_theme="lofi", cls='bg-base-200'  # DaisyUI's lofi theme
+            ),
+            data_theme="lofi", cls="pink"  # DaisyUI's lofi theme
         )
     )
