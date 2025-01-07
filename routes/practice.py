@@ -42,10 +42,10 @@ def get(session):
                         *[
                             Div(
                                 A(
-                                    Div(Div(cls="ti ti-highlight text-4xl text-neutral"), cls="text-3xl"),  # Icon for each module
-                                    H2(module['name'], cls="card-title text-xl font-bold mt-1"),  # Module name
-                                    P("Practice Test", cls="text-primary font-bold"),
-                                    cls="card bg-base-200 shadow-xl w-96 mx-auto hover:bg-base-300 transition-all rounded-lg p-8",
+                                    Div(Div(cls="ti ti-highlight text-4xl text-gray-700"), cls="text-3xl"),  # Icon for each module
+                                    H2(module['name'], cls="card-title text-xl font-bold mt-1 text-gray-700"),  # Module name
+                                    P("Practice Test", cls="text-gray-700 font-bold"),
+                                    cls="card bg-base-200 shadow-xl w-96 mx-auto hover:bg-gray-300 transition-all rounded-lg p-8",
                                     href=f"/practice/{i}/module/1" 
                                 )
                             )
@@ -55,7 +55,7 @@ def get(session):
                     ),
                     cls="container mx-auto py-8"
                 )
-            ), data_theme="lofi",cls="bg-base-200"
+            ), data_theme="lofi",cls="pink"
         )
     )
 
@@ -224,7 +224,7 @@ def get(session, practice_num: int, module_number: int):
                 ),
                 id="practice_html"
             ),
-            data_theme="lofi",cls="bg-base-200"  # lofi theme enabled
+            data_theme="lofi",cls="pink"  # lofi theme enabled
         )
     )
 
@@ -363,7 +363,7 @@ def get(practice_num: int, session):
             ),
             cls="flex items-center justify-center min-h-screen"
         ),
-        data_theme="lofi",cls="bg-base-200"
+        data_theme="lofi",cls="pink"
     )
 )
     

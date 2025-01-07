@@ -57,11 +57,11 @@ def menu_button(session):
 
     # Define menu items as links
     home_button = A(Div(cls="ti ti-home text-2xl"), "Home", href="/", cls="btn btn-wide btn-primary btn-rounded btn-outline rounded-lg m-1.5")
-    practice_button = A(Div(cls="ti ti-highlight text-2xl"), "Practice", href="/practice/explore", cls="btn btn-wide btn-primary btn-rounded btn-outline rounded-lg m-1.5")
+    practice_button = A(Div(cls="ti ti-highlight text-2xl"), "Practice", href="/practice/explore", cls="btn btn-primary btn-rounded btn-outline rounded-lg m-1.5")
     explore_button = A(Div(cls="ti ti-compass text-2xl"), "Explore", href="/explore", cls="btn btn-wide btn-primary btn-outline btn-rounded rounded-lg m-1.5")
-    tutors_button = A(Div(cls="ti ti-bookmarks text-2xl"), "Tutors", href="/tutors", cls="btn btn-wide btn-primary btn-outline btn-rounded rounded-lg m-1.5")
-    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"), "Issue Report", href="https://tally.so/r/312ovO", cls="btn btn-wide btn-error btn-rounded rounded-lg m-1.5")
-    github_button = A(Div(cls="ti ti-brand-github text-2xl text-neutral"), "Github", href="https://github.com/Anas099X/OpenSAT", cls="btn btn-wide btn-ghost btn-rounded rounded-lg m-1.5")
+    tutors_button = A(Div(cls="ti ti-bookmarks text-2xl"), "Tutors", href="/tutors", cls="btn btn-primary btn-outline btn-rounded rounded-lg m-1.5")
+    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"), "Issue Report", href="https://tally.so/r/312ovO", cls="btn btn-error btn-rounded rounded-lg m-1.5")
+    github_button = A(Div(cls="ti ti-brand-github text-2xl"), "Github", href="https://github.com/Anas099X/OpenSAT", cls="btn bg-blue-700 btn-outline btn-rounded rounded-lg m-1.5")
 
     # Drawer structure
     return Div(
@@ -90,9 +90,7 @@ def menu_button(session):
                         practice_button,
                         explore_button,
                         tutors_button,
-                        report_button,
-                        github_button,
-                        cls="menu bg-base-200 rounded-lg text-base-content mt-4 max-w-2xl"
+                        cls="menu pink rounded-lg text-base-content mt-4 max-w-2xl"
                     ),
                     cls="p-4"
                 ),
@@ -160,7 +158,7 @@ def get(session):
             ),
             cls="hero-content flex-col lg:flex-row items-center"
         ),
-        cls="hero pink min-h-screen mb-0"
+        cls="hero rounded-3xl pink min-h-screen mb-0"
     )
 
     third_hero = Div(

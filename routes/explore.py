@@ -44,11 +44,11 @@ def get(request, session):
             A(
                 Div(
                     Div(  # Icon section
-                        Div(cls="ti ti-books text-4xl text-primary"),  # Example icon, adjust as needed
+                        Div(cls="ti ti-books text-4xl text-gray-700"),  # Example icon, adjust as needed
                         cls="flex-shrink-0 p-2"
                     ),
                     Div(  # Content section
-                        H2(f"Question #{i + 1}", cls="font-bold text-lg"),  # Question title
+                        H2(f"Question #{i + 1}", cls="font-bold text-lg text-gray-700"),  # Question title
                         P(x["domain"], cls="text-sm text-gray-500"),  # Domain or category
                         Div(  # Metadata (e.g., stats)
                             Div(f"Difficulty: {x.get('difficulty', 'N/A')}", cls="text-xs text-gray-400"),
@@ -93,13 +93,15 @@ def get(request, session):
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
+                    H1("Explore", cls="text-4xl font-extrabold text-center my-8 text-gray-700"),
                     Div(
+                
                         Div(
                             Div(
                                 H1(
-                                    Div(cls="ti ti-filter text-4xl text-neutral"),
+                                    Div(cls="ti ti-filter text-4xl text-gray-700"),
                                     "Filters",
-                                    cls="text-2xl font-bold mb-4"
+                                    cls="text-2xl font-bold mb-4 text-gray-700"
                                 ),
                                 # Section Filters with Labels
                                 Div(
@@ -109,7 +111,7 @@ def get(request, session):
                                             Div(cls="ti ti-a-b-2 text-2xl"),
                                             "English",
                                             href=f"?{urlencode({'section': 'english', 'domain': 'any'})}",
-                                            cls=f"btn btn-primary btn-rounded btn-outline btn-sm {'btn-active' if section == 'english' else ''}"
+                                            cls=f"btn btn-primary text-gray-700 btn-rounded btn-outline btn-sm {'btn-active' if section == 'english' else ''}"
                                         ),
                                         A(
                                             Div(cls="ti ti-math-symbols text-2xl"),
