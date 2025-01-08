@@ -71,7 +71,8 @@ def get(request, session):
     question_list_view = generate_question_list_view()
 
     return (
-        Div(
+        
+            site_title,
             Head(
                 Defaults
             ),
@@ -147,8 +148,9 @@ def get(request, session):
                         cls="flex w-full flex-col lg:flex-row"
                     ),
                     cls="container mx-auto py-4"
-                )
-            ),
-            data_theme="lofi", cls="pink"  # DaisyUI's lofi theme
-        )
+                ),
+                data_theme="lofi", cls="pink"
+            )
+              # DaisyUI's lofi theme
+        
     )

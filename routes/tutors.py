@@ -6,7 +6,7 @@ def get(session):
     firestore_docs = db.collection('users').stream()
 
     return (
-        Div(
+        site_title,
             Head(
                 Defaults
             ),
@@ -80,7 +80,7 @@ def get(session):
                     cls="pink"
                 ),
                 cls="pink w-full"
-            ),
-            data_theme="lofi", cls="pink w-full"
+                ,data_theme="lofi"
+            )
         )
-    )
+    

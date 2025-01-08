@@ -15,7 +15,7 @@ def get(session):
 
 
     return (
-        Div(
+            site_title,
             Head(
                 Defaults
             ),
@@ -55,8 +55,9 @@ def get(session):
                     ),
                     cls="container mx-auto py-8"
                 )
-            ), data_theme="lofi",cls="pink"
-        )
+             ,data_theme="lofi",cls="pink"
+            )
+        
     )
 
 

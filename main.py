@@ -13,13 +13,15 @@ load_dotenv()
 app = FastHTML(exts='ws')
 rt = app.route
 
+site_title = Title("OpenSAT - Free SAT Question Bank with Endless Possibilities"),
+
 Defaults = (Meta(name="viewport", content="width=device-width"),
             Meta(property="og:title" ,content="OpenSAT: SAT Question Bank with Endless Possibilities"),
             Meta(property="og:description" ,content="OpenSAT, a free and open-source SAT question bank. Dive into a massive pool of SAT practice problems, constantly growing thanks to a dedicated community of contributors."),
             Meta(property="og:image" ,content="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true"),
             Meta(property="og:url" ,content="https://opensat.fun/"),
             Meta(property="og:type" ,content="website"),
-            Title("OpenSAT - Free SAT Question Bank with Endless Possibilities"),
+            site_title,
             Link(rel="icon",href="public/graduation-cap-solid.svg", sizes="any", type="image/svg+xml"),
             Link(rel="stylesheet" ,href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css"),
             Script('''
@@ -207,6 +209,7 @@ def get(session):
     )
 
     return (
+        site_title,
             Head(Defaults),
             Body(
                 Header(
