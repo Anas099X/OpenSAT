@@ -42,9 +42,9 @@ def get(session):
                         *[
                             Div(
                                 A(
-                                    Div(Div(cls="ti ti-highlight text-4xl text-gray-700"), cls="text-3xl"),  # Icon for each module
-                                    H2(module['name'], cls="card-title text-xl font-bold mt-1 text-gray-700"),  # Module name
-                                    P("Practice Test", cls="text-gray-700 font-bold"),
+                                    Div(Div(cls="ti ti-highlight text-4xl text-gray-900"), cls="text-3xl"),  # Icon for each module
+                                    H2(module['name'], cls="card-title text-xl font-bold mt-1 text-gray-900"),  # Module name
+                                    P("Practice Test", cls="text-gray-900 font-bold"),
                                     cls="card bg-base-200 shadow-xl w-96 mx-auto hover:bg-gray-300 transition-all rounded-lg p-8",
                                     href=f"/practice/{i}/module/1" 
                                 )
