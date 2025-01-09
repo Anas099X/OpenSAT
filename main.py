@@ -160,7 +160,7 @@ def get(session):
             ),
             cls="hero-content flex-col lg:flex-row items-center"
         ),
-        cls="hero rounded-3xl pink min-h-screen mb-0"
+        cls="hero pink min-h-screen mb-0"
     )
 
     third_hero = Div(
