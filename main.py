@@ -202,7 +202,7 @@ def get(session):
             H6("Links", cls="footer-title"),
             Div(
                 A(cls="ti ti-brand-github-filled text-2xl", href="https://github.com/Anas099X/OpenSAT"),
-                A(cls="ti ti-brand-discord-filled text-2xl",href="https://discord.gg/7KNg9zHRUk"),
+                A(cls="ti ti-brand-discord-filled text-2xl",href="https://discord.gg/nrXfMDvU"),
                 A(cls="ti ti-brand-instagram-filled text-2xl",href="https://www.instagram.com/anas099x/"),
                 cls="grid grid-flow-col gap-4"
             )
