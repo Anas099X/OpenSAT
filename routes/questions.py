@@ -90,9 +90,9 @@ def get(request, session):
                             cls="card bg-base-200 shadow-lg mx-auto w-full max-w-2xl"
                         ),
                         cls="container mx-auto py-8 px-4"
-                    )
+                    ),cls="pink" 
                 )
-               ,data_theme="lofi",cls="pink" 
+               ,data_theme="lofi"
             )
         
 )
