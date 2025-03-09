@@ -12,27 +12,15 @@ def get(session):
             ),
             Body(
                 Header(
-                    Div(
-                        Div(
-                            A(
-                                Img(src=graduation_icon, cls="avatar w-8"),
-                                P("opensat", cls="puff text-xl"),
-                                cls="btn rounded-full btn-ghost normal-case text-lg",
-                                href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        menu_button(session),
-                        cls="navbar "
-                    ),
+                    navbar,
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
                     Div(
-                        H1("Top SAT Prep Books", cls="text-4xl font-extrabold text-center my-8 text-gray-700"),
+                        H1("Top SAT Prep Books", cls="text-4xl font-extrabold text-center my-8"),
                         P(
                             "Explore our curated selection of the best SAT preparation books. Click on the links to learn more or purchase your copy.",
-                            cls="text-center text-gray-600 mb-10 text-lg"
+                            cls="text-center mb-10 text-lg"
                         ),
                         # SAT Books in grid format
                         Div(
@@ -58,7 +46,7 @@ def get(session):
                                         Div(
                                             P(
                                                 doc.to_dict()['description'],
-                                                cls="text-gray-600 text-center text-sm mb-4 line-clamp-3"  # Truncated to 3 lines
+                                                cls="text-center text-sm mb-4 line-clamp-3"  # Truncated to 3 lines
                                             ),
                                             cls="flex-1"  # Ensures content fills available space
                                         ),
@@ -67,12 +55,12 @@ def get(session):
                                             A(
                                                 "Buy Now", 
                                                 href=doc.to_dict()['referral_link'], 
-                                                cls="btn btn-primary btn-outline w-full",
+                                                cls="btn btn-warning w-full",
                                                 target="_blank",  # Opens the link in a new tab
                                             ),
                                             cls="mt-4"
                                         ),
-                                        cls="card bg-white shadow-md rounded-lg p-6 flex flex-col justify-between transition hover:shadow-lg h-full"
+                                        cls="card bg-base-300 shadow-md rounded-lg p-6 flex flex-col justify-between transition hover:shadow-lg h-full"
                                     ),
                                     cls="w-full max-w-xs mx-auto"
                                 ) for doc in firestore_docs
@@ -83,7 +71,7 @@ def get(session):
                     ),
                     cls=""
                 ),
-                cls=" w-full",
+                cls="bg-base-200 w-full",
                 data_theme="silk"
             )
         )

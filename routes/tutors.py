@@ -13,25 +13,16 @@ def get(session):
             Body(
                 Header(
                     Div(
-                        Div(
-                            A(
-                                Img(src=graduation_icon, cls="avatar w-8"),
-                                P("opensat", cls="puff text-xl"),
-                                cls="btn rounded-full btn-ghost normal-case text-lg",
-                                href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        menu_button(session),
+                        navbar,
                         cls="navbar "
                     ),
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
                     Div(
-                        H1("Meet Your Tutors", cls="text-4xl font-extrabold text-center my-8 text-gray-700"),
+                        H1("Meet Your Tutors", cls="text-4xl font-extrabold text-center my-8"),
                         P("Browse through a list of available tutors and find the perfect match for your learning needs.", 
-                          cls="text-center text-gray-500 mb-8 text-lg"),
+                          cls="text-center mb-8 text-lg"),
                         # Tutor cards in grid format
                         Div(
                             *[
@@ -43,13 +34,13 @@ def get(session):
                                                 Img(src=doc.to_dict()['banner'], cls="w-20 h-20 rounded-full shadow-lg mx-auto"),
                                                 cls="text-center"
                                             ),
-                                            H3(doc.to_dict()['username'], cls="text-2xl font-bold text-gray-800 mt-4 text-center"),
+                                            H3(doc.to_dict()['username'], cls="text-2xl font-bold mt-4 text-center"),
                                             cls="mb-4"
                                         ),
                                         # Card Body: Description and Details
                                         Div(
                                             P(doc.to_dict()['description'], 
-                                              cls="text-gray-600 text-center text-base mb-4"),
+                                              cls=" text-center text-base mb-4"),
                                             Div(
                                                 P(f"🕒 Availability: {doc.to_dict()['availability']}", 
                                                   cls="text-base text-gray-700 font-medium"),
@@ -68,7 +59,7 @@ def get(session):
                                             ),
                                             cls="mt-4"
                                         ),
-                                        cls="card bg-gray-50 shadow-md rounded-lg p-6 flex flex-col justify-between transition hover:bg-gray-100 hover:shadow-lg h-full"
+                                        cls="card bg-base-300 shadow-md rounded-lg p-6 flex flex-col justify-between transition hover:bg-gray-100 hover:shadow-lg h-full"
                                     ),
                                     cls="w-full max-w-xs mx-auto"
                                 ) for doc in firestore_docs
@@ -79,7 +70,7 @@ def get(session):
                     ),
                     cls=""
                 ),
-                cls=" w-full"
+                cls="bg-base-200 w-full"
                 ,data_theme="silk"
             )
         )
