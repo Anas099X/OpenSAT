@@ -40,13 +40,14 @@ MathJax = {
             Script(src="https://unpkg.com/htmx.org@2.0.2"),
             Script(src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"),
             Script(src="/_vercel/insights/script.js"),
-            Link(href="https://cdn.jsdelivr.net/npm/daisyui@4.12.12/dist/full.min.css",rel="stylesheet",type="text/css"),
+            Link(href="https://cdn.jsdelivr.net/npm/daisyui@5",rel="stylesheet",type="text/css"),
+            Link(href="https://cdn.jsdelivr.net/npm/daisyui@5.0.0/themes.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
             Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
             Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
             Meta(name="mnd-ver" ,content="abysxla5bnhhtfnlvwpq"),
             Script(src="https://ss.mrmnd.com/banner.js"),
-            Script(src="https://cdn.tailwindcss.com"),
+            Script(src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
                 )
@@ -54,57 +55,90 @@ MathJax = {
 
 
 
-def menu_button(session):
-    """Render the home page with Login/Profile management using DaisyUI drawer."""
+def menu_button():
+    """Render a proper menu card with navigation links using DaisyUI's drawer component."""
 
-    # Define menu items as links
-    home_button = A(Div(cls="ti ti-home text-2xl"), "Home", href="/", cls="btn btn-wide btn-primary btn-rounded btn-outline rounded-lg m-1.5")
-    practice_button = A(Div(cls="ti ti-highlight text-2xl"), "Practice", href="/practice/explore", cls="btn btn-primary btn-rounded btn-outline rounded-lg m-1.5")
-    explore_button = A(Div(cls="ti ti-compass text-2xl"), "Explore", href="/explore", cls="btn btn-wide btn-primary btn-outline btn-rounded rounded-lg m-1.5")
-    tutors_button = A(Div(cls="ti ti-bookmarks text-2xl"), "Tutors", href="/tutors", cls="btn btn-primary btn-outline btn-rounded rounded-lg m-1.5")
-    books_button = A(Div(cls="ti ti-book-2 text-2xl"), "Prep Books", href="/books", cls="btn btn-primary btn-outline btn-rounded rounded-lg m-1.5")
-    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl text-neutral"), "Issue Report", href="https://tally.so/r/312ovO", cls="btn btn-error btn-rounded rounded-lg m-1.5")
-    github_button = A(Div(cls="ti ti-brand-github text-2xl"), "Github", href="https://github.com/Anas099X/OpenSAT", cls="btn bg-blue-700 btn-outline btn-rounded rounded-lg m-1.5")
+    # Define menu items
+    menu_items = [
+        ("ti ti-home", "Home", "/"),
+        ("ti ti-highlight", "Practice", "/practice/explore"),
+        ("ti ti-compass", "Explore", "/explore"),
+        ("ti ti-bookmarks", "Tutors", "/tutors"),
+        ("ti ti-book-2", "Prep Books", "/books"),
+    ]
+
+    # Create menu buttons dynamically
+    menu_buttons = [
+        A(Div(cls=f"{icon} text-2xl"), label, href=link, cls="btn btn-warning btn-wide btn-rounded m-1")
+        for icon, label, link in menu_items
+    ]
+
+    # Special buttons
+    report_button = A(Div(cls="ti ti-exclamation-circle text-2xl"), "Issue Report",
+                      href="https://tally.so/r/312ovO", cls="btn btn-error btn-wide btn-rounded m-1")
+    github_button = A(Div(cls="ti ti-brand-github text-2xl"), "GitHub",
+                      href="https://github.com/Anas099X/OpenSAT", cls="btn btn-info btn-wide btn-rounded m-1")
 
     # Drawer structure
     return Div(
         Div(
-            # Drawer input (toggle)
-            Input(
-                id="menu-drawer",
-                type="checkbox",
-                cls="drawer-toggle"
-            ),
-            # Drawer content
+            # Drawer toggle checkbox (hidden)
+            Input(id="menu-drawer", type="checkbox", cls="drawer-toggle"),
+
+            # **Drawer Button (Opens Menu)**
             Div(
-                Label("Menu", cls="drawer-button btn btn-primary btn-outline btn-rounded", **{"for": "menu-drawer"}),  # Open drawer button
+                Label("☰ Menu", cls="btn btn-warning btn-active btn-outline justify-end", **{"for": "menu-drawer"}),
                 cls="drawer-content"
             ),
-            # Drawer sidebar (menu items)
+
+            # **Drawer Sidebar (Menu Items)**
             Div(
-                Label(
-                    cls="drawer-overlay",
-                    **{"for": "menu-drawer"}  # Close drawer overlay
-                ),
+                Label(cls="drawer-overlay", **{"for": "menu-drawer"}),  # Click outside to close
+
+                # **Menu Card**
                 Div(
                     Div(
-                        Div("Navigation", cls="flex justify-center text-xl font-bold mb-4"),
-                        home_button,
-                        practice_button,
-                        explore_button,
-                        tutors_button,
-                        books_button,
-                        cls="menu pink rounded-lg text-base-content mt-4 max-w-2xl"
+                        # **Menu Header**
+                        Div(
+                            H2("Navigation", cls="text-xl font-bold text-center p-2"),
+                            cls="relative text-center"
+                        ),
+                        Hr(cls="my-2"),
+
+                        # **Menu Items**
+                        *menu_buttons,
+                        Hr(cls="my-2"),
+
+                        # **Footer Buttons (Report & GitHub)**
+                        report_button,
+                        github_button,
+
+                        cls="flex flex-col items-center"
                     ),
-                    cls="p-4"
+                    cls="bg-base-300 shadow-lg rounded-lg w-80 min-h-screen"
                 ),
                 cls="drawer-side"
             ),
-            cls="drawer drawer-end navbar-end space-x-2"
+            cls="drawer drawer-end justify-end"
         ),
-        cls="navbar-end space-x-2"
+        cls="navbar-end"
     )
 
+
+
+navbar = Div(
+                        Div(
+                            A(
+                                I(cls="ti ti-school text-warning-content text-4xl"),
+                                P("opensat", cls="puff text-xl text-warning-content"),
+                                cls="btn rounded-full btn-ghost normal-case text-lg",
+                                href="/"
+                            ),
+                            cls="navbar-start"
+                        ),
+                        menu_button(),
+                        cls="navbar bg-warning shadow-lg"
+                    )
 
 graduation_icon = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'
 graduation_icon_white = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/0fd7e3b980f71fe315b286fec9c87d1d53cc39ed/public/graduation-cap-solid-white.svg'
@@ -118,77 +152,99 @@ def get(session):
     first_hero = Div(
      Div(
         Div(
-            Img(src=graduation_icon_white,cls="avatar w-48 mb-3"),  # Adjusted spacing
+            I(cls="ti ti-school text-9xl mb-3 text-warning-content"),  # Adjusted spacing
                 H2(
                     "Question Bank with ", 
-                    P("Endless", cls="text-pink puff"), 
+                    P("Endless", cls=" puff"), 
                     " Possibilities",
-                    cls="text-4xl text-white lg:text-5xl font-bold text-center mb-4"  # Reduced bottom margin
+                    cls="text-4xl text-warning-content lg:text-5xl font-bold text-center mb-4"  # Reduced bottom margin
                 ),
                 P(
                     "OpenSAT, a free and ",
-                    A("open-source", href="https://github.com/Anas099X/OpenSAT", cls="text-info font-bold"),
+                    A("open-source", href="https://github.com/Anas099X/OpenSAT", cls="text-blue-600 font-bold"),
                     " SAT question bank. Dive into a massive pool of SAT practice problems and tests, "
                     "constantly growing thanks to a dedicated community of contributors.",
-                    cls="text-lg text-white lg:text-xl text-center max-w-2xl mx-auto mb-4"  # Reduced bottom margin
+                    cls="text-lg text-warning-content lg:text-xl text-center max-w-2xl mx-auto mb-4"  # Reduced bottom margin
                 ),
                 cls="text-center"
         ),
         cls="hero-content text-center"
     ),
-    cls="hero bg-black min-h-screen mb-0"
+    cls="hero bg-warning min-h-screen mb-0 rounded-b-3xl"
  )
+    
 
+    
+
+    test_hero = Div(
+        Div(
+            # Removed Img component
+            Div(
+                I(cls="ti ti-highlight text-9xl mb-6"),
+                H1("Level Up with Practice Tests!", cls="text-3xl md:text-4xl font-bold mb-3 text-center"),
+                P(
+                    "Try full-length, uniquely made practice tests for free. Sharpen your skills, track your progress, and get fully prepared for test day!",
+                    cls="py-2 md:text-xl mb-3 text-center"
+                ),
+                cls="text-center px-4"
+            ),
+            A(
+                Div(cls="ti ti-highlight text-xl"),
+                "Explore",
+                href="/practice",
+                cls="btn btn-lg btn-rounded btn-soft mt-2"
+            ),
+            cls="hero-content flex flex-col items-center"
+        ),
+        cls="hero bg-base-200 min-h-screen mb-0 rounded-b-3xl"
+    )
 
     second_hero = Div(
         Div(
-            Img(
-                src="https://i.ibb.co/sq8ptWZ/Screenshot-from-2024-11-30-19-24-43.png",
-                cls="max-w-full sm:max-w-sm md:max-w-lg rounded-lg shadow-xl glass mx-auto mb-4"  # Made image fully responsive
-            ),
+            # Removed Img component
             Div(
-                H1("Practice SAT with over 1000 Unique Questions!", cls="text-3xl md:text-4xl font-bold mb-3"),
+                I(cls="ti ti-books text-9xl mb-6"),
+                H1("Practice SAT with over 1000 Unique Questions!", cls="text-3xl md:text-4xl font-bold mb-3 text-center"),
                 P(
                     "Get access to lots of Unique Custom SAT questions just like the real test. New questions are always being added—start learning now!",
-                    cls="py-4 text-sm md:text-lg mb-3"
+                    cls="py-2 md:text-xl mb-3 text-center"
                 ),
-                A(
-                    Div(cls="ti ti-compass text-xl"),
-                    "Explore",
-                    href="/explore",
-                    cls="btn btn-rounded btn-primary btn-outline mt-2"
-                ),
-                cls="text-center md:text-left px-4"  # Added padding for smaller screens
+                cls="text-center px-4"
             ),
-            cls="hero-content flex-col lg:flex-row items-center"
+            A(
+                Div(cls="ti ti-books text-xl"),
+                "Explore",
+                href="/explore",
+                cls="btn btn-lg btn-rounded btn-soft mt-2"
+            ),
+            cls="hero-content flex flex-col items-center"
         ),
-        cls="hero pink min-h-screen mb-0"
+        cls="hero bg-base-200 min-h-screen mb-0 rounded-b-3xl"
     )
 
     third_hero = Div(
         Div(
-            Img(
-                src="https://i.ibb.co/hyd1dDN/Screenshot-from-2024-11-30-21-55-31.png",
-                cls="max-w-full sm:max-w-sm md:max-w-lg rounded-lg shadow-xl glass mx-auto mb-4"
-            ),
+            # Removed Img component
             Div(
-                H1("Level Up with Practice Tests!", cls="text-3xl md:text-4xl font-bold mb-3"),
+                I(cls="ti ti-highlight text-9xl mb-6"),
+                H1("Level Up with Practice Tests!", cls="text-3xl md:text-4xl font-bold mb-3 text-center"),
                 P(
                     "Try full-length, uniquely made practice tests for free. Sharpen your skills, track your progress, and get fully prepared for test day!",
-                    cls="py-4 text-sm md:text-lg mb-3"
+                    cls="py-2 md:text-xl mb-3 text-center"
                 ),
-                A(
-                    Div(cls="ti ti-highlight text-xl"),
-                    "Practice",
-                    href="/practice/explore",
-                    cls="btn btn-rounded btn-primary btn-outline mt-2"
-                ),
-                cls="text-center md:text-left px-4"
+                cls="text-center px-4"
             ),
-            cls="hero-content flex-col lg:flex-row-reverse items-center"
+            A(
+                Div(cls="ti ti-highlight text-xl"),
+                "Practice",
+                href="/practice",
+                cls="btn btn-lg btn-rounded btn-soft mt-2"
+            ),
+            cls="hero-content flex flex-col items-center"
         ),
-        cls="hero bg-base-200 min-h-screen mb-0"
+        cls="hero bg-base-200 min-h-screen mb-5 rounded-b-3xl"
     )
+    
 
     footer = Footer(
         Aside(
@@ -207,7 +263,7 @@ def get(session):
                 cls="grid grid-flow-col gap-4"
             )
         ),
-        cls="footer bg-base-200 text-base-content p-10"
+        cls="footer bg-base-300 p-10 rounded-t-3xl"
     )
 
     return (
@@ -215,20 +271,8 @@ def get(session):
             Head(Defaults),
             Body(
                 Header(
-                    Div(
-                        Div(
-                            A(
-                                Img(src=graduation_icon,cls="avatar w-8"),
-                                P("opensat", cls="puff text-xl"),
-                                cls="btn rounded-full btn-ghost normal-case text-lg",
-                                href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        menu_button(session),
-                        cls="navbar pink"
-                    ),
-                    cls="sticky top-0 bg-gray-800 z-50"
+                    navbar,
+                    cls="sticky top-0 z-50"
                 ),
                 Main(
                     first_hero,
@@ -236,8 +280,8 @@ def get(session):
                     third_hero
                 ),
                 footer,
-                data_theme="lofi",
-                cls=""
+                data_theme="silk",
+                cls="bg-base-200"
             )
         )
 

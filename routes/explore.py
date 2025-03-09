@@ -2,155 +2,152 @@ from main import *
 
 @rt("/explore")
 def get(request, session):
+    # Use session filters if present, otherwise use query parameters
+    session["filter_section"] = "english"
+    session["filter_domain"] = "any"
 
-    # Get section and domain from query parameters, with defaults
-    section = request.query_params.get("section", "english")  # Default section: English
-    domain = request.query_params.get("domain", "any")  # Default domain: any
+    section = session.get("filter_section")
+    domain  = session.get("filter_domain")
 
-    def domain_lower(input):
-        return str(input).lower()
 
-    # Generate filter buttons dynamically
-    def filter_switch():
-        filters = {
-            "english": [
-                {"label": "Information and Ideas", "value": "information and ideas"},
-                {"label": "Craft and Structure", "value": "craft and structure"},
-                {"label": "Expression of Ideas", "value": "expression of ideas"},
-                {"label": "Standard English Conventions", "value": "standard english conventions"}
-            ],
-            "math": [
-                {"label": "Algebra", "value": "algebra"},
-                {"label": "Advanced Math", "value": "advanced math"},
-                {"label": "Problem-Solving and Data Analysis", "value": "problem-solving and data analysis"},
-                {"label": "Geometry and Trigonometry", "value": "geometry and trigonometry"}
-            ]
-        }
+    return (
+        site_title,
+        Head(Defaults),
+        Body(
+            Header(
+                # ...existing header code...
+                navbar,
+                cls="sticky top-0 bg-warning z-50"
+            ),
+            Main(
+    H1("Explore", cls="text-4xl font-extrabold text-center my-8"),
+    Div(
+        Div(
+            Div(
+                H1(
+                    Div(cls="ti ti-filter text-4xl "),
+                    "Filters",
+                    cls="text-2xl font-bold mb-4"
+                ),
+                # Section Filters with Labels
+                Div(
+                    Div("Section:", cls="text-sm font-semibold mb-2"),
+                    Div(
+                        Form(
+                            Input(cls="btn btn-warning m-1", type="radio", name="filters", aria_label="english", value="english", hx_post="/section_filter", hx_target="#section-filter"),
+                            Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="math", value="math", hx_post="/section_filter", hx_target="#section-filter"),
+                            id="section-filter"
+                        ),
+                    ),
+                    cls="mb-6"
+                ),
+                # Domain Filters with Labels
+                Div(
+                    Div("Domain:", cls="text-sm text-gray-600 font-semibold mb-2"),
+                    Div(
+                        hx_post="filters_switch",
+                        hx_trigger="load, change from:#section-filter",
+                        hx_target="#domain-filter",
+                        cls="flex flex-wrap gap-2 w-full",
+                        id="domain-filter"
+                    ),
+                    cls="mb-4"
+                ),
+                cls="p-4 rounded-lg shadow-xl mx-auto bg-base-300 max-w-xl mb-15"
+            ),
+            cls="card bg-ghost max-w-lg mx-auto w-full rounded-box flex-grow justify-center items-start flex"
+        ),
+        Div(cls="divider divider-horizontal mx-4 self-stretch"),  # Ensures alignment
+        Div(
+            Div(
+                hx_post="questions_list",
+                hx_trigger="load, change from:body delay:0.5s",
+                hx_target="#question-container",
+                hx_indicator="#spinner",
+                cls="overflow-auto max-h-[400px] w-full mt-10",
+                id="question-container"
+            ),
+            Div(
+                Span(cls="htmx-indicator loading loading-spinner loading-xl", id="spinner"),
+                cls="flex justify-center items-center w-full mt-5"
+            ),
+            cls="card bg-ghost rounded-box flex flex-grow justify-center items-start self-stretch"
+        ),
+        cls="flex w-full flex-col lg:flex-row",  # Keeps both sections aligned
+        id="explore-container"
+    ),
+    cls="container mx-auto py-4"
+),
+            data_theme="silk", cls="bg-base-200"
+        )
+    )
 
-        category_filters = filters.get(section.lower(), [])
-        return [
-            A(
-                f["label"],
-                href=f"?{urlencode({'section': section, 'domain': f['value']})}",
-                cls=f"btn btn-pink btn-rounded btn-outline btn-sm {'btn-active' if domain == f['value'] else ''}"
-            )
-            for f in category_filters
-        ]
+@rt('/section_filter')
+def post(filters: str, session):
+    session["filter_section"] = filters
+    session["filter_domain"] = "any"
 
-    # Question list view generation function
-    def generate_question_list_view():
-        questions = question_objects(section)  # Fetch questions for the section
-        return [
+    if filters == "english":
+     return Input(cls="btn btn-warning m-1", type="radio", name="filters", aria_label="english", value="english", hx_post="/section_filter", hx_target="#section-filter"),Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="math", value="math", hx_post="/section_filter", hx_target="#section-filter")
+    else:
+     return Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="english", value="english", hx_post="/section_filter", hx_target="#section-filter"),Input(cls="btn btn-warning m-1", type="radio", name="filters", aria_label="math", value="math", hx_post="/section_filter", hx_target="#section-filter")
+
+
+
+@rt('/domain_filter')
+def post(filters: str, session):
+    session["filter_domain"] = filters
+
+@rt('/questions_list')
+def post(session):
+    section = session.get("filter_section")
+    domain  = session.get("filter_domain")
+    print(domain)
+
+    # Fetch updated questions based on both filters
+    questions = question_objects(section)  # Get questions for the section
+
+    return Div(
+        *[
             A(
                 Div(
-                    Div(  # Icon section
-                        Div(cls="ti ti-books text-4xl text-gray-700"),  # Example icon, adjust as needed
-                        cls="flex-shrink-0 p-2"
-                    ),
-                    Div(  # Content section
-                        H2(f"Question #{i + 1}", cls="font-bold text-lg text-gray-700"),  # Question title
-                        P(x["domain"], cls="text-sm text-gray-500"),  # Domain or category
-                        Div(  # Metadata (e.g., stats)
-                            Div(f"Difficulty: {x.get('difficulty', 'N/A')}", cls="text-xs text-gray-400"),
-                            cls="flex space-x-4 mt-1"
-                        ),
+                    Div(Div(cls="ti ti-books text-4xl"), cls="flex-shrink-0 p-2"),
+                    Div(
+                        H2(f"Question #{i + 1}", cls="font-bold text-lg "),
+                        P(x["domain"], cls="text-sm"),
+                        Div(Div(f"Difficulty: {x.get('difficulty', 'N/A')}", cls="text-xs"), cls="flex space-x-4 mt-1"),
                         cls="flex-grow"
                     ),
-                    cls="flex items-center bg-base-200 hover:bg-base-300 rounded-lg shadow-md p-4 transition-all"
+                    cls="flex items-center bg-base-300 hover:bg-warning hover:text-warning-content rounded-lg shadow-md p-4 transition-all"
                 ),
                 href=f"/questions?{urlencode({'section': section, 'num': i})}",
                 cls="block w-full mb-3"
-            ) if domain.lower() == "any" or domain_lower(x['domain']) == domain.lower() else Div("", hidden=True)
+            ) if str(domain).lower() == "any" or str(x['domain']).lower() == str(domain).lower() else Div("", hidden=True)
             for i, x in enumerate(questions)
-        ]
-
-    # Generate filter buttons
-    filter_buttons = filter_switch()
-
-    # Generate question list view
-    question_list_view = generate_question_list_view()
-
-    return (
-        
-            site_title,
-            Head(
-                Defaults
-            ),
-            Body(
-                Header(
-                    Div(
-                        Div(
-                            A(
-                                Img(src=graduation_icon, cls="avatar w-8"),
-                                P("opensat", cls="puff text-xl"),
-                                cls="btn rounded-full btn-ghost normal-case text-lg",
-                                href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        menu_button(session),
-                        cls="navbar pink"
-                    ),
-                    cls="sticky top-0 bg-gray-800 z-50"
-                ),
-                Main(
-                    H1("Explore", cls="text-4xl font-extrabold text-center my-8 text-gray-700"),
-                    Div(
-                
-                        Div(
-                            Div(
-                                H1(
-                                    Div(cls="ti ti-filter text-4xl text-gray-700"),
-                                    "Filters",
-                                    cls="text-2xl font-bold mb-4 text-gray-700"
-                                ),
-                                # Section Filters with Labels
-                                Div(
-                                    Div("Section:", cls="text-sm text-gray-600 font-semibold mb-2"),  # Section Label
-                                    Div(
-                                        A(
-                                            Div(cls="ti ti-a-b-2 text-2xl"),
-                                            "English",
-                                            href=f"?{urlencode({'section': 'english', 'domain': 'any'})}",
-                                            cls=f"btn btn-primary text-gray-700 btn-rounded btn-outline btn-sm {'btn-active' if section == 'english' else ''}"
-                                        ),
-                                        A(
-                                            Div(cls="ti ti-math-symbols text-2xl"),
-                                            "Math",
-                                            href=f"?{urlencode({'section': 'math', 'domain': 'any'})}",
-                                            cls=f"btn btn-primary btn-rounded btn-outline btn-sm {'btn-active' if section == 'math' else ''}"
-                                        ),
-                                        cls="btn-group space-x-2"
-                                    ),
-                                    cls="mb-6"  # Adds spacing between section and domain filters
-                                ),
-                                # Domain Filters with Labels
-                                Div(
-                                    Div("Domain:", cls="text-sm text-gray-600 font-semibold mb-2"),  # Domain Label
-                                    Div(
-                                        *filter_buttons,  # Dynamically generated domain filter buttons
-                                        cls="flex flex-wrap gap-2"
-                                    ),
-                                    cls="mb-4"
-                                ),
-                                cls="p-4 rounded-lg shadow-xl mx-auto bg-base-200 max-w-xl mt-10"
-                            ),
-                            cls="card bg-ghost max-w-lg rounded-box flex-grow"
-                        ),
-                        Div(cls="divider divider-horizontal p-3"),
-                        Div(
-                            Div(
-                                *question_list_view,  # Generates all questions in list view
-                                cls="overflow-auto max-h-[500px]"  # Adds scrollable overflow to questions
-                            ),
-                            cls="card bg-ghost rounded-box flex flex-grow"
-                        ),
-                        cls="flex w-full flex-col lg:flex-row"
-                    ),
-                    cls="container mx-auto py-4"
-                ),
-                data_theme="lofi", cls="pink"
-            )
-              # DaisyUI's lofi theme
-        
+        ],
+        id="question-container"
     )
+
+@rt('/filters_switch')
+def post(session):
+        # Generate filters based on the current section
+        section = session.get("filter_section")
+        if section == "english":
+            return Form(
+                Input(cls="btn btn-error btn-square m-1", type="reset",name="filters",value="×", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Information and Ideas", value="Information and Ideas", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Craft and Structure", value="Craft and Structure", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Expression of Ideas", value="Expression of Ideas", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Standard English Conventions", value="Standard English Conventions", hx_post="domain_filter", hx_target="#question-container"),
+                cls="filter"
+            )
+        else:
+            return Form(
+                Input(cls="btn btn-error btn-square m-1", type="reset",name="filters", value="×", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Algebra", value="algebra", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Advanced Math", value="advanced math", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Problem-Solving and Data Analysis", value="problem-solving and data analysis", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Geometry and Trigonometry", value="geometry and trigonometry", hx_post="domain_filter", hx_target="#question-container"),
+                cls="filter mt-2"
+            )
+        

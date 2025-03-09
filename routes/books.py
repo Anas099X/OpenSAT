@@ -23,7 +23,7 @@ def get(session):
                             cls="navbar-start"
                         ),
                         menu_button(session),
-                        cls="navbar pink"
+                        cls="navbar "
                     ),
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
@@ -81,10 +81,10 @@ def get(session):
                         ),
                         cls="container mx-auto py-8"
                     ),
-                    cls="pink"
+                    cls=""
                 ),
-                cls="pink w-full",
-                data_theme="lofi"
+                cls=" w-full",
+                data_theme="silk"
             )
         )
     )

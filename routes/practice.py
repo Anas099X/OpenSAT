@@ -21,19 +21,7 @@ def get(session):
             ),
             Body(
                 Header(
-                    Div(
-                        Div(
-                            A(
-                                Img(src=graduation_icon, cls="avatar w-8"),
-                                P("opensat", cls="puff text-xl"),
-                                cls="btn rounded-full btn-ghost normal-case text-lg",
-                                href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        menu_button(session),
-                        cls="navbar pink"
-                    ),
+                    navbar,
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
@@ -42,10 +30,10 @@ def get(session):
                         *[
                             Div(
                                 A(
-                                    Div(Div(cls="ti ti-highlight text-4xl text-gray-900"), cls="text-3xl"),  # Icon for each module
-                                    H2(module['name'], cls="card-title text-xl font-bold mt-1 text-gray-900"),  # Module name
-                                    P("Practice Test", cls="text-gray-900 font-bold"),
-                                    cls="card bg-base-200 shadow-xl w-96 mx-auto hover:bg-gray-300 transition-all rounded-lg p-8",
+                                    Div(Div(cls="ti ti-highlight text-4xl"), cls="text-3xl"),  # Icon for each module
+                                    H2(module['name'], cls="card-title text-xl font-bold mt-1"),  # Module name
+                                    P("Practice Test", cls=" font-bold"),
+                                    cls="card bg-base-300 shadow-lg w-96 mx-auto hover:bg-warning hover:text-warning-content transition-all rounded-lg p-8",
                                     href=f"/practice/{i}/module/1" 
                                 )
                             )
@@ -55,7 +43,7 @@ def get(session):
                     ),
                     cls="container mx-auto py-8"
                 )
-             ,data_theme="lofi",cls="pink"
+             ,data_theme="silk",cls="bg-base-200"
             )
         
     )
@@ -124,19 +112,7 @@ def get(session, practice_num: int, module_number: int):
             Head(Defaults),
             Body(
                 Header(
-                    Div(
-                        Div(
-                            A(
-                                Img(src=graduation_icon, cls="avatar w-8"),
-                                P("opensat", cls="puff text-xl"),
-                                cls="btn rounded-full btn-ghost normal-case text-lg",
-                                href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        menu_button(session),
-                        cls="navbar pink"
-                    ),
+                    navbar,
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
@@ -207,7 +183,7 @@ def get(session, practice_num: int, module_number: int):
                 ),
                 cls="card-body"
             ),
-            cls="dropdown-content card bg-base-200 z-[1] w-[300px] h-[480px] absolute left-1/2 top-12 transform -translate-x-1/2 z-10 shadow",
+            cls="dropdown-content card bg-base-300 z-[1] w-[300px] h-[480px] absolute left-1/2 top-12 transform -translate-x-1/2 z-10 shadow",
             tabindex="0"
         ),
         cls="dropdown dropdown-top dropdown-hover"
@@ -216,7 +192,7 @@ def get(session, practice_num: int, module_number: int):
                                 cls="flex justify-between items-center mt-6 p-5"
                             )
                             ,
-                            cls="card bg-base-200 shadow-xl w-full max-w-3xl mx-auto mt-8"
+                            cls="card bg-base-300 shadow-xl w-full max-w-3xl mx-auto mt-8"
                         ),
                         # Navigation: Back, Page Number, Next/Finish
                        
@@ -225,7 +201,7 @@ def get(session, practice_num: int, module_number: int):
                 ),
                 id="practice_html"
             ),
-            data_theme="lofi",cls="pink"  # lofi theme enabled
+            data_theme="silk",cls="bg-base-200"  # silk theme enabled
         )
     )
 
@@ -258,10 +234,10 @@ def get(practice_num:int):
                             style="display:flex; justify-content:center;"
                             
                         ),
-                        cls="card bg-base-200 w-96 shadow-xl mx-auto py-8"
+                        cls="card bg-base-300 w-96 shadow-xl mx-auto py-8"
                     )
                 ),cls="flex items-center justify-center"
-            ),data_theme="lofi",cls="bg-base-200"
+            ),data_theme="silk",cls="bg-base-200"
         )
     )
 
@@ -325,7 +301,7 @@ def get(practice_num: int, session):
                             style="display:flex; justify-content:center;"
                        ),
 
-                    cls="card bg-base-200 w-96 shadow-xl mx-auto py-8 mb-6"
+                    cls="card bg-base-300 w-96 shadow-xl mx-auto py-8 mb-6"
                 ),
                 
                 # Card for mistakes table
@@ -348,7 +324,7 @@ def get(practice_num: int, session):
                                         Td(user_answer, cls="border border-neutral px-8 py-2"),
                                         Td(correct_answer, cls="border border-neutral px-8 py-2"),
                                         Td(
-                                            A("Go to question", href=f"/questions/{section}/{question_num}/True", cls="text-info underline"),
+                                            A("Go to question", href=f"/questions?section={section}&num={question_num}", cls="text-info underline"),
                                             cls="border border-neutral px-8 py-2"
                                         )
                                     )
@@ -359,12 +335,12 @@ def get(practice_num: int, session):
                         ),
                         cls="overflow-x-auto px-4"  # Responsive container for table
                     ),
-                    cls="card bg-base-200 shadow-xl mx-auto w-full max-w-3xl py-8"
+                    cls="card bg-base-300 shadow-xl mx-auto w-full max-w-3xl py-8"
                 )
             ),
             cls="flex items-center justify-center min-h-screen"
         ),
-        data_theme="lofi",cls="pink"
+        data_theme="silk",cls="bg-base-200"
     )
 )
     

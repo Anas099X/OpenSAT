@@ -44,35 +44,29 @@ def get(request, session):
             ),
             Body(
                 Header(
-                    Div(
-                        Div(
-                            A(
-                                Img(src=graduation_icon, cls="avatar w-8"),
-                                P("opensat", cls="puff text-xl"),
-                                cls="btn rounded-full btn-ghost normal-case text-lg",
-                                href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        menu_button(session),
-                        cls="navbar pink"
-                    ),
-                    cls="sticky top-0 bg-gray-800 z-50"
+                    navbar,
+                    cls="sticky top-0 z-50"
                 ),
                 Main(
                     Div(
                         # Card component for question display
                         Div(
                             Div(
-                                H2(copy_question_btn, f"Question #N{num + 1}", cls="card-title text-2xl font-bold"),
-                                P(question_obj['question'].get('paragraph', "").replace('null', ""), cls="text-base mt-4"),
+                                Div(
+                                    H2(copy_question_btn, f"Question #N{num + 1}", cls="card-title text-xl font-bold"),
+                                    A(Div(cls="ti ti-exclamation-circle text-2xl"),
+                                    "Report a mistake",
+                                    href="https://tally.so/r/312ovO",
+                                    cls="btn btn-error btn-sm btn-rounded m-1 flex items-center"),
+                                cls="flex items-center justify-between w-full"),
+                                P(question_obj['question'].get('paragraph', "").replace('null', ""), cls="text-base text-lg mt-2"),
                                 B(question_obj['question']['question'], cls="text-lg"),
                                 Div(
                                     Div(B("A. "), question_obj['question']['choices']['A'], cls="py-2"),
                                     Div(B("B. "), question_obj['question']['choices']['B'], cls="py-2"),
                                     Div(B("C. "), question_obj['question']['choices']['C'], cls="py-2"),
                                     Div(B("D. "), question_obj['question']['choices']['D'], cls="py-2"),
-                                    cls="mt-4"
+                                    cls="text-lg"
                                 ),
                                 Div(
                                     Input(type="checkbox"),
@@ -81,18 +75,18 @@ def get(request, session):
                                         B(f"Correct Answer is: {question_obj['question']['correct_answer']}"),
                                         Br(),
                                         P(question_obj['question']['explanation']),
-                                        cls="collapse-content"
+                                        cls="collapse-content text-lg"
                                     ),
-                                    cls="collapse collapse-plus glass"
+                                    cls="collapse collapse-plus bg-warning text-warning-content mt-4"
                                 ),
                                 cls="card-body"
                             ),
-                            cls="card bg-base-200 shadow-lg mx-auto w-full max-w-2xl"
+                            cls="card bg-base-300 shadow-lg mx-auto w-full max-w-2xl"
                         ),
                         cls="container mx-auto py-8 px-4"
-                    ),cls="pink" 
+                    ),cls="bg-base-200" 
                 )
-               ,data_theme="lofi"
+               ,data_theme="silk"
             )
         
 )
