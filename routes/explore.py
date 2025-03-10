@@ -61,7 +61,7 @@ def get(request, session):
         Div(
             Div(
                 hx_post="questions_list",
-                hx_trigger="load, change from:body delay:0.5s",
+                hx_trigger="load, change from:body delay:1.5s",
                 hx_target="#question-container",
                 hx_indicator="#spinner",
                 cls="overflow-auto max-h-[400px] w-full mt-10",
