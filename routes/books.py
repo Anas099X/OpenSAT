@@ -2,7 +2,8 @@ from fasthtml.common import *
 from main import *
 
 @rt("/books")
-def get(session):
+def get(request, session):
+    navigation = mobile_menu if is_mobile(request) else navbar
     firestore_docs = db.collection('books').stream()  # Assuming you have a 'books' collection in Firestore
 
     return (
@@ -12,7 +13,7 @@ def get(session):
             ),
             Body(
                 Header(
-                    navbar,
+                    navigation,
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(

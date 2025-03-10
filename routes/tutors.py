@@ -2,7 +2,9 @@ from fasthtml.common import *
 from main import *
 
 @rt("/tutors")
-def get(session):
+def get(request, session):
+    # Add navigation bar based on device type
+    navigation = mobile_menu if is_mobile(request) else navbar
     firestore_docs = db.collection('users').stream()
 
     return (
@@ -13,7 +15,7 @@ def get(session):
             Body(
                 Header(
                     Div(
-                        navbar,
+                        navigation,
                         cls="navbar "
                     ),
                     cls="sticky top-0 bg-gray-800 z-50"
@@ -74,4 +76,4 @@ def get(session):
                 ,data_theme="silk"
             )
         )
-    
+

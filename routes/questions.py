@@ -20,6 +20,9 @@ def get(request, session):
         copy_href=f"opensat.fun/questions?section={section}&num={num}"
     )
 
+    # Determine navigation based on device type
+    navigation = mobile_menu if is_mobile(request) else navbar
+
     # Return the HTML response
     return (
         site_title,
@@ -44,7 +47,7 @@ def get(request, session):
             ),
             Body(
                 Header(
-                    navbar,
+                    navigation,
                     cls="sticky top-0 z-50"
                 ),
                 Main(

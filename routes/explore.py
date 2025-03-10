@@ -10,6 +10,9 @@ def get(request, session):
     section = session.get("filter_section")
     domain  = session.get("filter_domain")
     
+    # Determine navigation based on device type
+    navigation = mobile_menu if is_mobile(request) else navbar
+    
 
     return (
         site_title,
@@ -17,7 +20,7 @@ def get(request, session):
         Body(
             Header(
                 # ...existing header code...
-                navbar,
+                navigation,
                 cls="sticky top-0 bg-warning z-50"
             ),
             Main(

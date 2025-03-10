@@ -54,6 +54,10 @@ MathJax = {
 
 
 
+def is_mobile(request):
+    ua = request.headers.get("user-agent", "").lower()
+    return any(x in ua for x in ["mobile", "android", "iphone", "ipad"])
+
 
 def menu_button():
     """Render a proper menu card with navigation links using DaisyUI's drawer component."""
@@ -78,6 +82,8 @@ def menu_button():
                       href="https://tally.so/r/312ovO", cls="btn btn-error btn-wide btn-rounded m-1")
     github_button = A(Div(cls="ti ti-brand-github text-2xl"), "GitHub",
                       href="https://github.com/Anas099X/OpenSAT", cls="btn btn-info btn-wide btn-rounded m-1")
+    
+
 
     # Drawer structure
     return Div(
@@ -87,7 +93,7 @@ def menu_button():
 
             # **Drawer Button (Opens Menu)**
             Div(
-                Label("☰ Menu", cls="btn btn-warning btn-active btn-outline justify-end", **{"for": "menu-drawer"}),
+                Label("☰ Menu", cls="btn btn-warning btn-ghost btn-outline justify-end", **{"for": "menu-drawer"}),
                 cls="drawer-content"
             ),
 
@@ -113,6 +119,8 @@ def menu_button():
                         report_button,
                         github_button,
 
+                        Label("Close", cls="btn btn-dash btn-error btn-wide m-6", **{"for": "menu-drawer"}),
+
                         cls="flex flex-col items-center"
                     ),
                     cls="bg-base-300 shadow-lg rounded-lg w-80 min-h-screen"
@@ -124,7 +132,25 @@ def menu_button():
         cls="navbar-end"
     )
 
-
+mobile_menu = Div(
+    A(
+        I(cls="ti ti-home text-lg"),
+        "Home",
+        cls="dock-label mt-3",href="/"
+    ),
+    A(
+        I(cls="ti ti-books text-lg"),
+        "Explore",
+        cls="dock-label mt-3",href="/explore"
+    ),
+    A(
+        I(cls="ti ti-highlight text-lg"),
+        "Practice",
+        cls="dock-label mt-3",href="/practice/explore"
+    ),
+    menu_button(),
+    cls="dock bg-warning text-warning-content shadow-xl"
+)
 
 navbar = Div(
                         Div(
@@ -145,58 +171,34 @@ graduation_icon_white = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/0fd7
 
 
 @rt("/")
-def get(session):
+def get(request, session):
     """Render the home page with fully responsive hero sections."""
-      # Fetch user data from session
+
+    # Choose navigation bar based on device type
+    navigation = mobile_menu if is_mobile(request) else navbar
 
     first_hero = Div(
-     Div(
         Div(
-            I(cls="ti ti-school text-9xl mb-3 text-warning-content"),  # Adjusted spacing
+            Div(
+                I(cls="ti ti-school text-9xl mb-3 text-warning-content"),
                 H2(
-                    "Question Bank with ", 
-                    P("Endless", cls=" puff"), 
+                    "Question Bank with ",
+                    P("Endless", cls=" puff"),
                     " Possibilities",
-                    cls="text-4xl text-warning-content lg:text-5xl font-bold text-center mb-4"  # Reduced bottom margin
+                    cls="text-4xl text-warning-content lg:text-5xl font-bold text-center mb-4"
                 ),
                 P(
                     "OpenSAT, a free and ",
                     A("open-source", href="https://github.com/Anas099X/OpenSAT", cls="text-blue-600 font-bold"),
                     " SAT question bank. Dive into a massive pool of SAT practice problems and tests, "
                     "constantly growing thanks to a dedicated community of contributors.",
-                    cls="text-lg text-warning-content lg:text-xl text-center max-w-2xl mx-auto mb-4"  # Reduced bottom margin
+                    cls="text-lg text-warning-content lg:text-xl text-center max-w-2xl mx-auto mb-4"
                 ),
                 cls="text-center"
-        ),
-        cls="hero-content text-center"
-    ),
-    cls="hero bg-warning min-h-screen mb-0 rounded-b-3xl"
- )
-    
-
-    
-
-    test_hero = Div(
-        Div(
-            # Removed Img component
-            Div(
-                I(cls="ti ti-highlight text-9xl mb-6"),
-                H1("Level Up with Practice Tests!", cls="text-3xl md:text-4xl font-bold mb-3 text-center"),
-                P(
-                    "Try full-length, uniquely made practice tests for free. Sharpen your skills, track your progress, and get fully prepared for test day!",
-                    cls="py-2 md:text-xl mb-3 text-center"
-                ),
-                cls="text-center px-4"
             ),
-            A(
-                Div(cls="ti ti-highlight text-xl"),
-                "Explore",
-                href="/practice",
-                cls="btn btn-lg btn-rounded btn-soft mt-2"
-            ),
-            cls="hero-content flex flex-col items-center"
+            cls="hero-content text-center"
         ),
-        cls="hero bg-base-200 min-h-screen mb-0 rounded-b-3xl"
+        cls="hero bg-warning min-h-screen mb-0 rounded-b-3xl"
     )
 
     second_hero = Div(
@@ -244,8 +246,8 @@ def get(session):
         ),
         cls="hero bg-base-200 min-h-screen mb-5 rounded-b-3xl"
     )
-    
 
+    # Footer remains unchanged
     footer = Footer(
         Aside(
             Span(cls="ti ti-school text-6xl"),
@@ -258,32 +260,28 @@ def get(session):
             H6("Links", cls="footer-title"),
             Div(
                 A(cls="ti ti-brand-github-filled text-2xl", href="https://github.com/Anas099X/OpenSAT"),
-                A(cls="ti ti-brand-discord-filled text-2xl",href="https://discord.gg/nrXfMDvU"),
-                A(cls="ti ti-brand-instagram-filled text-2xl",href="https://www.instagram.com/anas099x/"),
+                A(cls="ti ti-brand-discord-filled text-2xl", href="https://discord.gg/nrXfMDvU"),
+                A(cls="ti ti-brand-instagram-filled text-2xl", href="https://www.instagram.com/anas099x/"),
                 cls="grid grid-flow-col gap-4"
             )
         ),
         cls="footer bg-base-300 p-10 rounded-t-3xl"
     )
 
+
+    # Return page structure
     return (
         site_title,
-            Head(Defaults),
-            Body(
-                Header(
-                    navbar,
-                    cls="sticky top-0 z-50"
-                ),
-                Main(
-                    first_hero,
-                    second_hero,
-                    third_hero
-                ),
-                footer,
-                data_theme="silk",
-                cls="bg-base-200"
-            )
+        Head(Defaults),
+        Body(
+            Header(navigation, cls="sticky top-0 z-50"),
+            Main(first_hero,second_hero,third_hero),
+            footer,
+            data_theme="silk",
+            cls="bg-base-200"
         )
+    )
+
 
 
 

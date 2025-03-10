@@ -3,7 +3,7 @@ from main import *
 
 
 @rt("/practice/explore")
-def get(session):
+def get(request, session):
 
     # reset tests
     if 'page' not in session or session['page'] is None:
@@ -13,6 +13,7 @@ def get(session):
     # Load modules from JSON file
     modules = question_objects('practice_test')
 
+    navigation = mobile_menu if is_mobile(request) else navbar
 
     return (
             site_title,
@@ -21,7 +22,7 @@ def get(session):
             ),
             Body(
                 Header(
-                    navbar,
+                    navigation,
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
@@ -43,14 +44,14 @@ def get(session):
                     ),
                     cls="container mx-auto py-8"
                 )
-             ,data_theme="silk",cls="bg-base-200"
+             ,data_theme="silk",cls="bg-base-200 w-full"
             )
         
     )
 
 
 @rt("/practice/{practice_num}/module/{module_number}")
-def get(session, practice_num: int, module_number: int):
+def get(request, session, practice_num: int, module_number: int):
     #del session['page']
 
     
@@ -107,12 +108,14 @@ def get(session, practice_num: int, module_number: int):
         else:
             return Input(type="radio", name="answer", value=value, cls="radio radio-primary")
 
+    navigation = mobile_menu if is_mobile(request) else navbar
+
     return (
         Html(
             Head(Defaults),
             Body(
                 Header(
-                    navbar,
+                    navigation,
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
@@ -201,7 +204,7 @@ def get(session, practice_num: int, module_number: int):
                 ),
                 id="practice_html"
             ),
-            data_theme="silk",cls="bg-base-200"  # silk theme enabled
+            data_theme="silk",cls="bg-base-200 w-full"  # silk theme enabled
         )
     )
 
@@ -340,7 +343,7 @@ def get(practice_num: int, session):
             ),
             cls="flex items-center justify-center min-h-screen"
         ),
-        data_theme="silk",cls="bg-base-200"
+        data_theme="silk",cls="bg-base-200 w-full"
     )
 )
     
