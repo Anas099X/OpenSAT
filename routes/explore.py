@@ -47,7 +47,7 @@ def get(request, session):
                     Div("Domain:", cls="text-sm text-gray-600 font-semibold mb-2"),
                     Div(
                         hx_post="filters_switch",
-                        hx_trigger="load, change from:#section-filter",
+                        hx_trigger="load, change from:#section-filter throttle:0.5s",
                         hx_target="#domain-filter",
                         cls="flex flex-wrap gap-2 w-full",
                         id="domain-filter"
@@ -62,7 +62,7 @@ def get(request, session):
         Div(
             Div(
                 hx_post="questions_list",
-                hx_trigger="load, change from:body delay:0.5s",
+                hx_trigger="load, change from:body throttle:0.5s",
                 hx_target="#question-container",
                 hx_indicator="#spinner",
                 cls="overflow-auto max-h-[400px] w-full mt-10",
@@ -99,19 +99,14 @@ def post(filters: str, session):
 def post(filters: str, session):
     session["filter_domain"] = filters
 
-# Store cached questions in-memory to avoid session issues
-cached_questions = {}
-
 @rt('/questions_list')
 def post(session):
     section = session.get("filter_section")
     domain  = session.get("filter_domain")
+    print(domain)
 
-    # Check if cached questions exist for the section, else fetch and cache
-    if section not in cached_questions:
-        cached_questions[section] = question_objects(section)  # Store in-memory
-
-    questions = cached_questions[section]  # Retrieve cached questions
+    # Fetch updated questions based on both filters
+    questions = question_objects(section)  # Get questions for the section
 
     return Div(
         *[
