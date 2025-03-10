@@ -62,7 +62,7 @@ def menu_button():
     menu_items = [
         ("ti ti-home", "Home", "/"),
         ("ti ti-highlight", "Practice", "/practice/explore"),
-        ("ti ti-compass", "Explore", "/explore"),
+        ("ti ti-books", "Explore", "/explore"),
         ("ti ti-bookmarks", "Tutors", "/tutors"),
         ("ti ti-book-2", "Prep Books", "/books"),
     ]
@@ -237,7 +237,7 @@ def get(session):
             A(
                 Div(cls="ti ti-highlight text-xl"),
                 "Practice",
-                href="/practice",
+                href="/practice/explore",
                 cls="btn btn-lg btn-rounded btn-soft mt-2"
             ),
             cls="hero-content flex flex-col items-center"
