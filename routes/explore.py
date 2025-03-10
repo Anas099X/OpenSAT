@@ -54,7 +54,7 @@ def get(request, session):
                     ),
                     cls="mb-4"
                 ),
-                Div(A("Search", cls="btn btn-primary w-full", hx_post="/questions_list", hx_target="#question-container", hx_trigger="click"), id="test_button"),
+                Div(A("Search", cls="btn btn-warning w-full", hx_post="/questions_list", hx_target="#question-container", hx_trigger="click"), id="test_button"),
                 cls="p-4 rounded-lg shadow-xl mx-auto bg-base-300 max-w-xl mb-15"
             ),
             cls="card bg-ghost max-w-lg mx-auto w-full rounded-box flex-grow justify-center items-start flex"
@@ -159,21 +159,15 @@ def post(session):
 def post(session):
         # Generate filters based on the current section
         section = session.get("filter_section")
-        if section == "english":
-            return Form(
-                Input(cls="btn btn-error btn-square m-1", type="reset",name="filters",value="×", hx_post="domain_filter", hx_target="#question-container"),
-                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Information and Ideas", value="Information and Ideas", hx_post="domain_filter", hx_target="#question-container"),
-                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Craft and Structure", value="Craft and Structure", hx_post="domain_filter", hx_target="#question-container"),
-                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Expression of Ideas", value="Expression of Ideas", hx_post="domain_filter", hx_target="#question-container"),
-                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Standard English Conventions", value="Standard English Conventions", hx_post="domain_filter", hx_target="#question-container"),
-                cls="filter"
-            )
-        else:
-            return Form(
+        return Form(
                 Input(cls="btn btn-error btn-square m-1", type="reset",name="filters", value="×", hx_post="domain_filter", hx_target="#question-container"),
                 Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Algebra", value="algebra", hx_post="domain_filter", hx_target="#question-container"),
                 Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Advanced Math", value="advanced math", hx_post="domain_filter", hx_target="#question-container"),
                 Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Problem-Solving and Data Analysis", value="problem-solving and data analysis", hx_post="domain_filter", hx_target="#question-container"),
                 Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Geometry and Trigonometry", value="geometry and trigonometry", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Information and Ideas", value="Information and Ideas", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Craft and Structure", value="Craft and Structure", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Expression of Ideas", value="Expression of Ideas", hx_post="domain_filter", hx_target="#question-container"),
+                Input(cls="btn btn-active m-1", type="radio", name="filters", aria_label="Standard English Conventions", value="Standard English Conventions", hx_post="domain_filter", hx_target="#question-container"),
                 cls="filter mt-2"
             )
