@@ -134,19 +134,19 @@ def menu_button():
 
 mobile_menu = Div(
     A(
-        I(cls="ti ti-home text-lg"),
+        I(cls="ti ti-home text-xl"),
         "Home",
-        cls="dock-label mt-3",href="/"
+        cls="dock-label mt-3 text-lg",href="/"
     ),
     A(
-        I(cls="ti ti-books text-lg"),
+        I(cls="ti ti-books text-xl"),
         "Explore",
-        cls="dock-label mt-3",href="/explore"
+        cls="dock-label mt-3 text-lg",href="/explore"
     ),
     A(
-        I(cls="ti ti-highlight text-lg"),
+        I(cls="ti ti-highlight text-xl"),
         "Practice",
-        cls="dock-label mt-3",href="/practice/explore"
+        cls="dock-label mt-3 text-lg",href="/practice/explore"
     ),
     menu_button(),
     cls="dock bg-warning text-warning-content shadow-xl"
