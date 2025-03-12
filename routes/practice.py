@@ -54,7 +54,6 @@ def get(request, session):
 def get(request, session, practice_num: int, module_number: int):
     #del session['page']
 
-    
 
 
     # Load the current module and initialize session state
@@ -101,6 +100,11 @@ def get(request, session, practice_num: int, module_number: int):
     # Timer time (optional)
     timer_time = 10
 
+    #Timer Div
+    timer_div = Div(
+        Div(ws_send=True,id="countdown-display",hx_trigger='every 1s'),hx_ext='ws', ws_connect='/ws_timer'
+    )
+
     # Function for radio options (answer selection)
     def practice_options(value: str):
         if answers_session(session['page']) == value:
@@ -108,14 +112,21 @@ def get(request, session, practice_num: int, module_number: int):
         else:
             return Input(type="radio", name="answer", value=value, cls="radio radio-primary")
 
-    navigation = mobile_menu if is_mobile(request) else navbar
 
     return (
         Html(
             Head(Defaults),
             Body(
                 Header(
-                    navigation,
+                   Div(
+                        Div(
+                            H1(timer_div, cls="text-xl font-extrabold text-center"),
+                            cls="navbar-start"
+                        ),
+                        menu_button(),
+                        hx_swap_oob="true",
+                        cls="navbar bg-warning"
+                    ),
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
@@ -200,9 +211,10 @@ def get(request, session, practice_num: int, module_number: int):
                         # Navigation: Back, Page Number, Next/Finish
                        
                     ),
-                    cls="container mx-auto py-8 px-4"
-                ),
-                id="practice_html"
+                    cls="container mx-auto py-8 px-4",
+                    id="practice_html"
+                )
+                
             ),
             data_theme="silk",cls="bg-base-200 w-full"  # silk theme enabled
         )
@@ -216,6 +228,18 @@ def post(session,practice:str,module_number:str,value:int):
     session['page'] = value
     return RedirectResponse(f'/practice/{practice}/module/{module_number}', status_code=303)
 
+
+@app.ws('/ws_timer')
+async def ws(minutes: int = 0, seconds: int = 5, send=None):
+    """WebSocket handler that sends countdown updates for minutes and seconds."""
+    total_seconds = (minutes * 60) + seconds
+
+    for i in range(total_seconds, -1, -1):
+        mins, secs = divmod(i, 60)
+        await send(Div(f"Time Left: {mins} min {secs} sec", id='countdown-display'))
+        await asyncio.sleep(1)
+
+    await send(Div("⏳ Countdown Complete!", id='countdown-display', style="color: green; font-weight: bold;"))
 
 
 @rt("/practice/{practice_num}/break")
