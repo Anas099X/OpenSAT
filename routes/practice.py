@@ -231,29 +231,58 @@ def post(session,practice:str,module_number:str,value:int):
 
 @app.ws('/ws_timer')
 async def ws(scope, send=None):
-    """WebSocket handler that sends countdown updates and switches modules when time is up."""
+    """WebSocket handler that manages 4 phases of the practice session with configurable minutes & seconds."""
     
     # Extract query parameters from the WebSocket URL manually
     query_string = scope.get("query_string", b"").decode()
     query_params = dict(param.split("=") for param in query_string.split("&") if "=" in param)
     
     practice_num = query_params.get("practice_num")
-    module_number = query_params.get("module_number")
+    module_number = int(query_params.get("module_number", 1))  # Default to module 1 if not set
 
-    print(practice_num, module_number)
-    
-    # Default timer values
-    minutes = int(query_params.get("minutes", 0))
-    seconds = int(query_params.get("seconds", 10))
-    total_seconds = (minutes * 60) + seconds
+    # Define timer durations for each module (Minutes, Seconds)
+    module_times = {
+        1: (32, 0),  # Module 1 → 1 min 0 sec
+        2: (32, 0),  # Module 2 → 3 min 0 sec
+        3: (35, 0),  # Module 3 → 3 min 0 sec
+        4: (35, 0)   # Module 4 → 4 min 0 sec
+    }
 
+    # Allow override of time via URL parameters
+    default_minutes, default_seconds = module_times.get(module_number, (1, 0))  # Default 1 min if unknown
+    minutes = int(query_params.get("minutes", default_minutes))
+    seconds = int(query_params.get("seconds", default_seconds))
+    total_seconds = (minutes * 60) + seconds  # Convert total time to seconds
+
+    # Countdown loop
     for i in range(total_seconds, -1, -1):
         mins, secs = divmod(i, 60)
         await send(Div(f"Time Left: {mins} min {secs} sec", id='countdown-display'))
         await asyncio.sleep(1)
 
-    # Automatically switch to the next module when the timer ends
-    await send(Div("⏳ Countdown Complete!", id='countdown-display',hx_get=f'/practice/{practice_num}/module/{int(module_number) + 1}',hx_trigger="load",hx_target="#practice_html",hx_replace_url="true",hx_swap="innerHTML", style="color: green; font-weight: bold;"))
+    # Determine next step based on module
+    if module_number == 1:
+        next_route = f"/practice/{practice_num}/module/2"  # Move to Module 2
+    elif module_number == 2:
+        next_route = f"/practice/{practice_num}/break"  # Move to Break after Module 2
+    elif module_number == 3:
+        next_route = f"/practice/{practice_num}/module/4"  # Move to Module 4
+    elif module_number == 4:
+        next_route = f"/practice/{practice_num}/check"  # Move to Finish after Module 4
+    else:
+        next_route = f"/practice/{practice_num}/module/1"  # Default (should never happen)
+
+    # **Trigger HTMX to update the page & reload**
+    await send(Div(Script("setTimeout(() => window.location.reload(), 1000)"),
+        "⏳ Countdown Complete! Moving to Next...",
+        id='countdown-display',
+        hx_get=next_route, 
+        hx_trigger="load", 
+        hx_target="#practice_html", 
+        hx_replace_url="true", 
+        hx_swap="innerHTML",
+        style="color: green; font-weight: bold;"
+    ))
 
 @rt("/practice/{practice_num}/break")
 def get(practice_num:int):
