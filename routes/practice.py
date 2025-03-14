@@ -54,8 +54,6 @@ def get(request, session):
 def get(request, session, practice_num: int, module_number: int):
     #del session['page']
 
-
-
     # Load the current module and initialize session state
     module = f'module_{module_number}'
     
@@ -102,8 +100,10 @@ def get(request, session, practice_num: int, module_number: int):
 
     #Timer Div
     timer_div = Div(
-        Div(ws_send=True,id="countdown-display",hx_trigger='every 1s'),hx_ext='ws', ws_connect='/ws_timer'
-    )
+     Div(ws_send=True, id="countdown-display", hx_trigger='every 1s'),
+     hx_ext='ws',
+     ws_connect=f'/ws_timer?practice_num={practice_num}&module_number={module_number}&minutes=0&seconds=10')
+
 
     # Function for radio options (answer selection)
     def practice_options(value: str):
@@ -230,8 +230,21 @@ def post(session,practice:str,module_number:str,value:int):
 
 
 @app.ws('/ws_timer')
-async def ws(minutes: int = 0, seconds: int = 5, send=None):
-    """WebSocket handler that sends countdown updates for minutes and seconds."""
+async def ws(scope, send=None):
+    """WebSocket handler that sends countdown updates and switches modules when time is up."""
+    
+    # Extract query parameters from the WebSocket URL manually
+    query_string = scope.get("query_string", b"").decode()
+    query_params = dict(param.split("=") for param in query_string.split("&") if "=" in param)
+    
+    practice_num = query_params.get("practice_num")
+    module_number = query_params.get("module_number")
+
+    print(practice_num, module_number)
+    
+    # Default timer values
+    minutes = int(query_params.get("minutes", 0))
+    seconds = int(query_params.get("seconds", 10))
     total_seconds = (minutes * 60) + seconds
 
     for i in range(total_seconds, -1, -1):
@@ -239,8 +252,8 @@ async def ws(minutes: int = 0, seconds: int = 5, send=None):
         await send(Div(f"Time Left: {mins} min {secs} sec", id='countdown-display'))
         await asyncio.sleep(1)
 
-    await send(Div("⏳ Countdown Complete!", id='countdown-display', style="color: green; font-weight: bold;"))
-
+    # Automatically switch to the next module when the timer ends
+    await send(Div("⏳ Countdown Complete!", id='countdown-display',hx_get=f'/practice/{practice_num}/module/{int(module_number) + 1}',hx_trigger="load",hx_target="#practice_html",hx_replace_url="true",hx_swap="innerHTML", style="color: green; font-weight: bold;"))
 
 @rt("/practice/{practice_num}/break")
 def get(practice_num:int):
