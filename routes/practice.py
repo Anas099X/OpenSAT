@@ -102,7 +102,7 @@ def get(request, session, practice_num: int, module_number: int):
     timer_div = Div(
      Div(ws_send=True, id="countdown-display", hx_trigger='every 1s'),
      hx_ext='ws',
-     ws_connect=f'/ws_timer?practice_num={practice_num}&module_number={module_number}&minutes=0&seconds=10')
+     ws_connect=f'/ws_timer?practice_num={practice_num}&module_number={module_number}')
 
 
     # Function for radio options (answer selection)
