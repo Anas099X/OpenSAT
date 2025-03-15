@@ -289,7 +289,7 @@ async def ws(scope, send=None):
 
     # Define timer durations for each module (Minutes, Seconds)
     module_times = {
-        1: (0, 5),  # Module 1 → 1 min 0 sec
+        1: (32, 0),  # Module 1 → 1 min 0 sec
         2: (32, 0),  # Module 2 → 3 min 0 sec
         3: (35, 0),  # Module 3 → 3 min 0 sec
         4: (35, 0)   # Module 4 → 4 min 0 sec
@@ -496,5 +496,4 @@ def post(session, count: int, module: str, answer: str):
 
     # Update the session
     session[module] = practice_answers
-
 
