@@ -35,7 +35,7 @@ def get(request, session):
                                     H2(module['name'], cls="card-title text-xl font-bold mt-1"),  # Module name
                                     P("Practice Test", cls=" font-bold"),
                                     cls="card bg-base-300 shadow-lg w-96 mx-auto hover:bg-warning hover:text-warning-content transition-all rounded-lg p-8",
-                                    href=f"/practice/{i}/module/1" 
+                                    href=f"/practice/{i}/select_timer" 
                                 )
                             )
                             for i, module in enumerate(modules)
@@ -47,6 +47,31 @@ def get(request, session):
              ,data_theme="silk",cls="bg-base-200 w-full"
             )
         
+    )
+
+
+@rt("/practice/{practice_num}/select_timer")
+def select_timer(request, session, practice_num: int):
+    return (
+        Html(
+            Head(Defaults),
+            Body(
+                Main(
+                    Div(
+                        H2("Select Mode", cls="text-2xl font-bold text-center"),
+                        P("Choose a mode to take the test:", cls="text-center mb-4"),
+                        Div(
+                            A("With Timer", href=f"/practice/{practice_num}/module/1?timer=true", cls="btn btn-primary mx-2"),
+                            A("Without Timer", href=f"/practice/{practice_num}/module/1?timer=false", cls="btn btn-secondary mx-2"),
+                            cls="flex justify-center"
+                        ),
+                        cls="card bg-base-300 shadow-xl w-96 mx-auto py-8"
+                    ),
+                    cls="flex items-center justify-center min-h-screen"
+                )
+            ),
+            data_theme="silk", cls="bg-base-200 w-full"
+        )
     )
 
 
@@ -95,14 +120,20 @@ def get(request, session, practice_num: int, module_number: int):
             session['page'] = 0
             return A("Finish", href=f'/practice/{practice_num}/module/{module_number + 1}', cls="btn btn-secondary rounded-full")
 
-    # Timer time (optional)
-    timer_time = 10
+    # Timer check
+    timer_check = request.query_params.get("timer", "false")
 
     #Timer Div
-    timer_div = Div(
-     Div(ws_send=True, id="countdown-display", hx_trigger='every 1s'),
-     hx_ext='ws',
-     ws_connect=f'/ws_timer?practice_num={practice_num}&module_number={module_number}')
+    def timer_div():
+        if timer_check == "true":
+            return Div(
+                Div(ws_send=True, id="countdown-display", hx_trigger='every 1s'),
+                hx_ext='ws',
+                ws_connect=f'/ws_timer?practice_num={practice_num}&module_number={module_number}'
+            )
+        else:
+            return Div("No Timer", cls="text-xl font-bold text-center")
+    
 
 
     # Function for radio options (answer selection)
@@ -118,14 +149,30 @@ def get(request, session, practice_num: int, module_number: int):
             Head(Defaults),
             Body(
                 Header(
-                   Div(
-                        Div(
-                            H1(timer_div, cls="text-xl font-extrabold text-center"),
+                    Div(
+                        # Header container with three sections: left, center, right
+                        Div(  # Left section: logo/text
+                            Div(
+                                I(cls="ti ti-school text-warning-content text-4xl"),
+                                P("opensat", cls="puff text-xl text-warning-content"),
+                                cls="btn btn-ghost btn-disabled text-xl font-semibold",
+                                style="background-color:transparent"
+                            ),
                             cls="navbar-start"
                         ),
-                        menu_button(),
-                        hx_swap_oob="true",
-                        cls="navbar bg-warning"
+                        Div(  # Center section: timer
+                            H1(
+                                timer_div(),
+                                cls="text-xl font-extrabold text-center"
+                            ),
+                            cls="navbar-center"
+                        ),
+                        Div(  # Right section: menu button
+                            menu_button(),
+                            cls="navbar-end"
+                        ),
+                        cls="navbar bg-warning sticky top-0 z-50",
+                        hx_swap_oob="true"
                     ),
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
@@ -242,7 +289,7 @@ async def ws(scope, send=None):
 
     # Define timer durations for each module (Minutes, Seconds)
     module_times = {
-        1: (32, 0),  # Module 1 → 1 min 0 sec
+        1: (0, 5),  # Module 1 → 1 min 0 sec
         2: (32, 0),  # Module 2 → 3 min 0 sec
         3: (35, 0),  # Module 3 → 3 min 0 sec
         4: (35, 0)   # Module 4 → 4 min 0 sec
@@ -257,23 +304,28 @@ async def ws(scope, send=None):
     # Countdown loop
     for i in range(total_seconds, -1, -1):
         mins, secs = divmod(i, 60)
-        await send(Div(f"Time Left: {mins} min {secs} sec", id='countdown-display'))
+        await send(Span(
+                Span(style=f"--value:{mins};"), "m",
+                Span(style=f"--value:{secs};", **{"data-countdown": "true"}), "s",
+                id='countdown-display',
+                cls='countdown font-mono text-2xl')
+            )
         await asyncio.sleep(1)
 
     # Determine next step based on module
     if module_number == 1:
-        next_route = f"/practice/{practice_num}/module/2"  # Move to Module 2
+        next_route = f"/practice/{practice_num}/module/2?timer=true"  # Move to Module 2
     elif module_number == 2:
         next_route = f"/practice/{practice_num}/break"  # Move to Break after Module 2
     elif module_number == 3:
-        next_route = f"/practice/{practice_num}/module/4"  # Move to Module 4
+        next_route = f"/practice/{practice_num}/module/4?timer=true"  # Move to Module 4
     elif module_number == 4:
         next_route = f"/practice/{practice_num}/check"  # Move to Finish after Module 4
     else:
-        next_route = f"/practice/{practice_num}/module/1"  # Default (should never happen)
+        next_route = f"/practice/{practice_num}/module/1?timer=true"  # Default (should never happen)
 
     # **Trigger HTMX to update the page & reload**
-    await send(Div(Script("setTimeout(() => window.location.reload(), 1000)"),
+    await send(Div(Script("setTimeout(() => window.location.reload(), 80)"),
         "⏳ Countdown Complete! Moving to Next...",
         id='countdown-display',
         hx_get=next_route, 
@@ -444,3 +496,5 @@ def post(session, count: int, module: str, answer: str):
 
     # Update the session
     session[module] = practice_answers
+
+
