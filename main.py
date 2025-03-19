@@ -60,7 +60,7 @@ def is_mobile(request):
     return any(x in ua for x in ["mobile", "android", "iphone", "ipad"])
 
 
-def menu_button(img="https://via.placeholder.com/40"):
+def menu_button():
     """Render a proper menu card with navigation links using DaisyUI's drawer component."""
 
     # Define menu items
@@ -70,6 +70,7 @@ def menu_button(img="https://via.placeholder.com/40"):
         ("ti ti-books", "Explore", "/explore"),
         ("ti ti-bookmarks", "Tutors", "/tutors"),
         ("ti ti-book-2", "Prep Books", "/books"),
+        ("ti ti-user-circle", "Profile", "/profile"),
     ]
 
     # Create menu buttons dynamically
@@ -94,7 +95,7 @@ def menu_button(img="https://via.placeholder.com/40"):
 
             # **Drawer Button (Opens Menu)**
             Div(
-                Label(Img(src=img, cls="rounded-full"), cls="btn btn-lg btn-warning btn-ghost btn-circle btn-outline justify-end", **{"for": "menu-drawer"}),
+                Label("☰ Menu", cls="btn btn-warning btn-ghost btn-outline justify-end", **{"for": "menu-drawer"}),
                 cls="drawer-content"
             ),
 
@@ -153,7 +154,7 @@ mobile_menu = Div(
     cls="dock bg-warning text-warning-content shadow-xl"
 )
 
-def Navbar(img=None):
+def Navbar():
     return Div(
                         Div(
                             A(
@@ -164,7 +165,7 @@ def Navbar(img=None):
                             ),
                             cls="navbar-start"
                         ),
-                        menu_button(img),
+                        menu_button(),
                         cls="navbar bg-warning shadow-lg text-warning-content"
                     )
 
@@ -177,7 +178,7 @@ def get(request, session):
     """Render the home page with fully responsive hero sections."""
 
     # Choose navigation bar based on device type
-    navigation = mobile_menu if is_mobile(request) else Navbar(session.get("user").get("picture"))
+    navigation = mobile_menu if is_mobile(request) else Navbar()
 
     first_hero = Div(
         Div(
@@ -289,5 +290,5 @@ def get(request, session):
 
 
 #import other routes and run server
-from routes import explore, tutors, questions, practice, books, account
+from routes import account, explore, tutors, questions, practice, books
 serve()
