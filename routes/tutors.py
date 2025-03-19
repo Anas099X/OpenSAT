@@ -4,7 +4,7 @@ from main import *
 @rt("/tutors")
 def get(request, session):
     # Add navigation bar based on device type
-    navigation = mobile_menu if is_mobile(request) else navbar
+    navigation = mobile_menu if is_mobile(request) else Navbar()
     firestore_docs = db.collection('users').stream()
 
     return (

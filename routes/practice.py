@@ -13,7 +13,7 @@ def get(request, session):
     # Load modules from JSON file
     modules = question_objects('practice_test')
 
-    navigation = mobile_menu if is_mobile(request) else navbar
+    navigation = mobile_menu if is_mobile(request) else Navbar(session.get("user"))
 
     return (
             site_title,
@@ -61,8 +61,8 @@ def select_timer(request, session, practice_num: int):
                         H2("Select Mode", cls="text-2xl font-bold text-center"),
                         P("Choose a mode to take the test:", cls="text-center mb-4"),
                         Div(
-                            A("With Timer", href=f"/practice/{practice_num}/module/1?timer=true", cls="btn btn-primary mx-2"),
-                            A("Without Timer", href=f"/practice/{practice_num}/module/1?timer=false", cls="btn btn-secondary mx-2"),
+                            A("With Timer", href=f"/practice/{practice_num}/module/1?timer=true", cls="btn btn-success btn-disabled mx-2"),
+                            A("Without Timer", href=f"/practice/{practice_num}/module/1?timer=false", cls="btn btn-warning mx-2"),
                             cls="flex justify-center"
                         ),
                         cls="card bg-base-300 shadow-xl w-96 mx-auto py-8"
@@ -153,10 +153,7 @@ def get(request, session, practice_num: int, module_number: int):
                         # Header container with three sections: left, center, right
                         Div(  # Left section: logo/text
                             Div(
-                                I(cls="ti ti-school text-warning-content text-4xl"),
-                                P("opensat", cls="puff text-xl text-warning-content"),
-                                cls="btn btn-ghost btn-disabled text-xl font-semibold",
-                                style="background-color:transparent"
+                                H1(module_title(),cls="text-2xl font-bold")
                             ),
                             cls="navbar-start"
                         ),
@@ -174,7 +171,7 @@ def get(request, session, practice_num: int, module_number: int):
                         cls="navbar bg-warning sticky top-0 z-50",
                         hx_swap_oob="true"
                     ),
-                    cls="sticky top-0 bg-gray-800 z-50"
+                    cls="sticky top-0 bg-gray-800 z-50 text-warning-content"
                 ),
                 Main(
                   Div(

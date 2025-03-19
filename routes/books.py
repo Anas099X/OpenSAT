@@ -3,7 +3,7 @@ from main import *
 
 @rt("/books")
 def get(request, session):
-    navigation = mobile_menu if is_mobile(request) else navbar
+    navigation = mobile_menu if is_mobile(request) else Navbar()
     firestore_docs = db.collection('books').stream()  # Assuming you have a 'books' collection in Firestore
 
     return (

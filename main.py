@@ -48,6 +48,7 @@ MathJax = {
             Meta(name="mnd-ver" ,content="abysxla5bnhhtfnlvwpq"),
             Script(src="https://ss.mrmnd.com/banner.js"),
             Script(src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
+            Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
                 )
@@ -59,7 +60,7 @@ def is_mobile(request):
     return any(x in ua for x in ["mobile", "android", "iphone", "ipad"])
 
 
-def menu_button():
+def menu_button(img="https://via.placeholder.com/40"):
     """Render a proper menu card with navigation links using DaisyUI's drawer component."""
 
     # Define menu items
@@ -93,7 +94,7 @@ def menu_button():
 
             # **Drawer Button (Opens Menu)**
             Div(
-                Label("☰ Menu", cls="btn btn-warning btn-ghost btn-outline justify-end", **{"for": "menu-drawer"}),
+                Label(Img(src=img, cls="rounded-full"), cls="btn btn-lg btn-warning btn-ghost btn-circle btn-outline justify-end", **{"for": "menu-drawer"}),
                 cls="drawer-content"
             ),
 
@@ -152,7 +153,8 @@ mobile_menu = Div(
     cls="dock bg-warning text-warning-content shadow-xl"
 )
 
-navbar = Div(
+def Navbar(img=None):
+    return Div(
                         Div(
                             A(
                                 I(cls="ti ti-school text-warning-content text-4xl"),
@@ -162,8 +164,8 @@ navbar = Div(
                             ),
                             cls="navbar-start"
                         ),
-                        menu_button(),
-                        cls="navbar bg-warning shadow-lg"
+                        menu_button(img),
+                        cls="navbar bg-warning shadow-lg text-warning-content"
                     )
 
 graduation_icon = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'
@@ -175,7 +177,7 @@ def get(request, session):
     """Render the home page with fully responsive hero sections."""
 
     # Choose navigation bar based on device type
-    navigation = mobile_menu if is_mobile(request) else navbar
+    navigation = mobile_menu if is_mobile(request) else Navbar(session.get("user").get("picture"))
 
     first_hero = Div(
         Div(
@@ -287,5 +289,5 @@ def get(request, session):
 
 
 #import other routes and run server
-from routes import explore, tutors, questions, practice, books
+from routes import explore, tutors, questions, practice, books, account
 serve()

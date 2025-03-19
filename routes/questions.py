@@ -21,7 +21,7 @@ def get(request, session):
     )
 
     # Determine navigation based on device type
-    navigation = mobile_menu if is_mobile(request) else navbar
+    navigation = mobile_menu if is_mobile(request) else Navbar()
 
     # Return the HTML response
     return (

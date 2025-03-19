@@ -11,7 +11,7 @@ def get(request, session):
     domain  = session.get("filter_domain")
     
     # Determine navigation based on device type
-    navigation = mobile_menu if is_mobile(request) else navbar
+    navigation = mobile_menu if is_mobile(request) else Navbar()
     
 
     return (
