@@ -220,7 +220,7 @@ def get(request, session):
                 Div(cls="ti ti-books text-xl"),
                 "Explore",
                 href="/explore",
-                cls="btn btn-lg btn-rounded btn-soft mt-2"
+                cls="btn btn-lg btn-rounded btn-warning mt-2"
             ),
             cls="hero-content flex flex-col items-center"
         ),
@@ -243,7 +243,30 @@ def get(request, session):
                 Div(cls="ti ti-highlight text-xl"),
                 "Practice",
                 href="/practice/explore",
-                cls="btn btn-lg btn-rounded btn-soft mt-2"
+                cls="btn btn-lg btn-rounded btn-warning mt-2"
+            ),
+            cls="hero-content flex flex-col items-center"
+        ),
+        cls="hero bg-base-200 min-h-screen mb-5 rounded-b-3xl"
+    )
+
+    fourth_hero = Div(
+        Div(
+            # Removed Img component
+            Div(
+                I(cls="ti ti-brand-open-source text-9xl mb-6"),
+                H1("Open-Sourced!", cls="text-3xl md:text-4xl font-bold mb-3 text-center"),
+                P(
+                    "OpenSAT is open-source, allowing free access to SAT practice and community-driven improvements.",
+                    cls="py-2 md:text-xl mb-3 text-center"
+                ),
+                cls="text-center px-4"
+            ),
+            A(
+                Div(cls="ti ti-brand-github text-xl"),
+                "Github",
+                href="https://github.com/Anas099X/OpenSAT",
+                cls="btn btn-lg btn-rounded btn-info mt-2"
             ),
             cls="hero-content flex flex-col items-center"
         ),
@@ -278,7 +301,11 @@ def get(request, session):
         Head(Defaults),
         Body(
             Header(navigation, cls="sticky top-0 z-50"),
-            Main(first_hero,second_hero,third_hero),
+            Main(
+                first_hero,
+                second_hero,
+                third_hero,
+                fourth_hero,),
             footer,
             data_theme="silk",
             cls="bg-base-200"
