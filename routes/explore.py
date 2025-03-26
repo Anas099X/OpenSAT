@@ -30,8 +30,8 @@ def get(request, session):
                                     Div("Section:", cls="text-sm font-semibold mb-2"),
                                     Select(
                                         Option('Pick Section', disabled=True, selected=True),
-                                        Option('english'),
-                                        Option('math'),
+                                        Option('English'),
+                                        Option('Math'),
                                         cls='select select-warning bg-warning text-warning-content font-bold',
                                         name="section"
                                     ),
@@ -42,11 +42,11 @@ def get(request, session):
                                     Div("Domain:", cls="text-sm text-gray-600 font-semibold mb-2"),
                                     Select(
                                         Option('Pick Domain', disabled=True, selected=True),
-                                        Option('any'),
-                                        Option('algebra'),
-                                        Option('advanced math'),
-                                        Option('problem-solving and data analysis'),
-                                        Option('geometry and trigonometry'),
+                                        Option('Any'),
+                                        Option('Algebra'),
+                                        Option('Advanced Math'),
+                                        Option('Problem-Solving and Data Analysis'),
+                                        Option('Geometry and Trigonometry'),
                                         Option('Information and Ideas'),
                                         Option('Craft and Structure'),
                                         Option('Expression of Ideas'),
@@ -97,6 +97,8 @@ def get(request, session):
 
 @rt('/questions_list')
 def post(section: str = "english", domain: str = "any"):
+    section = section.lower()
+    domain = domain.lower()
     questions = question_objects(section)  # Use provided section
     return Div(
         *[
