@@ -13,7 +13,7 @@ def get(request, session):
     # Load modules from JSON file
     modules = question_objects('practice_test')
 
-    navigation = mobile_menu if is_mobile(request) else Navbar(session.get("user"))
+    navigation = mobile_menu if is_mobile(request) else Navbar()
 
     return (
             site_title,
@@ -109,16 +109,16 @@ def get(request, session, practice_num: int, module_number: int):
     def module_switcher():
         #checking different states of module
         if session['page'] < len(practice_en_questions[practice_num][module]) - 1:
-            return A("Next", hx_post=f'/switch_page/{practice_num}/{module_number}/{session["page"]+1}', hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-primary rounded-full")
+            return A("Next", hx_post=f'/switch_page/{practice_num}/{module_number}/{session["page"]+1}', hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-warning rounded-full")
         elif module == "module_2":
             session['page'] = 0
-            return A("Finish", href=f'/practice/{practice_num}/break', cls="btn btn-secondary rounded-full")
+            return A("Finish", href=f'/practice/{practice_num}/break', cls="btn btn-warning rounded-full")
         elif module == "module_4":
             session['page'] = 0
-            return A("Finish", href=f'/practice/{practice_num}/check', cls="btn btn-secondary rounded-full")
+            return A("Finish", href=f'/practice/{practice_num}/check', cls="btn btn-warning rounded-full")
         else:
             session['page'] = 0
-            return A("Finish", href=f'/practice/{practice_num}/module/{module_number + 1}', cls="btn btn-secondary rounded-full")
+            return A("Finish", href=f'/practice/{practice_num}/module/{module_number + 1}', cls="btn btn-warning rounded-full")
 
     # Timer check
     timer_check = request.query_params.get("timer", "false")
@@ -139,9 +139,9 @@ def get(request, session, practice_num: int, module_number: int):
     # Function for radio options (answer selection)
     def practice_options(value: str):
         if answers_session(session['page']) == value:
-            return Input(type="radio", name="answer", value=value, checked=True, cls="radio radio-primary")
+            return Input(type="radio", name="answer", value=value, checked=True, cls="radio radio-warning")
         else:
-            return Input(type="radio", name="answer", value=value, cls="radio radio-primary")
+            return Input(type="radio", name="answer", value=value, cls="radio radio-warning")
 
 
     return (
@@ -219,9 +219,9 @@ def get(request, session, practice_num: int, module_number: int):
                                 cls="card-body"
                             ),
                             Div(
-                                A("Back", hx_post=[f'/switch_page/{practice_num}/{module_number}/{session["page"]-1}' if session['page'] > 0 else None], hx_swap="innerHTML", hx_target='#practice_html', cls="btn rounded-full bg-base-300"),
+                                A("Back", hx_post=[f'/switch_page/{practice_num}/{module_number}/{session["page"]-1}' if session['page'] > 0 else None], hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-active rounded-full bg-base-300"),
                                 Div(
-        Div(f"Question {session['page'] + 1}", cls="btn btn-secondary m-1", tabindex="0", role="button"),
+        Div(f"Question {session['page'] + 1}", cls="btn btn-warning m-1", tabindex="0", role="button"),
         Div(
             Div(
                 H3(f"Select a Question", cls="card-title text-lg font-semibold mb-4"),
@@ -233,7 +233,7 @@ def get(request, session, practice_num: int, module_number: int):
                             hx_post=f"/switch_page/{practice_num}/{module_number}/{i}",
                             hx_swap="innerHTML",
                             hx_target='#practice_html', 
-                            cls="btn btn-outline btn-secondary w-12 h-10 m-1 text-lg font-semibold shadow"
+                            cls="btn btn-outline btn-warning w-12 h-10 m-1 text-lg font-semibold shadow"
                         ) 
                         for i, _ in enumerate(practice_en_questions[practice_num][module])
                     ],
