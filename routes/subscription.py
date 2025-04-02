@@ -16,6 +16,7 @@ db = firestore.client()
 PAYPAL_CLIENT_ID = os.getenv("PAYPAL_CLIENT_ID")
 PAYPAL_CLIENT_SECRET = os.getenv("PAYPAL_CLIENT_SECRET")
 PAYPAL_API_BASE = os.getenv("PAYPAL_API_BASE")  # Use live API for production
+PAYPAL_REDIRECT_URL = os.getenv("PAYPAL_REDIRECT_URL")
 
 
 
@@ -214,8 +215,8 @@ def post(request, session):
             "description": "OpenSAT Subscription"
         }],
         "application_context": {
-            "return_url": "http://localhost:5001/subscribe/paypal-success",
-            "cancel_url": "http://localhost:5001/subscribe/paypal-cancel"
+            "return_url": f"{PAYPAL_REDIRECT_URL}/subscribe/paypal-success",
+            "cancel_url": f"{PAYPAL_REDIRECT_URL}/subscribe/paypal-cancel"
         }
     }
     response = requests.post(f"{PAYPAL_API_BASE}/v2/checkout/orders", json=data, headers=headers)
@@ -253,8 +254,8 @@ def post_credit(request, session, card_number: str, expiry: str, cvv: str, cardh
             "description": "OpenSAT Subscription - Credit Card Payment"
         }],
         "application_context": {
-            "return_url": "http://localhost:5001/subscribe/paypal-success",
-            "cancel_url": "http://localhost:5001/subscribe/paypal-cancel"
+            "return_url": f"{PAYPAL_REDIRECT_URL}/subscribe/paypal-success",
+            "cancel_url": f"{PAYPAL_REDIRECT_URL}/subscribe/paypal-cancel"
         }
     }
     response = requests.post(f"{PAYPAL_API_BASE}/v2/checkout/orders", json=data, headers=headers)
