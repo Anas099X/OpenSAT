@@ -102,6 +102,33 @@ def post(section: str = "english", domain: str = "any"):
     questions = question_objects(section)  # Use provided section
     return Div(
         *[
+            A(
+                Div(
+                    Div(Div(cls="ti ti-books text-4xl"), cls="flex-shrink-0 p-2"),
+                    Div(
+                        H2(f"Question #{i + 1}", cls="font-bold text-lg "),
+                        P(x["domain"], cls="text-sm"),
+                        Div(Div(f"Difficulty: {x.get('difficulty', 'N/A')}", cls="text-xs"), cls="flex space-x-4 mt-1"),
+                        cls="flex-grow"
+                    ),
+                    cls="flex items-center bg-base-300 hover:bg-warning hover:text-warning-content rounded-lg shadow-md p-4 transition-all"
+                ),
+                href=f"/questions?{urlencode({'section': section, 'num': i})}",
+                cls="block w-full mb-3"
+            ) if str(domain).lower() == "any" or str(x['domain']).lower() == str(domain).lower() else Div("", hidden=True)
+            for i, x in enumerate(questions)
+        ],
+        id="question-container"
+    )
+
+
+@rt('/questions_list_beta')
+def post(section: str = "english", domain: str = "any"):
+    section = section.lower()
+    domain = domain.lower()
+    questions = question_objects(section)  # Use provided section
+    return Div(
+        *[
             Div(
                 Input(type="checkbox"),
                 # Collapse title: now without inner A element
@@ -159,4 +186,5 @@ def post(section: str = "english", domain: str = "any"):
         ],
         id="question-container"
     )
+
 
