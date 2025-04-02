@@ -11,7 +11,7 @@ client = GoogleAppClient(os.getenv("AUTH_CLIENT_ID"),
                          os.getenv("AUTH_CLIENT_SECRET"))
 
 UNI_REDIRECT_URL  = os.getenv("UNI_REDIRECT_URL")
-redirect_uri = f"{UNI_REDIRECT_URL}/redirect"
+redirect_uri = f"{UNI_REDIRECT_URL}/callback/redirect"
 
 
 @rt('/login')
