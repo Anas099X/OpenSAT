@@ -10,7 +10,8 @@ load_dotenv()
 client = GoogleAppClient(os.getenv("AUTH_CLIENT_ID"),
                          os.getenv("AUTH_CLIENT_SECRET"))
 
-redirect_uri = "http://localhost:5001/redirect"
+UNI_REDIRECT_URL  = os.getenv("UNI_REDIRECT_URL")
+redirect_uri = f"{UNI_REDIRECT_URL}/redirect"
 
 
 @rt('/login')
