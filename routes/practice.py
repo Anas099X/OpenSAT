@@ -1,6 +1,29 @@
+import firebase_admin
+from firebase_admin import firestore
 from main import *
 
+# Initialize Firestore (if not already done)
+if not firebase_admin._apps:
+    firebase_admin.initialize_app()
+db = firestore.client()
 
+
+def check_subscription_expired(email: str):
+    """Remove subscription details if subscription_date is older than 1 month."""
+    doc_ref = db.collection("users").document(email)
+    doc = doc_ref.get()
+    if not doc.exists:
+        return
+    data = doc.to_dict()
+    sub_date = data.get("subscription_date")
+    if sub_date and isinstance(sub_date, datetime):
+        # Convert sub_date to naive datetime by removing tzinfo
+        naive_sub_date = sub_date.replace(tzinfo=None)
+        if datetime.utcnow() - naive_sub_date > timedelta(days=30):
+            doc_ref.update({
+                "subscribed": firestore.DELETE_FIELD,
+                "subscription_date": firestore.DELETE_FIELD
+            })
 
 @rt("/practice/explore")
 def get(request, session):
@@ -15,6 +38,27 @@ def get(request, session):
 
     navigation = mobile_menu if is_mobile(request) else Navbar()
 
+    # Check if the user is subscribed.
+    email = session.get("user", {}).get("email")
+    check_subscription_expired(email)
+    subscribed = False
+    if email:
+        doc = db.collection("users").document(email).get()
+        subscribed = doc.exists and doc.to_dict().get("subscribed", False)
+    # Limit results for unsubscribed users.
+    if not subscribed:
+        modules = modules[:2]
+    def subscribe_overlay():
+        if not subscribed:
+            return Div(
+                Div(
+                    P("Unlock all practice tests and more!", cls="text-lg font-bold text-center"),
+                    A("Subscribe", href="/subscription", cls="btn btn-warning btn-active w-full mt-4"),
+                    cls="card bg-base-300 text-warning-content shadow-lg w-96 mx-auto p-8"
+                ),
+                cls="fixed inset-x-0 bottom-0 h-1/2 bg-soft bg-opacity-50 flex items-center justify-center z-50"
+            )    
+
     return (
             site_title,
             Head(
@@ -26,6 +70,7 @@ def get(request, session):
                     cls="sticky top-0 bg-gray-800 z-50"
                 ),
                 Main(
+                    subscribe_overlay(),
                     Div(
                         # Loop through modules and create a card for each one
                         *[
@@ -81,6 +126,17 @@ def get(request, session, practice_num: int, module_number: int):
 
     # Load the current module and initialize session state
     module = f'module_{module_number}'
+
+    # Check if the user is subscribed.
+    email = session.get("user", {}).get("email")
+    subscribed = False
+    if email:
+        doc = db.collection("users").document(email).get()
+        subscribed = doc.exists and doc.to_dict().get("subscribed", False)
+
+    # Limit results for unsubscribed users.
+    if not subscribed and module_number > 2:
+        return Redirect("/practice/explore")
     
     if 'page' not in session or session['page'] is None:
         session['page'] = 0

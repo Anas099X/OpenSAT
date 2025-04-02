@@ -102,21 +102,61 @@ def post(section: str = "english", domain: str = "any"):
     questions = question_objects(section)  # Use provided section
     return Div(
         *[
-            A(
+            Div(
+                Input(type="checkbox"),
+                # Collapse title: now without inner A element
                 Div(
-                    Div(Div(cls="ti ti-books text-4xl"), cls="flex-shrink-0 p-2"),
                     Div(
-                        H2(f"Question #{i + 1}", cls="font-bold text-lg "),
-                        P(x["domain"], cls="text-sm"),
-                        Div(Div(f"Difficulty: {x.get('difficulty', 'N/A')}", cls="text-xs"), cls="flex space-x-4 mt-1"),
-                        cls="flex-grow"
+                        Div(Div(cls="ti ti-books text-4xl"), cls="flex-shrink-0 p-2"),
+                        Div(
+                            H2(f"Question #{i + 1}", cls="font-bold text-lg"),
+                            P(x["domain"], cls="text-sm"),
+                            Div(
+                                Div(f"Difficulty: {x.get('difficulty', 'N/A')}", cls="text-xs"),
+                                cls="flex space-x-4 mt-1"
+                            ),
+                            cls="flex-grow"
+                        ),
+                        cls="flex items-center"
                     ),
-                    cls="flex items-center bg-base-300 hover:bg-warning hover:text-warning-content rounded-lg shadow-md p-4 transition-all"
+                    cls="collapse-title"
                 ),
-                href=f"/questions?{urlencode({'section': section, 'num': i})}",
-                cls="block w-full mb-3"
+                # Collapse content remains unchanged
+                Div(
+                    # Preview at the very top
+                    P(
+                        "Question Preview..",
+                        cls="text-xs italic mb-2"
+                    ),
+                    Div(
+                        # Full content details
+                        P(x["question"].get("paragraph", " ").strip(), cls="text-sm") if x["question"].get("paragraph", " ").strip() else " ",
+                        Br(),
+                        P(
+                            Span(x["question"]["question"], cls="mathjax"),
+                            cls="text-sm font-bold"
+                        ),
+                        Div(
+                            Div(B("A. "), x["question"]["choices"]["A"], cls="py-1"),
+                            Div(B("B. "), x["question"]["choices"]["B"], cls="py-1"),
+                            Div(B("C. "), x["question"]["choices"]["C"], cls="py-1"),
+                            Div(B("D. "), x["question"]["choices"]["D"], cls="py-1"),
+                            cls="text-sm"
+                        )
+                    ),
+                    cls="collapse-content",
+                    style="max-width: 130vh; overflow-y: auto;"
+                ),
+                # Overlay card with the same size to capture clicks
+                A(
+                    # transparent overlay
+                    href=f"/questions?{urlencode({'section': section, 'num': i})}",
+                    cls="absolute inset-0 z-50 w-3/4"
+                ),
+                cls="collapse collapse-plus bg-base-300 hover:bg-warning hover:text-warning-content rounded-lg shadow-md p-1 mb-3 relative"
             ) if str(domain).lower() == "any" or str(x['domain']).lower() == str(domain).lower() else Div("", hidden=True)
             for i, x in enumerate(questions)
         ],
         id="question-container"
     )
+

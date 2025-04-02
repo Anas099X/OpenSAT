@@ -65,19 +65,48 @@ def profile(request, session):
     navigation = mobile_menu if is_mobile(request) else Navbar()
     if not user:
         return RedirectResponse("/login", status_code=303)
+    
+    # Determine membership tier and define extra content
+    def tier():
+        doc = db.collection('users').document(user.get("email", 'N/A')).get()
+        if doc.exists and doc.to_dict().get('subscribed') == True:
+            return "Premium"
+        else:
+            return "Free"
+    
+    membership = tier()
+    premium_extra = ""
+    if membership == "Premium":
+        premium_extra = Div(
+            Span("Premium Member", cls="badge badge-lg badge-accent"),
+            H2("Welcome, valued Premium Member!", cls="text-2xl font-bold text-center text-white"),
+            P("Enjoy exclusive features and benefits.", cls="text-md text-center text-white"),
+            cls="mt-4 p-4 bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 rounded-lg"
+        )
+    else:
+        premium_extra = Div(
+            P("Upgrade to Premium for exclusive features!", cls="text-md text-center mb-3"),
+            A("Upgrade Now", href="/subscription", cls="btn btn-primary btn-block"),
+            cls="mt-4 p-5 bg-warning rounded-lg"
+        )
+    
     return (
         Html(
             Head(Defaults),
             Header(navigation),
             Body(
                 Div(
-                    # Profile display with card styling and centered content
+                    # Profile card with enhanced styling
                     Div(
-                        Img(src=user.get("picture"), alt="Profile Picture", cls="rounded-full w-32 h-32 mx-auto mb-4"),
-                        H1("User Profile", cls="text-3xl font-bold text-center mb-4"),
-                        P(f"Username: {user.get('name', 'N/A')}", cls="text-lg text-center"),
-                        P(f"Email: {user.get('email', 'N/A')}", cls="text-md text-center mb-4"),
-                        A("Logout", href="/logout", cls="btn btn-warning btn-block"),
+                        Img(src=user.get("picture"), alt="Profile Picture", cls="rounded-full w-32 h-32 mx-auto mb-4 shadow-xl"),
+                        H1(user.get("name", "N/A"), cls="text-3xl font-bold text-center mb-2"),
+                        P(f"Email: {user.get('email', 'N/A')}", cls="text-md text-center mb-2"),
+                        P(f"Membership: {membership}", cls="text-md text-center mb-4"),
+                        premium_extra,
+                        Div(
+                            A("Logout", href="/logout", cls="btn btn-warning btn-block mt-6"),
+                            cls="mt-4"
+                        ),
                         cls="card bg-white p-8 shadow-lg rounded-lg max-w-md mx-auto"
                     ),
                     cls="container mx-auto my-12"

@@ -70,6 +70,8 @@ def menu_button():
         ("ti ti-books", "Explore", "/explore"),
         ("ti ti-bookmarks", "Tutors", "/tutors"),
         ("ti ti-book-2", "Prep Books", "/books"),
+        # Added Subscribe menu button
+        ("ti ti-credit-card", "Subscribe", "/subscription"),
         ("ti ti-user-circle", "Profile", "/profile"),
     ]
 
@@ -317,5 +319,5 @@ def get(request, session):
 
 
 #import other routes and run server
-from routes import account, explore, tutors, questions, practice, books
+from routes import account, explore, tutors, questions, practice, books, subscription
 serve()
