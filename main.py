@@ -6,7 +6,6 @@ import random, json, time
 from starlette.responses import StreamingResponse
 from dotenv import load_dotenv
 from urllib.parse import urlencode
-from flask import render_template  # add if not already imported
 
 load_dotenv()
 
