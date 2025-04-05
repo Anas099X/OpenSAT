@@ -6,6 +6,7 @@ import random, json, time
 from starlette.responses import StreamingResponse
 from dotenv import load_dotenv
 from urllib.parse import urlencode
+from flask import render_template  # add if not already imported
 
 load_dotenv()
 
@@ -315,7 +316,41 @@ def get(request, session):
     )
 
 
-
+@rt('/privacy')
+def privacy(request, session):
+    # Choose navigation bar based on device type
+    navigation = mobile_menu if is_mobile(request) else Navbar()
+    return (
+        site_title,
+        Head(Defaults),
+        Body(
+            Header(navigation, cls="sticky top-0 z-50"),
+            Main(
+                Div(
+                    H1("Privacy Policy", cls="text-3xl font-bold mb-4"),
+                    P(
+                        "OpenSAT is an open-sourced project dedicated to providing free SAT practice resources. Our transparent approach means that our code and data practices are open for public review.",
+                        cls="text-lg mb-4"
+                    ),
+                    P(
+                        "We collect only the minimal user data required for site functionality and third-party integrations. Our open-source community continually scrutinizes our methods to ensure compliance with best privacy practices.",
+                        cls="text-lg mb-4"
+                    ),
+                    P(
+                        "By using our platform, you acknowledge and agree to our transparent practices, knowing that any improvements or issues are publicly addressed by contributors worldwide.",
+                        cls="text-lg mb-4"
+                    ),
+                    P(
+                        "If you have any questions or concerns, please contact us through the available support channels.",
+                        cls="text-lg mb-4"
+                    ),
+                    cls="container mx-auto my-12 p-8 bg-white shadow-lg rounded-lg"
+                ),
+            ),
+            data_theme="silk",
+            cls="bg-base-200"
+        )
+    )
 
 
 #import other routes and run server
