@@ -43,9 +43,7 @@ MathJax = {
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@5",rel="stylesheet",type="text/css"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@5.0.0/themes.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-            Meta(name="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2" ,content="5e561dd7ae7c1408af4aa0d65e34d2a23de4a0b2"),
-            Meta(name="google-adsense-account" ,content="ca-pub-2090178937498462"),
-            Meta(name="mnd-ver" ,content="abysxla5bnhhtfnlvwpq"),
+            Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE"),
             Script(src="https://ss.mrmnd.com/banner.js"),
             Script(src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
@@ -282,6 +280,7 @@ def get(request, session):
             Div("OpenSAT", cls="text-lg font-bold"),
             Div("Your go-to platform for SAT practice and preparation.", cls="font-bold"),
             Div("NOT AFFILIATED WITH OR ENDORSED BY COLLEGE BOARD.", cls="text-xs"),
+            A("Privacy Policy",cls="text-info-content underline" ,href="/privacy"),
             cls="text-center"
         ),
         Nav(
