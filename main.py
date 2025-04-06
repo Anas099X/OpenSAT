@@ -15,7 +15,9 @@ rt = app.route
 
 site_title = Title("OpenSAT - Free SAT Question Bank with Endless Possibilities"),
 
-Defaults = (Meta(name="viewport", content="width=device-width"),
+Defaults = (
+    NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />'),
+            Meta(name="viewport", content="width=device-width"),
             Meta(property="og:title" ,content="OpenSAT: SAT Question Bank with Endless Possibilities"),
             Meta(property="og:description" ,content="OpenSAT, a free and open-source SAT question bank. Dive into a massive pool of SAT practice problems, constantly growing thanks to a dedicated community of contributors."),
             Meta(property="og:image" ,content="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true"),
@@ -46,7 +48,6 @@ MathJax = {
             Script(src="https://ss.mrmnd.com/banner.js"),
             Script(src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-            NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />'),
                 Title("OpenSAT"),
             Style(open('main.css').read())    
                 )
@@ -299,10 +300,7 @@ def get(request, session):
     # Return page structure
     return (
         site_title,
-        Head(
-        Defaults,
-        NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />')
-        ),
+        Head(Defaults),
         Body(
             Header(navigation, cls="sticky top-0 z-50"),
             Main(
