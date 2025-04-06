@@ -10,14 +10,13 @@ from urllib.parse import urlencode
 load_dotenv()
 
 
-app = FastHTML(exts='ws')
+app = FastHTML(hdrs=Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE"))
 rt = app.route
 
 site_title = Title("OpenSAT - Free SAT Question Bank with Endless Possibilities"),
 
-Defaults = (
-    NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />'),
-            Meta(name="viewport", content="width=device-width"),
+Defaults = (Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE"),
+    Meta(name="viewport", content="width=device-width"),
             Meta(property="og:title" ,content="OpenSAT: SAT Question Bank with Endless Possibilities"),
             Meta(property="og:description" ,content="OpenSAT, a free and open-source SAT question bank. Dive into a massive pool of SAT practice problems, constantly growing thanks to a dedicated community of contributors."),
             Meta(property="og:image" ,content="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true"),
@@ -299,9 +298,10 @@ def get(request, session):
 
     # Return page structure
     return (
-        Head(Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE"),NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />'),Defaults),
+        site_title,
+        Head(Defaults),
         Body(
-            Header(navigation,NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />'), cls="sticky top-0 z-50"),
+            Header(navigation, cls="sticky top-0 z-50"),
             Main(
                 first_hero,
                 second_hero,
