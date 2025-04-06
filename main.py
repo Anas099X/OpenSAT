@@ -43,7 +43,6 @@ MathJax = {
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@5",rel="stylesheet",type="text/css"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@5.0.0/themes.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-            Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE"),
             Script(src="https://ss.mrmnd.com/banner.js"),
             Script(src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
@@ -299,7 +298,8 @@ def get(request, session):
     # Return page structure
     return (
         site_title,
-        Head(Defaults),
+        Head(Defaults,
+        Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE")),
         Body(
             Header(navigation, cls="sticky top-0 z-50"),
             Main(
