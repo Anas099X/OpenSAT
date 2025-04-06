@@ -299,7 +299,7 @@ def get(request, session):
     return (
         site_title,
         Head(Defaults,
-        Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE")),
+        NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />')),
         Body(
             Header(navigation, cls="sticky top-0 z-50"),
             Main(
