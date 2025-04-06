@@ -300,9 +300,9 @@ def get(request, session):
     # Return page structure
     return (
         site_title,
-        Head(NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />'),Defaults),
+        Head(Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE"),NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />'),Defaults),
         Body(
-            Header(navigation, cls="sticky top-0 z-50"),
+            Header(navigation,NotStr('<meta name="google-site-verification" content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE" />'), cls="sticky top-0 z-50"),
             Main(
                 first_hero,
                 second_hero,
