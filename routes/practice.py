@@ -1,3 +1,4 @@
+from asyncio import sleep
 import firebase_admin
 from firebase_admin import firestore
 from main import *
@@ -95,6 +96,13 @@ def get(request, session):
     )
 
 
+# New route to store timer selection in session
+@rt("/practice/{practice_num}/set_timer")
+def set_timer(request, session, practice_num: int):
+    timer_value = request.query_params.get("timer", "false")
+    session["timer_choice"] = timer_value
+    return Redirect(f"/practice/{practice_num}/module/1")
+
 @rt("/practice/{practice_num}/select_timer")
 def select_timer(request, session, practice_num: int):
     return (
@@ -106,8 +114,9 @@ def select_timer(request, session, practice_num: int):
                         H2("Select Mode", cls="text-2xl font-bold text-center"),
                         P("Choose a mode to take the test:", cls="text-center mb-4"),
                         Div(
-                            A("With Timer", href=f"/practice/{practice_num}/module/1?timer=true", cls="btn btn-success btn-disabled mx-2"),
-                            A("Without Timer", href=f"/practice/{practice_num}/module/1?timer=false", cls="btn btn-warning mx-2"),
+                            # Updated links to store timer choice in session
+                            A("With Timer", href=f"/practice/{practice_num}/set_timer?timer=true", cls="btn btn-success mx-2"),
+                            A("Without Timer", href=f"/practice/{practice_num}/set_timer?timer=false", cls="btn btn-warning mx-2"),
                             cls="flex justify-center"
                         ),
                         cls="card bg-base-300 shadow-xl w-96 mx-auto py-8"
@@ -135,7 +144,7 @@ def get(request, session, practice_num: int, module_number: int):
         subscribed = doc.exists and doc.to_dict().get("subscribed", False)
 
     # Limit results for unsubscribed users.
-    if not subscribed and module_number > 2:
+    if not subscribed and practice_num > 2:
         return Redirect("/practice/explore")
     
     if 'page' not in session or session['page'] is None:
@@ -176,16 +185,19 @@ def get(request, session, practice_num: int, module_number: int):
             session['page'] = 0
             return A("Finish", href=f'/practice/{practice_num}/module/{module_number + 1}', cls="btn btn-warning rounded-full")
 
-    # Timer check
-    timer_check = request.query_params.get("timer", "false")
+    # Timer check: read timer setting from session instead of query_params
+    timer_check = session.get("timer_choice", "false")
 
     #Timer Div
     def timer_div():
         if timer_check == "true":
             return Div(
-                Div(ws_send=True, id="countdown-display", hx_trigger='every 1s'),
-                hx_ext='ws',
-                ws_connect=f'/ws_timer?practice_num={practice_num}&module_number={module_number}'
+                Div(id="countdown-display", hx_trigger='every 1s'),
+                hx_ext='sse',
+                sse_connect=f"/sse_timer?practice_num={practice_num}&module_number={module_number}",
+                hx_swap="innerHTML",
+                sse_swap="message",
+                hx_target="#countdown-display"
             )
         else:
             return Div("No Timer", cls="text-xl font-bold text-center")
@@ -329,65 +341,51 @@ def post(session,practice:str,module_number:str,value:int):
     return RedirectResponse(f'/practice/{practice}/module/{module_number}', status_code=303)
 
 
-@app.ws('/ws_timer')
-async def ws(scope, send=None):
-    """WebSocket handler that manages 4 phases of the practice session with configurable minutes & seconds."""
-    
-    # Extract query parameters from the WebSocket URL manually
-    query_string = scope.get("query_string", b"").decode()
-    query_params = dict(param.split("=") for param in query_string.split("&") if "=" in param)
-    
+@rt('/sse_timer')
+async def sse_timer(request):
+    query_params = request.query_params
     practice_num = query_params.get("practice_num")
-    module_number = int(query_params.get("module_number", 1))  # Default to module 1 if not set
-
-    # Define timer durations for each module (Minutes, Seconds)
+    module_number = int(query_params.get("module_number", 1))
     module_times = {
-        1: (32, 0),  # Module 1 → 1 min 0 sec
-        2: (32, 0),  # Module 2 → 3 min 0 sec
-        3: (35, 0),  # Module 3 → 3 min 0 sec
-        4: (35, 0)   # Module 4 → 4 min 0 sec
+        1: (32, 0),
+        2: (32, 0),
+        3: (35, 0),
+        4: (35, 0)
     }
-
-    # Allow override of time via URL parameters
-    default_minutes, default_seconds = module_times.get(module_number, (1, 0))  # Default 1 min if unknown
+    default_minutes, default_seconds = module_times.get(module_number, (1, 0))
     minutes = int(query_params.get("minutes", default_minutes))
     seconds = int(query_params.get("seconds", default_seconds))
-    total_seconds = (minutes * 60) + seconds  # Convert total time to seconds
+    total_seconds = (minutes * 60) + seconds
 
-    # Countdown loop
-    for i in range(total_seconds, -1, -1):
-        mins, secs = divmod(i, 60)
-        await send(Span(
+    async def timer_generator():
+        for i in range(total_seconds, -1, -1):
+            mins, secs = divmod(i, 60)
+            yield sse_message(Span(
                 Span(style=f"--value:{mins};"), "m",
                 Span(style=f"--value:{secs};", **{"data-countdown": "true"}), "s",
                 id='countdown-display',
-                cls='countdown font-mono text-2xl')
-            )
-        await asyncio.sleep(1)
-
-    # Determine next step based on module
-    if module_number == 1:
-        next_route = f"/practice/{practice_num}/module/2?timer=true"  # Move to Module 2
-    elif module_number == 2:
-        next_route = f"/practice/{practice_num}/break"  # Move to Break after Module 2
-    elif module_number == 3:
-        next_route = f"/practice/{practice_num}/module/4?timer=true"  # Move to Module 4
-    elif module_number == 4:
-        next_route = f"/practice/{practice_num}/check"  # Move to Finish after Module 4
-    else:
-        next_route = f"/practice/{practice_num}/module/1?timer=true"  # Default (should never happen)
-
-    # **Trigger HTMX to update the page & reload**
-    await send(Div(Script("setTimeout(() => window.location.reload(), 80)"),
-        "⏳ Countdown Complete! Moving to Next...",
-        id='countdown-display',
-        hx_get=next_route, 
-        hx_trigger="load", 
-        hx_target="#practice_html", 
-        hx_replace_url="true", 
-        hx_swap="innerHTML",
-        style="color: green; font-weight: bold;"
-    ))
+                cls='countdown font-mono text-2xl'
+            ))
+            await sleep(1)
+        if module_number == 1:
+            next_route = f"/practice/{practice_num}/module/2"
+        elif module_number == 2:
+            next_route = f"/practice/{practice_num}/break"
+        elif module_number == 3:
+            next_route = f"/practice/{practice_num}/module/4"
+        elif module_number == 4:
+            next_route = f"/practice/{practice_num}/check"
+        else:
+            next_route = f"/practice/{practice_num}/module/1"
+        # Updated the final yield to redirect directly with a script.
+        yield sse_message(Div(
+            Script(f"setTimeout(() => window.location.href='{next_route}', 80)"),
+            "⏳ Countdown Complete! Moving to Next...",
+            id='countdown-display',
+            style="color: green; font-weight: bold;"
+        ))
+    
+    return EventStream(timer_generator())
 
 @rt("/practice/{practice_num}/break")
 def get(practice_num:int):
