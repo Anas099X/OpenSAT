@@ -113,7 +113,7 @@ def creditcard_form():
                 ),
                 cls=" p-4 rounded-lg"  # Optional styling for fieldset
             ),
-            Button(I(cls="ti ti-credit-card text-xl"), "Subscribe with Credit Card", cls="btn btn-disabled btn-warning w-full",
+            Button(I(cls="ti ti-credit-card text-xl"), "Subscribe with Credit Card", cls="btn btn-warning w-full",
                    hx_post="/subscription/create-credit-order", hx_target="#subscription-response"),
             id="credit-card-form",
             cls="space-y-4"
@@ -188,8 +188,8 @@ def get(request, session):
                         cls="mb-6 text-center"
                     ),
                     Div(
-                        creditcard_form(),
-                        Div("Or", cls="text-center text-xl font-bold mb-2"),
+                        #creditcard_form(),
+                        #Div("Or", cls="text-center text-xl font-bold mb-2"),
                         paypal_subscribe(),
                         Div(id="subscription-response"),
                         cls="space-y-8 w-full md:w-1/3 mx-auto"
