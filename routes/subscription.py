@@ -113,7 +113,7 @@ def creditcard_form():
                 ),
                 cls=" p-4 rounded-lg"  # Optional styling for fieldset
             ),
-            Button(I(cls="ti ti-credit-card text-xl"), "Subscribe with Credit Card", cls="btn btn-warning w-full",
+            Button(I(cls="ti ti-credit-card text-xl"), "Subscribe with Credit Card", cls="btn btn-disabled btn-warning w-full",
                    hx_post="/subscription/create-credit-order", hx_target="#subscription-response"),
             id="credit-card-form",
             cls="space-y-4"
