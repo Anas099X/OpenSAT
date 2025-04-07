@@ -43,7 +43,7 @@ def login(request, session):
         )
     )
 
-@rt('/redirect')
+@rt('/google-callback')
 def auth_redirect(request, code: str, session):
     info = client.retr_info(code, redirect_uri)
     # Filter out unwanted fields
