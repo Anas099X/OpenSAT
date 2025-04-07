@@ -53,7 +53,7 @@ def subscription_card():
             Span("Most Popular", cls="badge badge-xs badge-warning mb-2 block text-center"),
             Div(
                 H2("Premium", cls="text-3xl font-bold"),
-                Span("$29/mo", cls="text-xl"),
+                Span("$3.99/mo", cls="text-xl"),
                 cls="flex justify-center items-center space-x-2"
             ),
             Ul(
@@ -211,7 +211,7 @@ def post(request, session):
     data = {
         "intent": "CAPTURE",
         "purchase_units": [{
-            "amount": {"currency_code": "USD", "value": "15.00"},
+            "amount": {"currency_code": "USD", "value": "3.99"},
             "description": "OpenSAT Subscription"
         }],
         "application_context": {
@@ -250,7 +250,7 @@ def post_credit(request, session, card_number: str, expiry: str, cvv: str, cardh
             }
         },
         "purchase_units": [{
-            "amount": {"currency_code": "USD", "value": "15.00"},
+            "amount": {"currency_code": "USD", "value": "3.99"},
             "description": "OpenSAT Subscription - Credit Card Payment"
         }],
         "application_context": {
