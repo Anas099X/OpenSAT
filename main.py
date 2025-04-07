@@ -154,19 +154,35 @@ mobile_menu = Div(
 )
 
 def Navbar():
+    test = requests.get("https://api.github.com/repos/anas099x/opensat/discussions")
+    data = test.json()
     return Div(
-                        Div(
-                            A(
-                                I(cls="ti ti-school text-warning-content text-4xl"),
-                                P("opensat", cls="puff text-xl text-warning-content"),
-                                cls="btn rounded-full btn-ghost normal-case text-lg",
-                                href="/"
-                            ),
-                            cls="navbar-start"
-                        ),
-                        menu_button(),
-                        cls="navbar bg-warning shadow-lg text-warning-content"
-                    )
+        # Left section remains unchanged
+        Div(
+            A(
+                I(cls="ti ti-school text-warning-content text-4xl"),
+                P("opensat", cls="puff text-xl text-warning-content"),
+                cls="btn rounded-full btn-ghost normal-case text-lg",
+                href="/"
+            ),
+            cls="navbar-start"
+        ),
+        # Center toast updated with bg-success and a close button
+        Div(
+            Div(
+                Div(
+                data[-1]['title'], 
+                A("Open", cls="btn btn-xs btn-success",href=data[-1]['html_url']),
+                Button("Close", cls="btn btn-xs btn-error", onclick="this.parentElement.style.display='none';"),
+                cls="alert alert-info"),
+                cls="toast flex items-center justify-between rounded"
+            ),
+            cls="navbar-center"
+        ),
+        # Right section remains unchanged
+        menu_button(),
+        cls="navbar bg-warning shadow-lg text-warning-content"
+    )
 
 graduation_icon = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'
 graduation_icon_white = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/0fd7e3b980f71fe315b286fec9c87d1d53cc39ed/public/graduation-cap-solid-white.svg'

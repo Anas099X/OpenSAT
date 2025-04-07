@@ -3,3 +3,4 @@ requests
 firebase-admin
 python-dotenv
 ipython
+markdown
