@@ -154,8 +154,6 @@ mobile_menu = Div(
 )
 
 def Navbar():
-    test = requests.get("https://api.github.com/repos/anas099x/opensat/discussions")
-    data = test.json()
     return Div(
         # Left section remains unchanged
         Div(
@@ -167,18 +165,7 @@ def Navbar():
             ),
             cls="navbar-start"
         ),
-        # Center toast updated with bg-success and a close button
-        Div(
-            Div(
-                Div(
-                data[-1]['title'], 
-                A("Open", cls="btn btn-xs btn-success",href=data[-1]['html_url']),
-                Button("Close", cls="btn btn-xs btn-error", onclick="this.parentElement.style.display='none';"),
-                cls="alert alert-info"),
-                cls="toast flex items-center justify-between rounded"
-            ),
-            cls="navbar-center"
-        ),
+        # Removed center alert from Navbar
         # Right section remains unchanged
         menu_button(),
         cls="navbar bg-warning shadow-lg text-warning-content"
@@ -194,6 +181,22 @@ def get(request, session):
 
     # Choose navigation bar based on device type
     navigation = mobile_menu if is_mobile(request) else Navbar()
+    
+    # Fetch alert data from GitHub and build alert component
+    test = requests.get("https://api.github.com/repos/anas099x/opensat/discussions")
+    data = test.json()
+    alert_section = Div(
+        Div(
+            Div(
+                data[-1]['title'],
+                A("Open", cls="btn btn-xs btn-success", href=data[-1]['html_url']),
+                Button("Close", cls="btn btn-xs btn-error", onclick="this.parentElement.style.display='none';"),
+                cls="alert alert-info"
+            ),
+            cls="toast flex items-center justify-between p-2 rounded"
+        ),
+        cls=""
+    )
 
     first_hero = Div(
         Div(
@@ -318,6 +321,7 @@ def get(request, session):
         Body(
             Header(navigation, cls="sticky top-0 z-50"),
             Main(
+                alert_section,
                 first_hero,
                 second_hero,
                 third_hero,
