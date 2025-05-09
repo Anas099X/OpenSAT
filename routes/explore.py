@@ -171,8 +171,9 @@ def post(session, question_id: list[str] = None):
     return Redirect("/print")
 
 @rt('/questions_list')
-def post(section: str = "english", domain: str = "any", page: int = 1):
+def post(session,section: str = "english", domain: str = "any", page: int = 1):
     section = section.lower()
+    session["print_section"] = section
     domain = domain.lower()
     questions = question_objects(section)
     start = (page - 1) * 30
