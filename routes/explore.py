@@ -173,6 +173,7 @@ def post(session, question_id: list[str] = None):
 @rt('/questions_list')
 def post(session,section: str = "english", domain: str = "any", page: int = 1):
     section = section.lower()
+    session["checked_questions"] = []
     session["print_section"] = section
     domain = domain.lower()
     questions = question_objects(section)
