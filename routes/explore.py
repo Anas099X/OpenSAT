@@ -163,7 +163,8 @@ def post(session,section: str = "english", domain: str = "any", page: int = 1):
 
 @rt('/printable_checkbox')
 def post(session, question_id: list[str] = None):
-    del session["checked_questions"]
+    if session["checked_questions"]:
+     del session["checked_questions"]
     session["checked_questions"] = question_id
     print("Received question IDs:", session["checked_questions"])  # Print the received question IDs for debugging
     # Print the received question IDs for debugging
