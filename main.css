@@ -1,10 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@500&display=swap');
 
-.collapse-title::after {
-    font-size: 2rem; /* or whatever size you prefer */
-    margin-right: 1rem; /* space between text and icon */
-    margin-top: 0.5rem; /* adjust as needed */
-  }
+/* Remove or comment out the default ::after style for collapse-title */
+/* .collapse-title::after {
+    font-size: 2rem;
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+} */
+
+/* Add new styling for collapse-title when the "modified" class is applied */
+.collapse-title-lg::after {
+    font-size: 2rem; /* or desired size */
+    margin-right: 1rem;
+    margin-top: 0.5rem;
+}
 
 .puff {
     font-family: "DynaPuff", serif;
@@ -60,4 +68,3 @@ body {
 
 }
 
-    

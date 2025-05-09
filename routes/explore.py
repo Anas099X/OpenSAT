@@ -142,7 +142,7 @@ def post(session,section: str = "english", domain: str = "any", page: int = 1):
                     # transparent overlay
                     href=f"/questions?{urlencode({'section': section, 'num': start + i})}",
                     cls="absolute inset-0 z-50 w-3/4"),
-                    cls="collapse-title"
+                    cls="collapse-title collapse-title-lg"
                 ),
                 # Collapse content remains unchanged
                 Div(
