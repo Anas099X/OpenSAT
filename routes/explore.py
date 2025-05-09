@@ -110,66 +110,6 @@ def get(request, session):
 
 # Removed old filtering endpoints: /section_filter, /domain_filter, and /filters_switch
 
-@rt('/questions_list_beta')
-def post(session,section: str = "english", domain: str = "any", page: int = 1):
-    section = section.lower()
-    session["print_section"] = section
-    domain = domain.lower()
-    questions = question_objects(section)
-    start = (page - 1) * 30
-    end = page * 30
-    return Div(
-        *[
-            A(
-                Div(
-                    Div(Div(cls="ti ti-books text-4xl"), cls="flex-shrink-0 p-2"),
-                    Div(
-                        H2(f"Question #{start + i + 1}", cls="font-bold text-lg "),
-                        P(x["domain"], cls="text-sm"),
-                        Div(Div(f"Difficulty: {x.get('difficulty', 'N/A')}", cls="text-xs"), cls="flex space-x-4 mt-1"),
-                        cls="flex-grow"
-                    ),
-                    Input(
-                        type='checkbox', 
-                        name="question_id", 
-                        value=f"{start + i}", 
-                        cls='checkbox checkbox-error'
-                    ),
-                    cls="flex items-center bg-base-300 hover:bg-warning hover:text-warning-content rounded-lg shadow-md p-4 transition-all"
-                ),
-                href=f"/questions?{urlencode({'section': section, 'num': start + i})}",
-                cls="block w-full mb-3"
-            ) if str(domain).lower() == "any" or str(x['domain']).lower() == str(domain).lower() else Div("", hidden=True)
-            for i, x in enumerate(questions[start:end])
-        ],
-        Div(
-            # Pagination controls
-            (Button("«", type="button", cls="join-item btn btn-warning", 
-                    hx_post=f"/questions_list?section={section}&domain={domain}&page={page - 1}",
-                    hx_trigger="click", hx_target="#question-container")
-             if page > 1 else ""),
-
-            Button(f"Page {page}", type="button", cls="join-item btn btn-warning disabled"),
-            # Updated: use hx_post to load next page
-            (Button("»", type="button", cls="join-item btn btn-warning", 
-                    hx_post=f"/questions_list?section={section}&domain={domain}&page={page + 1}",
-                    hx_trigger="click", hx_target="#question-container")
-             if len(questions) > end else ""),
-            cls="join"
-        ),
-        id="question-container"
-    )
-
-
-@rt('/printable_checkbox')
-def post(session, question_id: list[str] = None):
-    if session["checked_questions"]:
-     del session["checked_questions"]
-    session["checked_questions"] = question_id
-    print("Received question IDs:", session["checked_questions"])  # Print the received question IDs for debugging
-    # Print the received question IDs for debugging
-    return Redirect("/print")
-
 @rt('/questions_list')
 def post(session,section: str = "english", domain: str = "any", page: int = 1):
     section = section.lower()
@@ -259,6 +199,16 @@ def post(session,section: str = "english", domain: str = "any", page: int = 1):
         ),
         id="question-container"
     )
+
+
+@rt('/printable_checkbox')
+def post(session, question_id: list[str] = None):
+    if session["checked_questions"]:
+     del session["checked_questions"]
+    session["checked_questions"] = question_id
+    print("Received question IDs:", session["checked_questions"])  # Print the received question IDs for debugging
+    # Print the received question IDs for debugging
+    return Redirect("/print")
 
 
 
