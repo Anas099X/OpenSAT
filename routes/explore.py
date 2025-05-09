@@ -1,5 +1,4 @@
 from main import *
-from fpdf import FPDF
 
 # Add global variable for storing checked questions
 checked_questions = []
