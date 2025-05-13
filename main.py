@@ -209,7 +209,7 @@ def get(request, session):
                     cls="text-4xl text-warning-content lg:text-5xl font-bold text-center mb-4"
                 ),
                 P(
-                    "PineSAT is the offical fork of OpenSAT. a free and ",
+                    "PineSAT is the offical website of the OpenSAT project. a free and ",
                     A("open-source", href="https://github.com/Anas099X/OpenSAT", cls="text-blue-600 font-bold"),
                     " SAT question bank. Dive into a massive pool of SAT practice problems and tests, "
                     "constantly growing thanks to a dedicated community of contributors.",
