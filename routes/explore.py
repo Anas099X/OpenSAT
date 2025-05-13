@@ -243,8 +243,8 @@ def get(session):
         # ...existing navbar code...
         Div(
             Div(
-                I(cls="ti ti-school text-base-content text-4xl"),
-                P("opensat", cls="puff text-xl text-base-content"),
+                I(cls="ti ti-plant-2 text-base-content text-4xl"),
+                P("PineSAT", cls="puff text-xl text-base-content"),
                 cls="btn btn-disabled rounded-full btn-ghost normal-case text-lg",
                 href="/"
             ),

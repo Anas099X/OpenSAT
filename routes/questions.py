@@ -17,7 +17,7 @@ def get(request, session):
         cls="tooltip",
         data_tip="Click to copy",
         onclick="copyHref(this)",
-        copy_href=f"opensat.fun/questions?section={section}&num={num}"
+        copy_href=f"pinesat.com/questions?section={section}&num={num}"
     )
 
     # Determine navigation based on device type

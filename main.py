@@ -13,13 +13,13 @@ load_dotenv()
 app = FastHTML(hdrs=Meta(name="google-site-verification" ,content="DRvUtrkp21eFen9JI4r7FREzHHMrCDzK96VBWWh52eE"))
 rt = app.route
 
-site_title = Title("OpenSAT - Free SAT Question Bank with Endless Possibilities"),
+site_title = Title("PineSAT - Free SAT Question Bank with Endless Possibilities"),
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
             Meta(property="og:title" ,content="OpenSAT: SAT Question Bank with Endless Possibilities"),
             Meta(property="og:description" ,content="OpenSAT, a free and open-source SAT question bank. Dive into a massive pool of SAT practice problems, constantly growing thanks to a dedicated community of contributors."),
             Meta(property="og:image" ,content="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true"),
-            Meta(property="og:url" ,content="https://opensat.fun/"),
+            Meta(property="og:url" ,content="https://pinesat.com/"),
             Meta(property="og:type" ,content="website"),
             site_title,
             Link(rel="icon",href="public/graduation-cap-solid.svg", sizes="any", type="image/svg+xml"),
@@ -158,8 +158,8 @@ def Navbar():
         # Left section remains unchanged
         Div(
             A(
-                I(cls="ti ti-school text-warning-content text-4xl"),
-                P("opensat", cls="puff text-xl text-warning-content"),
+                I(cls="ti ti-plant-2 text-warning-content text-4xl"),
+                P("PineSAT", cls="puff text-xl text-warning-content"),
                 cls="btn rounded-full btn-ghost normal-case text-lg",
                 href="/"
             ),
@@ -193,7 +193,7 @@ def get(request, session):
                 Button("Close", cls="btn btn-xs btn-error", onclick="this.parentElement.style.display='none';"),
                 cls="alert alert-info"
             ),
-            cls="toast flex items-center justify-between p-2 rounded"
+            cls="toast flex items-center justify-between p-2 rounded z-50"
         ),
         cls=""
     )
@@ -209,7 +209,7 @@ def get(request, session):
                     cls="text-4xl text-warning-content lg:text-5xl font-bold text-center mb-4"
                 ),
                 P(
-                    "OpenSAT, a free and ",
+                    "PineSAT is the offical fork of OpenSAT. a free and ",
                     A("open-source", href="https://github.com/Anas099X/OpenSAT", cls="text-blue-600 font-bold"),
                     " SAT question bank. Dive into a massive pool of SAT practice problems and tests, "
                     "constantly growing thanks to a dedicated community of contributors.",
@@ -294,8 +294,8 @@ def get(request, session):
     # Footer remains unchanged
     footer = Footer(
         Aside(
-            Span(cls="ti ti-school text-6xl"),
-            Div("OpenSAT", cls="text-lg font-bold"),
+            Span(cls="ti ti-plant-2 text-6xl"),
+            Div("PineSAT", cls="text-lg font-bold"),
             Div("Your go-to platform for SAT practice and preparation.", cls="font-bold"),
             Div("NOT AFFILIATED WITH OR ENDORSED BY COLLEGE BOARD.", cls="text-xs"),
             A("Privacy Policy",cls="text-info-content underline" ,href="/privacy"),
