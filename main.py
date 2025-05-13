@@ -16,8 +16,8 @@ rt = app.route
 site_title = Title("PineSAT - Free SAT Question Bank with Endless Possibilities"),
 
 Defaults = (Meta(name="viewport", content="width=device-width"),
-            Meta(property="og:title" ,content="OpenSAT: SAT Question Bank with Endless Possibilities"),
-            Meta(property="og:description" ,content="OpenSAT, a free and open-source SAT question bank. Dive into a massive pool of SAT practice problems, constantly growing thanks to a dedicated community of contributors."),
+            Meta(property="og:title" ,content="PineSAT: SAT Question Bank with Endless Possibilities"),
+            Meta(property="og:description" ,content="PineSAT, a free and open-source SAT question bank. Dive into a massive pool of SAT practice problems, constantly growing thanks to a dedicated community of contributors."),
             Meta(property="og:image" ,content="https://github.com/Anas099X/OpenSAT/blob/main/public/banner.png?raw=true"),
             Meta(property="og:url" ,content="https://pinesat.com/"),
             Meta(property="og:type" ,content="website"),
@@ -46,7 +46,7 @@ MathJax = {
             Script(src="https://ss.mrmnd.com/banner.js"),
             Script(src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
-                Title("OpenSAT"),
+                Title("PineSAT"),
             Style(open('main.css').read())    
                 )
 
