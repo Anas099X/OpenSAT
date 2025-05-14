@@ -1,7 +1,6 @@
 from main import *
 import firebase_admin
 from firebase_admin import credentials, firestore
-import uuid
 from datetime import datetime, timedelta  # Ensure timedelta is imported
 
 # Load environment variables from .env file
@@ -90,7 +89,10 @@ paypal.Buttons({
         amount: {
           value: '3.99'
         }
-      }]
+      }],
+        application_context: {
+      shipping_preference: "NO_SHIPPING"
+    }
     });
   },
   onApprove: (data, actions) => {
