@@ -1,6 +1,7 @@
 from main import *
 import firebase_admin
 from firebase_admin import credentials, firestore
+import uuid
 from datetime import datetime, timedelta  # Ensure timedelta is imported
 
 # Load environment variables from .env file
@@ -70,56 +71,45 @@ def subscription_card():
         cls="card w-96 shadow-lg bg-base-100 mx-auto transform transition hover:scale-105"
     )
 
-def paypal_subscribe():
-    return Div(
-        Button(I(cls="ti ti-brand-paypal text-xl"),"Subscribe with PayPal", cls="btn btn-info w-full",
-               hx_post="/subscription/create-order", hx_target="#subscription-response"),
-        cls="mb-4"
-    )
-
-def creditcard_form():
-    return Div(
-        Form(
-            # Fieldset for credit card details
-            Fieldset(
-                Legend("Credit Card Information", cls="legend text-xl font-bold mb-2"),
-                Div(
-                    Div(
-                        Label("Card Number", cls="label"),
-                        Input(name="card_number", placeholder="4111 1111 1111 1111", cls="input input-bordered w-full"),
-                        cls="form-control mb-2"
-                    ),
-                    Div(
-                        Label("Expiry", cls="label"),
-                        Input(name="expiry", placeholder="12/26", cls="input input-bordered w-full"),
-                        cls="form-control mb-2"
-                    ),
-                    Div(
-                        Label("CVV", cls="label"),
-                        Input(name="cvv", type="password", placeholder="123", cls="input input-bordered w-full"),
-                        cls="form-control mb-2"
-                    ),
-                    Div(
-                        Label("Cardholder Name", cls="label"),
-                        Input(name="cardholder", placeholder="John Doe", cls="input input-bordered w-full"),
-                        cls="form-control mb-2"
-                    ),
-                    Div(
-                        Label("Billing Address", cls="label"),
-                        Input(name="billing_address", placeholder="123 Main St", cls="input input-bordered w-full"),
-                        cls="form-control mb-1"
-                    ),
-                    cls="space-y-3"
-                ),
-                cls=" p-4 rounded-lg"  # Optional styling for fieldset
-            ),
-            Button(I(cls="ti ti-credit-card text-xl"), "Subscribe with Credit Card", cls="btn btn-warning w-full",
-                   hx_post="/subscription/create-credit-order", hx_target="#subscription-response"),
-            id="credit-card-form",
-            cls="space-y-4"
-        ),
-        cls="card bg-base-100 shadow-md p-6"
-    )
+def subscription_buttons():
+    return (
+        Script(src=f"https://www.paypal.com/sdk/js?client-id={PAYPAL_CLIENT_ID}&components=buttons,funding-eligibility&enable-funding=card"),
+        NotStr('''
+<div id="paypal-button-container" class="-z-30"></div>
+<script>
+paypal.Buttons({
+  style: {
+    layout: 'vertical',
+    color: 'gold',
+    shape: 'rect',
+    label: 'paypal'
+  },
+  createOrder: (data, actions) => {
+    return actions.order.create({
+      purchase_units: [{
+        amount: {
+          value: '3.99'
+        }
+      }]
+    });
+  },
+  onApprove: (data, actions) => {
+    return actions.order.capture().then(details => {
+      // POST to your backend to mark subscription active
+      fetch('/subscribe/api-confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          orderID: data.orderID,
+          payerID: data.payerID
+        })
+      });
+      window.location.href = "/subscribe/success";
+    });
+  }
+}).render('#paypal-button-container');
+</script>
+'''))
 
 @rt("/subscription")
 def get(request, session):
@@ -190,7 +180,7 @@ def get(request, session):
                     Div(
                         #creditcard_form(),
                         #Div("Or", cls="text-center text-xl font-bold mb-2"),
-                        paypal_subscribe(),
+                        subscription_buttons(),
                         Div(id="subscription-response"),
                         cls="space-y-8 w-full md:w-1/3 mx-auto"
                     ),
@@ -202,71 +192,27 @@ def get(request, session):
         )
     )
 
-@rt("/subscription/create-order")
-def post(request, session):
-    """Create a PayPal order for subscription."""
-    # Define subscription price and description.
-    token = get_paypal_token()
-    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-    data = {
-        "intent": "CAPTURE",
-        "purchase_units": [{
-            "amount": {"currency_code": "USD", "value": "3.99"},
-            "description": "OpenSAT Subscription"
-        }],
-        "application_context": {
-            "return_url": f"{UNI_REDIRECT_URL}/subscribe/paypal-success",
-            "cancel_url": f"{UNI_REDIRECT_URL}/subscribe/paypal-cancel"
-        }
-    }
-    response = requests.post(f"{PAYPAL_API_BASE}/v2/checkout/orders", json=data, headers=headers)
-    if response.status_code == 201:
-        approval_url = next(link["href"] for link in response.json()["links"] if link["rel"] == "approve")
-        return Script(f'window.location.href="{approval_url}"')
-    return Titled("Error", Container(H1("❌ Subscription order creation failed!")))
 
-@rt("/subscription/create-credit-order")
-def post_credit(request, session, card_number: str, expiry: str, cvv: str, cardholder: str, billing_address: str):
-    """Create a direct credit card payment for subscription and update Firestore."""
+@rt("/subscribe/api-confirm")
+async def post(request, session):
+    data = await request.json()
+    """Handle PayPal payment success."""
     if not session.get("user").get("email"):
-        return Redirect("/profile")
-    token = get_paypal_token()
-    headers = {"Authorization": f"Bearer {token}", "Content-Type": "application/json"}
-    data = {
-        "intent": "CAPTURE",
-        "payment_source.card": {
-            "card": {
-                "number": card_number,
-                "expiry": expiry,
-                "security_code": cvv,
-                "name": cardholder,
-                "billing_address": {
-                    "address_line_1": billing_address,
-                    "admin_area_2": "San Jose",
-                    "admin_area_1": "CA",
-                    "postal_code": "95131",
-                    "country_code": "US"
-                }
-            }
-        },
-        "purchase_units": [{
-            "amount": {"currency_code": "USD", "value": "3.99"},
-            "description": "OpenSAT Subscription - Credit Card Payment"
-        }],
-        "application_context": {
-            "return_url": f"{UNI_REDIRECT_URL}/subscribe/paypal-success",
-            "cancel_url": f"{UNI_REDIRECT_URL}/subscribe/paypal-cancel"
-        }
-    }
-    response = requests.post(f"{PAYPAL_API_BASE}/v2/checkout/orders", json=data, headers=headers)
-    if response.status_code == 201:
+        return Titled("Error", Container(H1("User not logged in.")))
+    paypal_token = get_paypal_token()
+    headers = {"Authorization": f"Bearer {paypal_token}", "Content-Type": "application/json"}
+    capture_url = f"{PAYPAL_API_BASE}/v2/checkout/orders/{data['orderID']}"
+    response = requests.get(capture_url, headers=headers)
+    print(response.text, response.status_code)
+    if response.status_code == 200 or 201:
         email = session.get("user").get("email")
+        # Store subscription info on Firestore for the logged-in user.
         db.collection('users').document(email).update({
             "subscribed": True,
             "subscription_date": datetime.utcnow()
         })
-        return Redirect("/subscribe/success")
-    return Redirect("/subscribe/failed")
+        return Titled("Subscription Successful", Container(H1("✅ You have successfully subscribed!")))
+    return Titled("Payment Failed", Container(H1("❌ Payment capture failed.")))
 
 
 @rt("/subscribe/success")
@@ -346,29 +292,5 @@ def get(request, session):
         )
     )
 
-
-@rt("/subscribe/paypal-success")
-def get(request, session, token: str):
-    """Capture the PayPal payment and store subscription data into Firestore."""
-    if not session.get("user").get("email"):
-        return Titled("Error", Container(H1("User not logged in.")))
-    paypal_token = get_paypal_token()
-    headers = {"Authorization": f"Bearer {paypal_token}", "Content-Type": "application/json"}
-    capture_url = f"{PAYPAL_API_BASE}/v2/checkout/orders/{token}/capture"
-    response = requests.post(capture_url, headers=headers)
-    if response.status_code == 201:
-        email = session.get("user").get("email")
-        # Store subscription info on Firestore for the logged-in user.
-        db.collection('users').document(email).update({
-            "subscribed": True,
-            "subscription_date": datetime.utcnow()
-        })
-        return Titled("Subscription Successful", Container(H1("✅ You have successfully subscribed!")))
-    return Titled("Payment Failed", Container(H1("❌ Payment capture failed.")))
-
-@rt("/subscribe/paypal-cancel")
-def get(request, session):
-    """Handle cancelled subscription payment."""
-    return Titled("Subscription Cancelled", Container(H1("❌ Subscription process was cancelled.")))
 
 serve()
