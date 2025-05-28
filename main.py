@@ -168,7 +168,7 @@ def Navbar():
         # Removed center alert from Navbar
         # Right section remains unchanged
         menu_button(),
-        cls="navbar bg-warning shadow-xl text-warning-content bg_test"
+        cls="navbar bg-warning shadow-xl text-warning-content bg_pattern_yellow"
     )
 
 graduation_icon = 'https://raw.githubusercontent.com/Anas099X/OpenSAT/28581a0e460f99f2ccb2e8a717e72baf3221a1b0/public/graduation-cap-solid.svg'
@@ -219,7 +219,7 @@ def get(request, session):
             ),
             cls="hero-content text-center"
         ),
-        cls="hero bg-warning min-h-screen mb-0 rounded-b-3xl bg_test"
+        cls="hero bg-warning min-h-screen mb-0 rounded-b-3xl bg_pattern_yellow"
     )
 
     second_hero = Div(
