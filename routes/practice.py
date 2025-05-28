@@ -153,10 +153,10 @@ def get(request, session, practice_num: int, module_number: int):
         session[module] = []
 
     # Load practice questions
-    practice_en_questions = question_objects('practice_test')
+    practice_questions = question_objects('practice_test')
     
     # Get the current question object
-    question_obj = question_objects('english' if module_number < 3 else 'math')[practice_en_questions[practice_num][module][session['page']]]
+    question_obj = question_objects('english' if module_number < 3 else 'math')[practice_questions[practice_num][module][session['page']]]
 
     # Helper to retrieve answers from session
     def answers_session(count):
@@ -173,7 +173,7 @@ def get(request, session, practice_num: int, module_number: int):
     # Button for navigating to the next page/module
     def module_switcher():
         #checking different states of module
-        if session['page'] < len(practice_en_questions[practice_num][module]) - 1:
+        if session['page'] < len(practice_questions[practice_num][module]) - 1:
             return A("Next", hx_post=f'/switch_page/{practice_num}/{module_number}/{session["page"]+1}', hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-warning rounded-full")
         elif module == "module_2":
             session['page'] = 0
@@ -303,7 +303,7 @@ def get(request, session, practice_num: int, module_number: int):
                             hx_target='#practice_html', 
                             cls="btn btn-outline btn-warning w-12 h-10 m-1 text-lg font-semibold shadow"
                         ) 
-                        for i, _ in enumerate(practice_en_questions[practice_num][module])
+                        for i, _ in enumerate(practice_questions[practice_num][module])
                     ],
                     cls=" gap-3 justify-items-center"  # Ensures buttons align properly
                 ),

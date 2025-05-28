@@ -62,7 +62,19 @@ body {
     pointer-events: none; /* Ensures the waves don't block clicks */
 }
 
+.bg_test {
 
+background:
+      calc( .9*66px) calc( .9*66px)/calc(2*66px) calc(2*66px) conic-gradient(at 20% 20%,#0000 75%,#efc274 0),
+      calc(-.1*66px) calc(-.1*66px)/calc(2*66px) calc(2*66px) conic-gradient(at 20% 20%,#0000 75%,#efc274 0),
+      calc( .7*66px) calc( .7*66px)/calc(2*66px) calc(2*66px) conic-gradient(at 40% 40%,#0000 75%,#e6ba6e 0),
+      calc(-.3*66px) calc(-.3*66px)/calc(2*66px) calc(2*66px) conic-gradient(at 40% 40%,#0000 75%,#e6ba6e 0),
+      conic-gradient(from 90deg at 20% 20%,#efc274 25%,#e6ba6e 0) 
+       0 0/66px 66px;
+
+
+
+}
 
 
 .btn-rounded {
