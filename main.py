@@ -124,7 +124,7 @@ def menu_button():
 
                         cls="flex flex-col items-center"
                     ),
-                    cls="bg-base-300 shadow-lg rounded-lg w-80 min-h-screen"
+                    cls="bg-base-300 shadow-lg rounded-lg w-80 min-h-screen bg_pattern_white"
                 ),
                 cls="drawer-side"
             ),
