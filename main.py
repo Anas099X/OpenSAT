@@ -372,4 +372,4 @@ def privacy(request, session):
 
 #import other routes and run server
 from routes import account, explore, tutors, questions, practice, books, subscription, tools
-serve()
+serve(port=2020)
