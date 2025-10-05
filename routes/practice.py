@@ -99,8 +99,15 @@ def get(request, session):
 # New route to store timer selection in session
 @rt("/practice/{practice_num}/set_timer")
 def set_timer(request, session, practice_num: int):
+    session["custom_practice"] = "false"  # Reset custom practice flag
     timer_value = request.query_params.get("timer", "false")
     session["timer_choice"] = timer_value
+    return Redirect(f"/practice/{practice_num}/module/1")
+
+# Fix custom practice check route to store both custom flag and practice_num in session
+@rt("/practice/{practice_num}/custom/{check}")
+def set_custom_practice(request, check: str, session, practice_num: str):
+    session["custom_practice"] = check
     return Redirect(f"/practice/{practice_num}/module/1")
 
 @rt("/practice/{practice_num}/select_timer")
@@ -130,11 +137,17 @@ def select_timer(request, session, practice_num: int):
 
 
 @rt("/practice/{practice_num}/module/{module_number}")
-def get(request, session, practice_num: int, module_number: int):
+def get(request, session, practice_num: str, module_number: int):
     #del session['page']
+
+    custom_practice_check = session.get("custom_practice", "false")
+
+    if custom_practice_check == "false":
+        practice_num = int(practice_num)  # Ensure practice_num is an integer
 
     # Load the current module and initialize session state
     module = f'module_{module_number}'
+    
 
     # Check if the user is subscribed.
     email = session.get("user", {}).get("email")
@@ -144,20 +157,24 @@ def get(request, session, practice_num: int, module_number: int):
         subscribed = doc.exists and doc.to_dict().get("subscribed", False)
 
     # Limit results for unsubscribed users.
-    if not subscribed and practice_num > 2:
+    if not subscribed and custom_practice_check == "false" and module_number > 2:
         return Redirect("/practice/explore")
     
     if 'page' not in session or session['page'] is None:
         session['page'] = 0
     if module not in session or session[module] is None:
         session[module] = []
-
-    # Load practice questions
-    practice_questions = question_objects('practice_test')
     
-    # Get the current question object
-    question_obj = question_objects('english' if module_number < 3 else 'math')[practice_questions[practice_num][module][session['page']]]
-
+    if custom_practice_check == "false":
+     # Load practice questions from jsonsilo
+     practice_questions = question_objects('practice_test')
+     # Get the current question object
+     question_obj = question_objects('english' if module_number < 3 else 'math')[practice_questions[practice_num][module][session['page']]]
+    else: 
+     #load custom practice questions from firestore
+     quiz = db.collection("practices").document(practice_num).get()
+     practice_questions = quiz.to_dict()
+     question_obj = practice_questions["question"][session['page']]
     # Helper to retrieve answers from session
     def answers_session(count):
         for answer in session[module]:
@@ -173,7 +190,7 @@ def get(request, session, practice_num: int, module_number: int):
     # Button for navigating to the next page/module
     def module_switcher():
         #checking different states of module
-        if session['page'] < len(practice_questions[practice_num][module]) - 1:
+        if session['page'] < len(practice_questions[practice_num][module] if custom_practice_check == "false" else practice_questions["question"]) - 1:
             return A("Next", hx_post=f'/switch_page/{practice_num}/{module_number}/{session["page"]+1}', hx_swap="innerHTML", hx_target='#practice_html', cls="btn btn-warning rounded-full")
         elif module == "module_2":
             session['page'] = 0
@@ -250,31 +267,31 @@ def get(request, session, practice_num: int, module_number: int):
                         Div(
     
                             Div(
-                                P(question_obj['question'].get('paragraph', "").replace('null',''), cls="text-base mb-4"),
-                                B(question_obj['question']['question'], cls="text-lg font-bold"),
+                                P(question_obj['question'].get('paragraph', "").replace('null','') if custom_practice_check == "false" else question_obj.get('paragraph',''), cls="text-base mb-4"),
+                                B(question_obj['question']['question'] if custom_practice_check == "false" else question_obj['question'], cls="text-lg font-bold"),
                                 Form(
                                     Div(
                                         Label(
                                             practice_options('A'),
-                                            Span("A. " + question_obj['question']['choices']['A'], cls="ml-2"),
+                                            Span("A. " + question_obj['question']['choices']['A'] if custom_practice_check == "false" else question_obj['choices']['A'], cls="ml-2"),
                                             cls="flex items-center space-x-2"
                                         ),
                                         Br(),
                                         Label(
                                             practice_options('B'),
-                                            Span("B. " + question_obj['question']['choices']['B'], cls="ml-2"),
+                                            Span("B. " + question_obj['question']['choices']['B'] if custom_practice_check == "false" else question_obj['choices']['B'], cls="ml-2"),
                                             cls="flex items-center space-x-2"
                                         ),
                                         Br(),
                                         Label(
                                             practice_options('C'),
-                                            Span("C. " + question_obj['question']['choices']['C'], cls="ml-2"),
+                                            Span("C. " + question_obj['question']['choices']['C'] if custom_practice_check == "false" else question_obj['choices']['C'], cls="ml-2"),
                                             cls="flex items-center space-x-2"
                                         ),
                                         Br(),
                                         Label(
                                             practice_options('D'),
-                                            Span("D. " + question_obj['question']['choices']['D'], cls="ml-2"),
+                                            Span("D. " + question_obj['question']['choices']['D'] if custom_practice_check == "false" else question_obj['choices']['D'], cls="ml-2"),
                                             cls="flex items-center space-x-2"
                                         ),
                                         cls="mt-4"
@@ -303,7 +320,7 @@ def get(request, session, practice_num: int, module_number: int):
                             hx_target='#practice_html', 
                             cls="btn btn-outline btn-warning w-12 h-10 m-1 text-lg font-semibold shadow"
                         ) 
-                        for i, _ in enumerate(practice_questions[practice_num][module])
+                        for i, _ in enumerate(practice_questions[practice_num][module] if custom_practice_check == "false" else practice_questions["question"]) 
                     ],
                     cls=" gap-3 justify-items-center"  # Ensures buttons align properly
                 ),
@@ -338,7 +355,7 @@ def post(session,practice:str,module_number:str,value:int):
  # Initialize module in the session if it doesn't exist or if it's None
     session.setdefault('page', 0)
     session['page'] = value
-    return RedirectResponse(f'/practice/{practice}/module/{module_number}', status_code=303)
+    return RedirectResponse(f'/practice/{practice}/module/{module_number}',status_code=303)
 
 
 @rt('/sse_timer')
