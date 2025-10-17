@@ -39,7 +39,7 @@ MathJax = {
             Script(src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"),
             Script(src="https://unpkg.com/htmx.org@2.0.2"),
             Script(src="https://unpkg.com/htmx.org@1.9.12/dist/ext/ws.js"),
-            Script(src="/_vercel/insights/script.js"),
+            Script(src="https://cloud.umami.is/script.js" ,data_website_id="d6214ed5-d28d-4bbc-bbdf-e9da88f38f6b"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@5",rel="stylesheet",type="text/css"),
             Link(href="https://cdn.jsdelivr.net/npm/daisyui@5.0.0/themes.css",rel="stylesheet",type="text/css"),
             Script(src="https://unpkg.com/htmx-ext-sse@2.2.1/sse.js"),
