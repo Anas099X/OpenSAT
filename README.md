@@ -9,10 +9,15 @@ OpenSAT is a collaborative project dedicated to providing a comprehensive and fr
 - **Open Source:** The entire question bank and codebase are openly available on GitHub, allowing for continuous improvement and community contributions.
 - **Free to Use and Modify:** OpenSAT API is accessible to everyone, free of charge.
 
-**Public JSON Database:**
-- Explore our public JSON database containing SAT practice questions [here](https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5). 📚
 
-```
+## Public JSON Database
+
+* Explore our public JSON database containing SAT practice questions
+  👉 [https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5](https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5) 📚
+
+### Example Question Object
+
+```json
 {
   "id": "70ced8dc",
   "domain": "Standard English Conventions",
@@ -26,10 +31,66 @@ OpenSAT is a collaborative project dedicated to providing a comprehensive and fr
       "D": "value but"
     },
     "correct_answer": "A",
-    "explanation": "Choice A is the best answer. The convention being tested is the coordination of independent clauses within a sentence. An independent clause is a phrase containing a subject and a verb that can stand on its own as a sentence. This choice uses a comma and the coordinating conjunction 'but' to join the first independent clause ('underlines…lower a book’s value') and the second independent clause ('such markings…can be a gold mine to scholars') to create a compound sentence."
+    "explanation": "Choice A is the best answer. The convention being tested is the coordination of independent clauses within a sentence..."
   }
 }
 ```
+
+---
+
+## API Access (Questions Endpoint)
+
+### GET `/api/questions`
+
+Retrieve SAT practice questions with optional filters.
+
+### Query Parameters
+
+| Parameter | Type    | Default | Description                                                    |
+| --------- | ------- | ------- | -------------------------------------------------------------- |
+| section   | string  | english | Question section (case-insensitive, e.g. `english`, `ENGLISH``) |
+| domain    | string  | any     | Domain name (case-insensitive)                                 |
+| limit     | integer | null    | Maximum number of questions to return                          |
+
+---
+
+### Examples
+
+**Filter by section (case-insensitive)**
+
+```
+/api/questions?section=MATH
+```
+
+```
+/api/questions?section=english
+```
+
+---
+
+**Filter by section and domain**
+
+```
+/api/questions?section=English&domain=standard%20english%20conventions
+```
+
+---
+
+**Use all filters together**
+
+```
+/api/questions?section=ENGLISH&domain=Standard%20English%20Conventions&limit=3
+```
+
+---
+
+### Response Behavior
+
+* Uppercase and lowercase differences are ignored for all query parameters.
+* If no matching domain is found, all questions for the selected section are returned.
+* If a domain matches, filtered questions are returned (up to the specified limit).
+* All query parameters are optional and can be combined.
+
 
 ## How to Contribute:
 
