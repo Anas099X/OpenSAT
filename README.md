@@ -48,7 +48,7 @@ Retrieve SAT practice questions with optional filters.
 
 | Parameter | Type    | Default | Description                                                    |
 | --------- | ------- | ------- | -------------------------------------------------------------- |
-| section   | string  | english | Question section (case-insensitive, e.g. `english`, `ENGLISH``) |
+| section   | string  | english | Question section (case-insensitive, e.g. `english`, `ENGLISH`) |
 | domain    | string  | any     | Domain name (case-insensitive)                                 |
 | limit     | integer | null    | Maximum number of questions to return                          |
 
