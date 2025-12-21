@@ -59,11 +59,11 @@ Retrieve SAT practice questions with optional filters.
 **Filter by section**
 
 ```
-/api/questions?section=MATH
+pinesat.com/api/questions?section=MATH
 ```
 
 ```
-/api/questions?section=english
+pinesat.com/api/questions?section=english
 ```
 
 ---
@@ -71,7 +71,7 @@ Retrieve SAT practice questions with optional filters.
 **Filter by section and domain**
 
 ```
-/api/questions?section=English&domain=standard%20english%20conventions
+pinesat.com/api/questions?section=English&domain=standard%20english%20conventions
 ```
 
 ---
@@ -79,7 +79,7 @@ Retrieve SAT practice questions with optional filters.
 **Use all filters together**
 
 ```
-/api/questions?section=ENGLISH&domain=Standard%20English%20Conventions&limit=3
+pinesat.com/api/questions?section=ENGLISH&domain=Standard%20English%20Conventions&limit=3
 ```
 
 ---
