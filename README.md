@@ -56,7 +56,7 @@ Retrieve SAT practice questions with optional filters.
 
 ### Examples
 
-**Filter by section (case-insensitive)**
+**Filter by section**
 
 ```
 /api/questions?section=MATH
