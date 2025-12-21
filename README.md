@@ -13,7 +13,7 @@ OpenSAT is a collaborative project dedicated to providing a comprehensive and fr
 ## Public JSON Database
 
 * Explore our public JSON database containing SAT practice questions
-  👉 [https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5](https://api.jsonsilo.com/public/942c3c3b-3a0c-4be3-81c2-12029def19f5) 📚
+  👉 [https://pinesat.com/api/questions](https://pinesat.com/api/questions) 📚
 
 ### Example Question Object
 
@@ -59,11 +59,11 @@ Retrieve SAT practice questions with optional filters.
 **Filter by section**
 
 ```
-pinesat.com/api/questions?section=MATH
+/api/questions?section=MATH
 ```
 
 ```
-pinesat.com/api/questions?section=english
+/api/questions?section=english
 ```
 
 ---
@@ -71,7 +71,7 @@ pinesat.com/api/questions?section=english
 **Filter by section and domain**
 
 ```
-pinesat.com/api/questions?section=English&domain=standard%20english%20conventions
+/api/questions?section=English&domain=standard%20english%20conventions
 ```
 
 ---
@@ -79,7 +79,7 @@ pinesat.com/api/questions?section=English&domain=standard%20english%20convention
 **Use all filters together**
 
 ```
-pinesat.com/api/questions?section=ENGLISH&domain=Standard%20English%20Conventions&limit=3
+/api/questions?section=ENGLISH&domain=Standard%20English%20Conventions&limit=3
 ```
 
 ---
