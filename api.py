@@ -18,7 +18,7 @@ def question_objects(section):
 @rt('/api/questions')
 def api_questions(section: str = "english", domain: str = "any",limit: int = None):
     # Fetch questions based on section
-    questions = question_objects(section)
+    questions = question_objects(section.lower())
 
     filtered_questions = []
 
