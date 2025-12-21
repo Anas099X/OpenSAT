@@ -38,13 +38,13 @@ OpenSAT is a collaborative project dedicated to providing a comprehensive and fr
 
 ---
 
-## API Access (Questions Endpoint)
+### API Access (Questions Endpoint)
 
-### GET `/api/questions`
+#### GET `/api/questions`
 
 Retrieve SAT practice questions with optional filters.
 
-### Query Parameters
+#### Query Parameters
 
 | Parameter | Type    | Default | Description                                                    |
 | --------- | ------- | ------- | -------------------------------------------------------------- |
@@ -54,7 +54,7 @@ Retrieve SAT practice questions with optional filters.
 
 ---
 
-### Examples
+#### Examples
 
 **Filter by section**
 
@@ -84,7 +84,7 @@ Retrieve SAT practice questions with optional filters.
 
 ---
 
-### Response Behavior
+#### Response Behavior
 
 * Uppercase and lowercase differences are ignored for all query parameters.
 * If no matching domain is found, all questions for the selected section are returned.
