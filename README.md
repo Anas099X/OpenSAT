@@ -13,7 +13,7 @@ OpenSAT is a collaborative project dedicated to providing a comprehensive and fr
 ## Public JSON Database
 
 * Explore our public JSON database containing SAT practice questions
-  👉 [https://pinesat.com/api/questions](https://pinesat.com/api/questions) 📚
+  👉 [pinesat.duckdns.org](pinesat.duckdns.org) 📚
 
 ### Example Question Object
 
